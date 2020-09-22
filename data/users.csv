@@ -1,2 +1,3 @@
-Name,Password,Wins,Losses
-devin123,password123,0,0
+"ID","LOSSES","NAME","PASSWORD","WINS"
+"1","0","devin456","pass123","0"
+"2","0","devin123","pass123","3"
