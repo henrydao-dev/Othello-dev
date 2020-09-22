@@ -75,6 +75,10 @@ public class UserRepository {
 	}
 	private int GetNextId() {
 		List<User> users = GetUsers();
-		return users.get(users.size() -1).Id + 1;
+		if(users.size() > 0) {
+			return users.get(users.size() -1).Id + 1;
+		} else {
+			return 1;
+		}
 	}
 }
