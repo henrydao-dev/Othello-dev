@@ -13,11 +13,20 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-
+/**
+ * Handles all the Create, Read, Update operations for the Game entity in the games.csv file
+ * @author Devin Prejean
+ *
+ */
 public class GameRepository {
 
 	private final String USERSCSVPATH = "data/games.csv";
 
+	/**
+	 * Gets the user's last game that was not finished, essentially resuming play. 
+	 * @param user
+	 * @return Game
+	 */
 	public Game GetLastUnfinishedGameForUser(User user) {
 		List<Game> allGames = GetGames();
 		List<Game> usersGames = new ArrayList<Game>();
@@ -33,7 +42,14 @@ public class GameRepository {
 		}
 	}
 	
-	public void InsertGame(Game newGame) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException, IllegalArgumentException {
+	/**
+	 * Adds a game into the CSV file
+	 * @param newGame
+	 * @throws CsvDataTypeMismatchException If the game object isn't right
+	 * @throws CsvRequiredFieldEmptyException If the game object isn't right
+	 * @throws IOException If the file cannot be found
+	 */
+	public void InsertGame(Game newGame) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		newGame.Id = GetNextId();
 		List<Game> games = GetGames();
 		games.add(newGame);
@@ -43,6 +59,13 @@ public class GameRepository {
 	    writer.close();
 	}
 	
+	/**
+	 * Updates the game in the CSV file, overwriting the entire record with the one passed in.
+	 * @param updatedGame
+	 * @throws CsvDataTypeMismatchException If the game object isn't right
+	 * @throws CsvRequiredFieldEmptyException If the game object isn't right
+	 * @throws IOException If the file cannot be found
+	 */
 	public void UpdateGame(Game updatedGame) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		// Read existing file
 		List<Game> games = GetGames();
@@ -60,7 +83,9 @@ public class GameRepository {
 	     beanToCsv.write(games);
 	     writer.close();
 	}
-	
+	/**
+	 * Gets all the games in the CSV
+	 */
 	private List<Game> GetGames() {
 		try {
 			FileReader file = new FileReader(USERSCSVPATH);
@@ -73,6 +98,10 @@ public class GameRepository {
 		}
 		return null;
 	}
+	/**
+	 * Get's the next available ID in the list by getting the last and adding one
+	 * @return Next ID available in the CSV
+	 */
 	private int GetNextId() {
 		List<Game> games = GetGames();
 		if(games.size() > 0) {
