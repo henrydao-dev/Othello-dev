@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="dependencies/commons-lang3-3.11.jar"/>
 	<classpathentry kind="lib" path="dependencies/commons-beanutils-1.9.4.jar"/>
 	<classpathentry kind="lib" path="dependencies/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="dependencies"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

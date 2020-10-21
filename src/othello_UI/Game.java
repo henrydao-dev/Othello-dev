@@ -35,9 +35,15 @@ public class Game {
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
 	}
+	public Date getEnd() throws ParseException {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.EndString);
+	}
 	
 	public Game() {
 		
+	}
+	public void EndGame() {
+		this.EndString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
 	}
 	
 	public Game(String playerOne, String playerTwo) {
