@@ -2,7 +2,7 @@ package othello_UI;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class User {
+public class Player implements Comparable<Player> {
 	@CsvBindByName
 	int Id;
 	@CsvBindByName
@@ -14,14 +14,21 @@ public class User {
 	@CsvBindByName
 	int Losses;
 	
-	public User() {
+	public Player() {
 		
 	}
 	
-	public User(String name, String password) {
+	public Player(String name, String password) {
 		this.Name = name;
 		this.Password = password;
 		this.Wins = 0;
 		this.Losses = 0;
+	}
+
+	@Override
+	public int compareTo(Player compareUser) {
+		int compareWins = ((Player) compareUser).Wins;
+		//ascending order
+		return this.Wins - compareWins;
 	}
 }

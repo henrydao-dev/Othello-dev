@@ -17,7 +17,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
  * @author Devin Prejean
  *
  */
-public class UserRepository {
+public class PlayerRepository {
 
 	private final String USERSCSVPATH = "data/users.csv";
 
@@ -27,9 +27,9 @@ public class UserRepository {
 	 * @return User
 	 * @throws NullPointerException thrown if the user does not exist
 	 */
-	public User GetUserByUserName(String userName) throws NullPointerException {
-		List<User> users = GetUsers();
-		for(User user : users) {
+	public Player GetUserByUserName(String userName) throws NullPointerException {
+		List<Player> users = GetUsers();
+		for(Player user : users) {
 			if(user.Name.equalsIgnoreCase(userName)) {
 				return user;
 			}
@@ -45,17 +45,17 @@ public class UserRepository {
 	 * @throws IOException thrown if file doesn't exist
 	 * @throws IllegalArgumentException thrown if the user already exists in the CSV
 	 */
-	public void InsertUser(User newUser) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException, IllegalArgumentException {
+	public void InsertUser(Player newUser) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException, IllegalArgumentException {
 		newUser.Id = GetNextId();
-		List<User> users = GetUsers();
-		for(User user : users) {
+		List<Player> users = GetUsers();
+		for(Player user : users) {
 			if(user.Name.equals(newUser.Name)) {
 				throw new IllegalArgumentException("A user with this name already exists");
 			}
 		}
 		users.add(newUser);
 		Writer writer = new FileWriter(USERSCSVPATH);
-	    StatefulBeanToCsv<User> beanToCsv = new StatefulBeanToCsvBuilder<User>(writer).build();
+	    StatefulBeanToCsv<Player> beanToCsv = new StatefulBeanToCsvBuilder<Player>(writer).build();
 	    beanToCsv.write(users);
 	    writer.close();
 	}
@@ -66,11 +66,11 @@ public class UserRepository {
 	 * @throws CsvDataTypeMismatchException
 	 * @throws CsvRequiredFieldEmptyException
 	 */
-	public void UpdateUser(User updatedUser) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+	public void UpdateUser(Player updatedUser) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		// Read existing file
-		List<User> users = GetUsers();
+		List<Player> users = GetUsers();
 		int index = 0;
-		for(User user : users) {
+		for(Player user : users) {
 			if(user.Id == updatedUser.Id) {
 				users.set(index, updatedUser);
 			}
@@ -79,7 +79,7 @@ public class UserRepository {
 
         // Write to CSV file which is open
 		 Writer writer = new FileWriter(USERSCSVPATH);
-	     StatefulBeanToCsv<User> beanToCsv = new StatefulBeanToCsvBuilder<User>(writer).build();
+	     StatefulBeanToCsv<Player> beanToCsv = new StatefulBeanToCsvBuilder<Player>(writer).build();
 	     beanToCsv.write(users);
 	     writer.close();
 	}
@@ -87,11 +87,11 @@ public class UserRepository {
 	 * Gets all the Users in the CSV file
 	 * @return List<User>
 	 */
-	private List<User> GetUsers() {
+	public List<Player> GetUsers() {
 		try {
 			FileReader file = new FileReader(USERSCSVPATH);
-			List<User> users = new CsvToBeanBuilder<User>(file)
-				       .withType(User.class).build().parse();
+			List<Player> users = new CsvToBeanBuilder<Player>(file)
+				       .withType(Player.class).build().parse();
 			return users;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -104,11 +104,20 @@ public class UserRepository {
 	 * @return
 	 */
 	private int GetNextId() {
-		List<User> users = GetUsers();
+		List<Player> users = GetUsers();
 		if(users.size() > 0) {
 			return users.get(users.size() -1).Id + 1;
 		} else {
 			return 1;
 		}
+	}
+	public void dispose() {
+		try {
+			super.finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
