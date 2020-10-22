@@ -74,6 +74,12 @@ public class Admin {
 		return player;
 	}
 	
+	/**
+	 * Checks the password for the given player's name against the repository
+	 * @param name
+	 * @param password
+	 * @return true if the password matches, false if it doesn't
+	 */
 	public static boolean Login(String name, String password) {
 		PlayerRepository playerRepo = new PlayerRepository();
 		
