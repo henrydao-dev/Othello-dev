@@ -17,9 +17,9 @@ public class othello_UI extends Application{
 		System.out.println("hello world");
 		try {
 			FileReader file = new FileReader("data/users.csv");
-			List<User> beans = new CsvToBeanBuilder<User>(file)
-				       .withType(User.class).build().parse();
-			for(User user : beans) {
+			List<Player> beans = new CsvToBeanBuilder<Player>(file)
+				       .withType(Player.class).build().parse();
+			for(Player user : beans) {
 				System.out.println(user.Name);
 			}
 		} catch (FileNotFoundException e) {
