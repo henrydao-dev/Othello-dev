@@ -127,6 +127,12 @@ public class Board {
 		return true;
 	}
 	
+	/**
+	 * Flips the discs in each direction 
+	 * @param color (player's color)
+	 * @param row
+	 * @param col
+	 */
 	public void flipDiscs(char color, int row, int col) {
 		// flip the one that is clicked first because it's empty
 		this.CurrentBoard[row][col] = color;
