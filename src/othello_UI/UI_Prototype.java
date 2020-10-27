@@ -199,7 +199,7 @@ public class UI_Prototype extends Application {
 				color = Color.BLACK;
 			}
 		gameBoard.PlaceDisc(p, row, col);
-		Circle c = new Circle(75/2, 75/2, 25, color );
+		Circle c = new Circle(75/2, 75/2, 37, color );
 		Gpane.add(c, row, col);
 		} catch (IllegalArgumentException ex) {
 			System.out.println("Illegal Move");
@@ -210,10 +210,10 @@ public class UI_Prototype extends Application {
 	}
 	
 	private void drawBoard() {
-		Circle c1 = new Circle(75/2, 75/2, 25, Color.WHITE);
-		Circle c2 = new Circle(75/2, 75/2, 25, Color.BLACK);
-		Circle c3 = new Circle(75/2, 75/2, 25, Color.BLACK);
-		Circle c4 = new Circle(75/2, 75/2, 25, Color.WHITE);
+		Circle c1 = new Circle(75/2, 75/2, 37, Color.WHITE);
+		Circle c2 = new Circle(75/2, 75/2, 37, Color.BLACK);
+		Circle c3 = new Circle(75/2, 75/2, 37, Color.BLACK);
+		Circle c4 = new Circle(75/2, 75/2, 37, Color.WHITE);
 		Gpane.add(c1, 3, 3);
 		Gpane.add(c2, 3, 4);
 		Gpane.add(c3, 4, 3);

@@ -1,6 +1,8 @@
 package othello_UI;
 
 public class Board {
+	
+	
 	/**
 	 * Current game being played
 	 */
@@ -35,6 +37,30 @@ public class Board {
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
 	}
+	
+	
+	/**Determines which players goes first 
+	 * if p1 = true then p1 goes first
+	 * if p2 = true then p2 goes first
+	 * 
+	 * @param p1
+	 * @param p2
+	 */
+	
+	public void coinflip(boolean p1, boolean p2 ) {
+		
+		
+		if (Math.random() > 0.5 ) {
+			
+		 p1 = true;
+			
+		}else p2 = true;
+		
+		
+	}
+	
+		
+	
 	/**
 	 * Place a disc on the board, checks if the move is valid, throws error if it is not valid
 	 * @param player
@@ -49,13 +75,45 @@ public class Board {
 			throw new IllegalArgumentException("Invalid move");
 		}
 	}
+	
+	/**
+	 * Checks to see if there are any valid moves else forces pass().
+	 * 
+	 * @param player
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	
+private boolean validatePass(Player player, int row, int col) {
+		
+		for (int i=0; i<CurrentBoard.length; i++)
+	    {
+	      for (int j=0; j<CurrentBoard[i].length; j++)
+	      {
+	    	  if(validateMove(player, row, col) == false) {
+	    		  
+	    		  return true;
+	    	
+	    	  }
+	    	  
+	    	  else return false;
+	      }
+	    }
+		
+		return true;
+	}
+	
 	/**
 	 * Passes play. Throws error if pass is not allowed
 	 * @throws IllegalArgumentException
 	 */
-	public void Pass() throws IllegalArgumentException {
-		if(validatePass()) {
-			// Do something here about passing
+	public void Pass(Player player, int row, int col) throws IllegalArgumentException {
+		if(validatePass(player, col, row)) {
+			
+			// player turn determined by boolean
+			boolean turn = true;
+			
 		} else {
 			throw new IllegalArgumentException("Invalid move");
 		}
@@ -123,9 +181,10 @@ public class Board {
 		
 		return valid;
 	}
-	private boolean validatePass() {
-		return true;
-	}
+	
+	
+	
+	
 	
 	/**
 	 * Flips the discs in each direction 
