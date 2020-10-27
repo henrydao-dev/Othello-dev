@@ -23,6 +23,7 @@
 package othello_UI;
 
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -46,11 +47,12 @@ import java.awt.Label;
 
 public class UI_Prototype extends Application {
 	private GridPane Gpane;
+	private Board gameBoard;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 		
-		
+		gameBoard = new Board();
 			//Creates our pane
 			Pane pane = new Pane();
 			Gpane = new GridPane();
@@ -77,7 +79,7 @@ public class UI_Prototype extends Application {
 				for(int k2 = 0; k2 < 8; k2++) {
 					if(k > 1)
 						k = 0;
-					Tile r1 = new Tile(75,75,k2,k1);
+					Tile r1 = new Tile(75,75,k1,k2);
 					r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
 					r1.setStroke(Color.BLACK);
 					r1.setFill(Paint.valueOf(color[r][k]));
@@ -89,7 +91,7 @@ public class UI_Prototype extends Application {
 			
 			Gpane.setLayoutX(100);
 			Gpane.setLayoutY(150);
-			
+			drawBoard();
 			
 				
 				//Needed buttons
@@ -188,9 +190,34 @@ public class UI_Prototype extends Application {
 			primaryStage.show(); 
 		}
 	
-	private Object drawMove(int row, int col) {
+	private void drawMove(int row, int col) {
+		Player p = new Player();
+		p.Color = Player.BLACK;
+		try {
+			Color color = Color.WHITE;
+			if(Player.BLACK == p.Color) {
+				color = Color.BLACK;
+			}
+		gameBoard.PlaceDisc(p, row, col);
+		Circle c = new Circle(75/2, 75/2, 25, color );
+		Gpane.add(c, row, col);
+		} catch (IllegalArgumentException ex) {
+			System.out.println("Illegal Move");
+			return;
+		}
 		System.out.println(row + " " + col);
-		return null;
+		return;
+	}
+	
+	private void drawBoard() {
+		Circle c1 = new Circle(75/2, 75/2, 25, Color.WHITE);
+		Circle c2 = new Circle(75/2, 75/2, 25, Color.BLACK);
+		Circle c3 = new Circle(75/2, 75/2, 25, Color.BLACK);
+		Circle c4 = new Circle(75/2, 75/2, 25, Color.WHITE);
+		Gpane.add(c1, 3, 3);
+		Gpane.add(c2, 3, 4);
+		Gpane.add(c3, 4, 3);
+		Gpane.add(c4, 4, 4);
 	}
 
 	//Idea: Set boolean flag for for player turns (if checked True, then player1 turn, if false, player2 turn)
