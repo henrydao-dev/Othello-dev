@@ -31,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -71,18 +72,19 @@ public class UI_Prototype extends Application {
 			//Gpane.setAlignment(Pos.CENTER);   
 
 			for(int k1 = 0; k1 < 8; k1++) {
-			if(r > 1)
-			r = 0;
-			for(int k2 = 0; k2 < 8; k2++) {
-			if(k > 1)
-			k = 0;
-			Rectangle r1 = new Rectangle(75,75);
-			r1.setStroke(Color.BLACK);
-			r1.setFill(Paint.valueOf(color[r][k]));
-			Gpane.add(r1,k1,k2);
-			k++;
-			}
-			r++;
+				if(r > 1)
+					r = 0;
+				for(int k2 = 0; k2 < 8; k2++) {
+					if(k > 1)
+						k = 0;
+					Tile r1 = new Tile(75,75,k2,k1);
+					r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
+					r1.setStroke(Color.BLACK);
+					r1.setFill(Paint.valueOf(color[r][k]));
+					Gpane.add(r1,k1,k2);
+					k++;
+				}
+				r++;
 			}
 			
 			Gpane.setLayoutX(100);
@@ -186,6 +188,11 @@ public class UI_Prototype extends Application {
 			primaryStage.show(); 
 		}
 	
+	private Object drawMove(int row, int col) {
+		System.out.println(row + " " + col);
+		return null;
+	}
+
 	//Idea: Set boolean flag for for player turns (if checked True, then player1 turn, if false, player2 turn)
 
 	public static void main(String[] args) {
