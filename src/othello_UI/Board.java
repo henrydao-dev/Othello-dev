@@ -29,6 +29,11 @@ public class Board {
 	    	  CurrentBoard[i][j]=NO_DISC;
 	      }
 	    }
+		// Set starting discs
+		CurrentBoard[3][3] = WHITE;
+		CurrentBoard[3][4] = BLACK;
+		CurrentBoard[4][3] = BLACK;
+		CurrentBoard[4][4] = WHITE;
 	}
 	/**
 	 * Place a disc on the board, checks if the move is valid, throws error if it is not valid
