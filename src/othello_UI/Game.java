@@ -16,11 +16,11 @@ public class Game {
 	@CsvBindByName
 	public int Id;
 	@CsvBindByName
-	public String PlayerOne; // Player 1 is always the Black colored discs
+	public Player PlayerOne; // Player 1 is always the Black colored discs
 	@CsvBindByName
-	public String PlayerTwo;
+	public Player PlayerTwo;
 	@CsvBindByName
-	public int LastTurn; // 1 or 2 to signify the player's turn
+	public String LastTurn; // 1 or 2 to signify the player's turn
 	@CsvBindByName
 	public String StartString;
 	@CsvBindByName
@@ -30,27 +30,46 @@ public class Game {
 	@CsvBindByName
 	public int PlayerOneTime; // In Seconds
 	@CsvBindByName
-	public int PlayerTwoTime; // In Seconds	
-	
+	public int PlayerTwoTime; // In Seconds
+
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
 	}
+
 	public Date getEnd() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.EndString);
 	}
-	
+
 	public Game() {
-		
+
 	}
+
 	public void EndGame() {
 		this.EndString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
 	}
-	
-	public Game(String playerOne, String playerTwo) {
+
+	public Game(Player playerOne, Player playerTwo) {
 		this.PlayerOne = playerOne;
 		this.PlayerTwo = playerTwo;
-		this.LastTurn = 0; // No one has played
+		this.LastTurn = playerOne.Name; // No one has played
 		this.StartString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
-		
+
 	}
+
+	public void SwitchTurn() {
+		if (this.LastTurn == PlayerOne.Name) {
+			this.LastTurn = PlayerTwo.Name;
+		} else {
+			this.LastTurn = PlayerOne.Name;
+		}
+		System.out.println("now its "+this.LastTurn+"\'s Turn");
+	}
+
+	public Player getPlayerwithTurn() {
+		if (PlayerOne.Name == this.LastTurn)
+			return PlayerOne;
+		else
+			return PlayerTwo;
+	}
+
 }

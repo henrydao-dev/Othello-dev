@@ -18,7 +18,9 @@ public class Player implements Comparable<Player> {
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
 	
-	public Player() {
+	public Player(String Name,int color) {
+		this.Color = color ;
+		this.Name = Name;
 		
 	}
 	

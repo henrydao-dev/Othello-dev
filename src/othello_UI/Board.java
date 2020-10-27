@@ -7,6 +7,8 @@ public class Board {
 	 * Current game being played
 	 */
 	public Game CurrentGame;
+	public Player p1;
+	public Player p2;
 	/**
 	 * Some configuration of the discs on the board
 	 */
@@ -36,8 +38,13 @@ public class Board {
 		CurrentBoard[3][4] = BLACK;
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
-	}
-	
+		p1 = new Player("black",Player.BLACK);
+		p2 = new Player("white",Player.WHITE);
+//		System.out.println(p1.Name);
+//		System.out.println(p2.Name);
+		CurrentGame = new Game(p1,p2);
+		
+	}	
 	
 	/**Determines which players goes first 
 	 * if p1 = true then p1 goes first
@@ -46,7 +53,6 @@ public class Board {
 	 * @param p1
 	 * @param p2
 	 */
-	
 	public void coinflip(boolean p1, boolean p2 ) {
 		
 		
@@ -85,13 +91,13 @@ public class Board {
 	 * @return
 	 */
 	
-private boolean validatePass(Player player, int row, int col) {
+private boolean validatePass(Player player) {// I guess row and col does not make sense for pass so I removed them
 		
 		for (int i=0; i<CurrentBoard.length; i++)
 	    {
 	      for (int j=0; j<CurrentBoard[i].length; j++)
 	      {
-	    	  if(validateMove(player, row, col) == false) {
+	    	  if(validateMove(player, 0, 0) == false) {
 	    		  
 	    		  return true;
 	    	
@@ -108,11 +114,11 @@ private boolean validatePass(Player player, int row, int col) {
 	 * Passes play. Throws error if pass is not allowed
 	 * @throws IllegalArgumentException
 	 */
-	public void Pass(Player player, int row, int col) throws IllegalArgumentException {
-		if(validatePass(player, col, row)) {
+	public boolean Pass(Player player) throws IllegalArgumentException { // I guess row and col does not make sense for pass so I removed them
+		if(validatePass(player)) {
 			
 			// player turn determined by boolean
-			boolean turn = true;
+			return true; // for now return true we should change this.
 			
 		} else {
 			throw new IllegalArgumentException("Invalid move");

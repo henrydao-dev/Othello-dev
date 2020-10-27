@@ -48,11 +48,15 @@ import java.awt.Label;
 public class UI_Prototype extends Application {
 	private GridPane Gpane;
 	private Board gameBoard;
+	private Game currGame;
+	private Player playerwithTurn;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 		
 		gameBoard = new Board();
+		this.currGame = gameBoard.CurrentGame;
+		
 			//Creates our pane
 			Pane pane = new Pane();
 			Gpane = new GridPane();
@@ -115,6 +119,7 @@ public class UI_Prototype extends Application {
 					passButton.setCenterX(402.5);
 					passButton.setCenterY(90);
 					passButton.setRadius(40);
+					pass.setOnMouseClicked(event -> passMove());
 					pane.getChildren().add(passButton);
 					pane.getChildren().add(pass);
 			
@@ -128,6 +133,7 @@ public class UI_Prototype extends Application {
 					player1Box.setLayoutY(100);
 					pane.getChildren().add(player1);
 					pane.getChildren().add(player1Box);
+					player1Box.appendText("gi");
 				
 						//Player2
 					Text player2 = new Text(600,90, "Player 2: ");
@@ -191,8 +197,10 @@ public class UI_Prototype extends Application {
 		}
 	
 	private void drawMove(int row, int col) {
-		Player p = new Player();
-		p.Color = Player.BLACK;
+//		Player p = new Player();
+//		p.Color = Player.BLACK;
+		Player p = currGame.getPlayerwithTurn();
+//		System.out.println(p.Color);
 		try {
 			Color color = Color.WHITE;
 			if(Player.BLACK == p.Color) {
@@ -201,6 +209,8 @@ public class UI_Prototype extends Application {
 		gameBoard.PlaceDisc(p, row, col);
 		Circle c = new Circle(75/2, 75/2, 37, color );
 		Gpane.add(c, row, col);
+		currGame.SwitchTurn();
+
 		} catch (IllegalArgumentException ex) {
 			System.out.println("Illegal Move");
 			return;
@@ -208,6 +218,18 @@ public class UI_Prototype extends Application {
 		System.out.println(row + " " + col);
 		return;
 	}
+	
+	private void passMove() {
+		
+		System.out.println("pass pressed");
+		if (gameBoard.Pass(currGame.getPlayerwithTurn()));
+			currGame.SwitchTurn();
+			
+		
+		return;
+	}
+	
+	
 	
 	private void drawBoard() {
 		Circle c1 = new Circle(75/2, 75/2, 37, Color.WHITE);
