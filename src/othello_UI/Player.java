@@ -13,6 +13,10 @@ public class Player implements Comparable<Player> {
 	int Wins;
 	@CsvBindByName
 	int Losses;
+	int Color;
+	
+	public static final char BLACK = 'b';
+	public static final char WHITE = 'w';
 	
 	public Player() {
 		
