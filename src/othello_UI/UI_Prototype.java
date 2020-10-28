@@ -207,10 +207,8 @@ public class UI_Prototype extends Application {
 		}
 	
 	private void drawMove(int row, int col) {
-//		Player p = new Player();
-//		p.Color = Player.BLACK;
+
 		Player p = currGame.getPlayerwithTurn();
-//		System.out.println(p.Color);
 		try {
 			Color color = Color.WHITE;
 			if(Player.BLACK == p.Color) {
