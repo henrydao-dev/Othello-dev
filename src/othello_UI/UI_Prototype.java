@@ -27,6 +27,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -55,17 +56,23 @@ public class UI_Prototype extends Application {
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 
-		if(coinFlip()) {
-			// Login logic goes here GetUser then set color
-			player1 = new Player("Player1", Player.BLACK);
-			player2 = new Player("Player2", Player.WHITE);
-		} else {
-			// Login logic goes here
-			player1 = new Player("Player1", Player.WHITE);
-			player2 = new Player("Player2", Player.BLACK);
-		}
+//		if(coinFlip()) {
+//			// Login logic goes here GetUser then set color
+//			player1 = new Player("Player1", Player.BLACK);
+//			player2 = new Player("Player2", Player.WHITE);
+//		} else {
+//			// Login logic goes here
+//			player1 = new Player("Player1", Player.WHITE);
+//			player2 = new Player("Player2", Player.BLACK);
+//		}
+		
+		player1 = new Player("Player1", Player.WHITE);
+		player2 = new Player("Player2", Player.BLACK);
+		
 		gameBoard = new Board(player1, player2);
 		this.currGame = gameBoard.CurrentGame;
+		
+		
 		
 			//Creates our pane
 			Pane pane = new Pane();
@@ -201,7 +208,7 @@ public class UI_Prototype extends Application {
 			
 			
 			
-			primaryStage.setTitle("Orthello");
+			primaryStage.setTitle("Othello");
 			primaryStage.setScene(scene);
 			primaryStage.show(); 
 		}
@@ -215,6 +222,7 @@ public class UI_Prototype extends Application {
 				color = Color.BLACK;
 			}
 		gameBoard.PlaceDisc(p, row, col);
+		updateBoard();
 		Circle c = new Circle(75/2, 75/2, 37, color );
 		Gpane.add(c, row, col);
 		currGame.SwitchTurn();
@@ -249,6 +257,69 @@ public class UI_Prototype extends Application {
 		Gpane.add(c3, 4, 3);
 		Gpane.add(c4, 4, 4);
 	}
+	
+	/**Updates board after disc is placed
+	 * 
+	 */
+	private void updateBoard(){
+	
+	Gpane.getChildren().clear();
+	
+	int k = 0;
+	int r = 0;
+	String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
+
+
+	for(int k1 = 0; k1 < 8; k1++) {
+		if(r > 1)
+			r = 0;
+		for(int k2 = 0; k2 < 8; k2++) {
+			if(k > 1)
+				k = 0;
+			Tile r1 = new Tile(75,75,k1,k2);
+			r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
+			r1.setStroke(Color.BLACK);
+			r1.setFill(Paint.valueOf(color[r][k]));
+			Gpane.add(r1,k1,k2);
+			k++;
+		}
+		r++;
+	}
+	
+	Gpane.setLayoutX(100);
+	Gpane.setLayoutY(150);
+	drawBoard();
+	
+	for (int i=0; i<gameBoard.CurrentBoard.length; i++)
+    {
+      for (int j=0; j<gameBoard.CurrentBoard[i].length; j++)
+      {
+    	if(gameBoard.CurrentBoard[j][i] == Player.BLACK) {
+    		
+    		Circle c = new Circle(75/2, 75/2, 37, Color.BLACK);
+    		Gpane.add(c, i, j);
+    	
+    	} else if(gameBoard.CurrentBoard[j][i] == Player.WHITE) {
+    		
+    		Circle c = new Circle(75/2, 75/2, 37, Color.WHITE);
+    		Gpane.add(c, i, j);
+    	
+    	}
+    			  
+      }
+    
+    }
+	}
+
+private Node getCircleFromGridPane( int col, int row) {
+    for (Node node : Gpane.getChildren()) {
+        if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+            return (Circle)node;
+        }
+    }
+    return null;
+	
+}
 	
 	/**
 	 * Decides who goes first
