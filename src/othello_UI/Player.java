@@ -18,6 +18,11 @@ public class Player implements Comparable<Player> {
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
 	
+	/**
+	 * New Player with Color choice
+	 * @param Name
+	 * @param color
+	 */
 	public Player(String Name,int color) {
 		this.Color = color ;
 		this.Name = Name;
