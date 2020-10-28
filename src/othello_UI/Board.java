@@ -49,9 +49,9 @@ public class Board {
 	 * @param col
 	 * @throws IllegalArgumentException
 	 */
-	public void PlaceDisc(Player player, int row, int col) throws IllegalArgumentException {
+	public void PlaceDisc(Player player, int col, int row) throws IllegalArgumentException {
 		if(isMoveValid(player, row, col)) {
-			// Do something here about placing the disc
+			flipDiscs(player.Color, row, col);
 		} else {
 			throw new IllegalArgumentException("Invalid move");
 		}
@@ -206,28 +206,29 @@ private boolean isPassValid(Player player) {
 		int colToFlip = col + colDir;
 		char cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 		// If we're off the game board for this direction of movement
-		if(rowToFlip == 8 || rowToFlip < 0 || colToFlip == 8 || colToFlip < 0) {
+		if(isCellOutOfBounds(rowToFlip, colToFlip)) {
 			return; // We're off the board and there is nothing to flip in this cell
 		}
 		while(cellIsBlack(rowToFlip, colToFlip) || cellIsWhite(rowToFlip, colToFlip)) {
 			if(cellToFlip == colorToSet) { 
 				// Cell is already the color it needs to be
 				// Check in the negative directions until it hits the row and column we clicked
-				boolean exactCellThatWasClicked = (row == rowToFlip && col == colToFlip);
-				while(!(exactCellThatWasClicked)) {
+				while(!(row == rowToFlip && col == colToFlip)) {
 					this.CurrentBoard[rowToFlip][colToFlip] = colorToSet;
 					// move in the negative direction
 					rowToFlip = rowToFlip - rowDir;
 					colToFlip = colToFlip - colDir;
+					cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 				}
 				break;
 			} else {
 				// move the cell in the positive direction to check it
 				rowToFlip = rowToFlip + rowDir;
 				colToFlip = colToFlip + colDir;
+				cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 			}
 			// Stop when you get to the edge of the board
-			if(rowToFlip < 0 || rowToFlip == 8 || colToFlip < 0 || colToFlip == 8) {
+			if(isCellOutOfBounds(rowToFlip, colToFlip)) {
 				break;
 			}
 		}
@@ -238,5 +239,24 @@ private boolean isPassValid(Player player) {
 	}
 	private boolean cellIsWhite(int row, int col) {
 		return this.CurrentBoard[row][col] == Board.WHITE;
+	}
+	private boolean isCellOutOfBounds(int row, int col) {
+		if(row < 0 || row == 8 || col < 0 || col == 8) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public String toString() {
+		String matrix = "";
+		// Loop through all rows 
+        for (int i = 0; i < CurrentBoard.length; i++) {
+        	matrix += "\n";
+            // Loop through all elements of current row 
+            for (int j = 0; j < CurrentBoard[i].length; j++) { 
+                matrix += (CurrentBoard[i][j] + " ");
+            }
+        }
+        return matrix;
 	}
 }
