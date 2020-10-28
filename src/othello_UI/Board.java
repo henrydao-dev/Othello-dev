@@ -7,8 +7,6 @@ public class Board {
 	 * Current game being played
 	 */
 	public Game CurrentGame;
-	public Player p1;
-	public Player p2;
 	/**
 	 * Some configuration of the discs on the board
 	 */
@@ -24,7 +22,7 @@ public class Board {
 	private static final int NONE = 0;
 	
 	
-	public Board() {
+	public Board(Player player1, Player player2) {
 		CurrentBoard = new char[8][8];
 		for (int i=0; i<CurrentBoard.length; i++)
 	    {
@@ -38,34 +36,11 @@ public class Board {
 		CurrentBoard[3][4] = BLACK;
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
-		p1 = new Player("black",Player.BLACK);
-		p2 = new Player("white",Player.WHITE);
 //		System.out.println(p1.Name);
 //		System.out.println(p2.Name);
-		CurrentGame = new Game(p1,p2);
+		CurrentGame = new Game(player1, player2);
 		
 	}	
-	
-	/**Determines which players goes first 
-	 * if p1 = true then p1 goes first
-	 * if p2 = true then p2 goes first
-	 * 
-	 * @param p1
-	 * @param p2
-	 */
-	public void coinflip(boolean p1, boolean p2 ) {
-		
-		
-		if (Math.random() > 0.5 ) {
-			
-		 p1 = true;
-			
-		}else p2 = true;
-		
-		
-	}
-	
-		
 	
 	/**
 	 * Place a disc on the board, checks if the move is valid, throws error if it is not valid
@@ -75,7 +50,7 @@ public class Board {
 	 * @throws IllegalArgumentException
 	 */
 	public void PlaceDisc(Player player, int row, int col) throws IllegalArgumentException {
-		if(validateMove(player, row, col)) {
+		if(isMoveValid(player, row, col)) {
 			// Do something here about placing the disc
 		} else {
 			throw new IllegalArgumentException("Invalid move");
@@ -91,34 +66,27 @@ public class Board {
 	 * @return
 	 */
 	
-private boolean validatePass(Player player) {// I guess row and col does not make sense for pass so I removed them
+private boolean isPassValid(Player player) {
+		boolean isOKToPass = true;
 		
-		for (int i=0; i<CurrentBoard.length; i++)
-	    {
-	      for (int j=0; j<CurrentBoard[i].length; j++)
-	      {
-	    	  if(validateMove(player, 0, 0) == false) {
-	    		  
-	    		  return true;
-	    	
+		for (int i=0; i<CurrentBoard.length; i++){
+			
+	      for (int j=0; j<CurrentBoard[i].length; j++) {
+	    	  if(isMoveValid(player, i, j)) {
+	    		  isOKToPass = false;
 	    	  }
-	    	  
-	    	  else return false;
 	      }
 	    }
-		
-		return true;
+		return isOKToPass;
 	}
 	
 	/**
 	 * Passes play. Throws error if pass is not allowed
 	 * @throws IllegalArgumentException
 	 */
-	public boolean Pass(Player player) throws IllegalArgumentException { // I guess row and col does not make sense for pass so I removed them
-		if(validatePass(player)) {
-			
-			// player turn determined by boolean
-			return true; // for now return true we should change this.
+	public boolean Pass(Player player) throws IllegalArgumentException {
+		if(isPassValid(player)) {
+			return true; 
 			
 		} else {
 			throw new IllegalArgumentException("Invalid move");
@@ -129,7 +97,7 @@ private boolean validatePass(Player player) {// I guess row and col does not mak
 	 * Checks if the game is over. Returns true for yes, false for no.
 	 * @return
 	 */
-	public boolean GameOver() {
+	public boolean isGameOver() {
 		boolean gameOver = false;
 		int takenSpaces = 0;
 		for (int i=0; i<CurrentBoard.length; i++)
@@ -149,7 +117,7 @@ private boolean validatePass(Player player) {// I guess row and col does not mak
 	}
 	
 	
-	private boolean validateMove(Player player, int row, int col) {
+	private boolean isMoveValid(Player player, int row, int col) {
 		boolean valid = false;
 		// Get the opponent's color
 		char opponent = Player.BLACK;
@@ -187,9 +155,6 @@ private boolean validatePass(Player player) {// I guess row and col does not mak
 		
 		return valid;
 	}
-	
-	
-	
 	
 	
 	/**

@@ -20,7 +20,7 @@ public class Game {
 	@CsvBindByName
 	public Player PlayerTwo;
 	@CsvBindByName
-	public String LastTurn; // 1 or 2 to signify the player's turn
+	public String LastTurn; // Player's Name
 	@CsvBindByName
 	public String StartString;
 	@CsvBindByName

@@ -49,12 +49,22 @@ public class UI_Prototype extends Application {
 	private GridPane Gpane;
 	private Board gameBoard;
 	private Game currGame;
-	private Player playerwithTurn;
+	private Player player1;
+	private Player player2;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
-		
-		gameBoard = new Board();
+
+		if(coinFlip()) {
+			// Login logic goes here GetUser then set color
+			player1 = new Player("Player1", Player.BLACK);
+			player2 = new Player("Player2", Player.WHITE);
+		} else {
+			// Login logic goes here
+			player1 = new Player("Player1", Player.WHITE);
+			player2 = new Player("Player2", Player.BLACK);
+		}
+		gameBoard = new Board(player1, player2);
 		this.currGame = gameBoard.CurrentGame;
 		
 			//Creates our pane
@@ -222,14 +232,14 @@ public class UI_Prototype extends Application {
 	private void passMove() {
 		
 		System.out.println("pass pressed");
-		if (gameBoard.Pass(currGame.getPlayerwithTurn()));
+		if (gameBoard.Pass(currGame.getPlayerwithTurn())) {
 			currGame.SwitchTurn();
-			
+		}
 		
 		return;
+
 	}
-	
-	
+
 	
 	private void drawBoard() {
 		Circle c1 = new Circle(75/2, 75/2, 37, Color.WHITE);
@@ -240,6 +250,23 @@ public class UI_Prototype extends Application {
 		Gpane.add(c2, 3, 4);
 		Gpane.add(c3, 4, 3);
 		Gpane.add(c4, 4, 4);
+	}
+	
+	/**
+	 * Decides who goes first
+	 * @param p1
+	 * @param p2
+	 * @return returns true for black false for white
+	 */
+	public boolean coinFlip() {
+		
+		if (Math.random() > 0.5 ) {
+			
+		 return true;
+			
+		} else {
+			return false;
+		}
 	}
 
 	//Idea: Set boolean flag for for player turns (if checked True, then player1 turn, if false, player2 turn)
