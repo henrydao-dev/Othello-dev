@@ -204,11 +204,11 @@ public class Board {
 	private void flipDisc(char colorToSet, int row, int col, int rowDir, int colDir) {
 		int rowToFlip = row + rowDir;
 		int colToFlip = col + colDir;
-		char cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 		// If we're off the game board for this direction of movement
 		if(isCellOutOfBounds(rowToFlip, colToFlip)) {
 			return; // We're off the board and there is nothing to flip in this cell
 		}
+		char cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 		while(cellIsBlack(rowToFlip, colToFlip) || cellIsWhite(rowToFlip, colToFlip)) {
 			if(cellToFlip == colorToSet) { 
 				// Cell is already the color it needs to be
