@@ -67,8 +67,8 @@ public class UI_Prototype extends Application {
 		//			player2 = new Player("Player2", Player.BLACK);
 		//		}
 
-		player1 = new Player("Player1", Player.WHITE);
-		player2 = new Player("Player2", Player.BLACK);
+		player1 = new Player("Player1", Player.BLACK);
+		player2 = new Player("Player2", Player.WHITE);
 
 		gameBoard = new Board(player1, player2);
 		this.currGame = gameBoard.CurrentGame;
