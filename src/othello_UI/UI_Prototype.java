@@ -215,13 +215,24 @@ public class UI_Prototype extends Application {
 		p2TimerBox.setLayoutY(20);
 		pane.getChildren().add(p2TimerBox);
 		pane.getChildren().add(placeHolderTime2);
-
-
+		
+		Button quitButton = new Button("Quit");
+		quitButton.setMaxWidth(150);
+		quitButton.setMaxHeight(150);
+		pane.getChildren().add(quitButton);
+		
+		
 
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(scene);
 		primaryStage.show(); 
-	}
+		
+		quitButton.setOnAction(value -> System.exit(0));
+			
+		};
+
+
+	
 
 	private void drawMove(int row, int col) {
 
@@ -374,36 +385,36 @@ public class UI_Prototype extends Application {
 			gameBoard.CurrentGame.EndGame();
 		
 			System.out.println("Game is now over. Play again? [Y/N (N will close application]");
-			String userInput = input.next().toLowerCase();
+			String userInput = input.next();
 			
-			if(userInput == "y") {
+			if(userInput.equalsIgnoreCase("y")) {
 				//Restart Game and Board
 				
 				
-			} else if (userInput == "n") {
+			} else if (userInput.equalsIgnoreCase("n")) {
 			
 				System.exit(0);
 			} else {
 				System.out.println("Not a valid input. Please input Y or N.");
 				//2nd Attempt
-				String userInput2 = input.next().toLowerCase();
+				String userInput2 = input.next();
 				
 				//nested loop 
-				if(userInput2 == "y") {
+				if(userInput2.equalsIgnoreCase("y")) {
 					//Restart Game and Board
 					
-				} else if (userInput2 == "n") {
+				} else if (userInput2.equalsIgnoreCase("n")) {
 					System.exit(0);
 				} else {
 					System.out.println("Not a valid input. Please input Y or N.");
 					//3rd and Final Attempt
-					String userInput3 = input.next().toLowerCase();
+					String userInput3 = input.next();
 					
 					//final nested loop
-					if(userInput3 == "y") {
+					if(userInput3.equalsIgnoreCase("y")) {
 						//Restart Game and Board
 						
-					} else if (userInput3 == "n") {
+					} else if (userInput3.equalsIgnoreCase("n")) {
 						System.exit(0);
 					} else {
 						System.out.println("Not a valid input. Game is now exiting. Thanks for playing!");
