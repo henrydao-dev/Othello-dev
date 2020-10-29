@@ -150,42 +150,66 @@ public class Board {
 
 
 	private boolean isMoveValid(Player player, int row, int col) {
-		boolean valid = false;
+		boolean isValid = false;
 		// Get the opponent's color
 		char opponent = Player.BLACK;
 		if(player.Color == Player.BLACK) {
 			opponent = Player.WHITE;
 		}
 
-		if(this.CurrentBoard[row][col] == NO_DISC ) {
-			if(row+1<8 && col+1<8 && this.CurrentBoard[row+1][col+1] == opponent) {
+		if(CurrentBoard[row][col] == NO_DISC ) {
+			if(row+1<8 && col+1<8 && validFlip(player.Color, row, col, ROW_DOWN, COL_RIGHT)) {
 				// If it's in the board range (8x8) and the BOTTOM RIGHT diagonal row and column is an opponents
-				valid = true;
-			} else if(row-1>-1 && col-1>-1 && this.CurrentBoard[row-1][col-1] == opponent) {
-				// if it's in the board range and the TOP LEFT diagonal is an opponents
-				valid = true;
-			} else if(row+1<8 && col-1>-1 && this.CurrentBoard[row+1][col-1] == opponent) {
-				// if it's in the board range and the BOTTOM LEFT diagonal this is an opponents
-				valid = true;
-			} else if(row-1>-1 && col+1<8 && this.CurrentBoard[row-1][col+1] == opponent) {
-				// if it's in the board range and the TOP RIGHT diagonal this is an opponents
-				valid = true;
-			} else if(row+1<8 && this.CurrentBoard[row+1][col] == opponent) {
-				// if it's in the board range and the one above this is an opponents TOP
-				valid = true;
-			} else if(col+1<8 && this.CurrentBoard[row][col+1] == opponent) {
-				// if it's in the board range and the one to the right is an opponents RIGHT
-				valid = true;
-			} else if(row-1>-1 && this.CurrentBoard[row-1][col] == opponent) {
+				isValid = true;
+			} else if(row+1<8 && validFlip(player.Color, row, col, ROW_DOWN, NONE)) {
 				// if it's in the board range and the one under this is an opponents BOTTOM
-				valid = true;
-			} else if(col-1>-1 && this.CurrentBoard[row][col-1] == opponent) {
+				isValid = true;
+			} else if(col+1<8 && validFlip(player.Color, row, col, NONE, COL_RIGHT)) {
+				// if it's in the board range and the one to the right is an opponents RIGHT
+				isValid = true;
+			} else if(col-1>-1 && validFlip(player.Color, row, col, NONE, COL_LEFT)) {
 				// if it's in the board range and the one to the left is an opponents LEFT
-				valid = true;
-			}  
+				isValid = true;
+			} else if(row-1>-1 && col-1>-1 && validFlip(player.Color, row, col, ROW_UP, COL_LEFT)) {
+				// if it's in the board range and the TOP LEFT diagonal is an opponents
+				isValid = true;
+			} else if(row-1>-1 && validFlip(player.Color, row, col, ROW_UP, NONE)) {
+				// if it's in the board range and the one above this is an opponents TOP
+				isValid = true;
+			} else if(row-1>-1 && col+1<8 && validFlip(player.Color, row, col, ROW_UP, COL_RIGHT)) {
+				// if it's in the board range and the TOP RIGHT diagonal this is an opponents
+				isValid = true;
+			} else if(row+1<8 && col-1>-1 && validFlip(player.Color, row, col, ROW_DOWN, COL_LEFT)) {
+				// if it's in the board range and the BOTTOM LEFT diagonal this is an opponents
+				isValid = true;
+			}     
 		}
 
-		return valid;
+		return isValid;
+	}
+	private boolean validFlip(char color, int r, int c, int rowDir, int colDir) {
+		char opponent = Player.BLACK;
+		if(color == Player.BLACK) {
+			opponent = Player.WHITE;
+		}
+		int row = r, col = c;
+		boolean valid = false;
+		for(int i=0; i<8; i++) {
+			row+= rowDir;
+			col+= colDir;
+			if(CurrentBoard[row][col] == opponent){
+				valid = true;
+			}
+			else if(CurrentBoard[row][col] == color){
+				if(valid) {
+					return true;
+				} else{
+					return false;
+				}
+			}
+			else return false;
+		}
+		return false;
 	}
 
 
@@ -240,24 +264,21 @@ public class Board {
 		if(isCellOutOfBounds(rowToFlip, colToFlip)) {
 			return; // We're off the board and there is nothing to flip in this cell
 		}
-		char cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 		while(cellIsBlack(rowToFlip, colToFlip) || cellIsWhite(rowToFlip, colToFlip)) {
-			if(cellToFlip == colorToSet) { 
+			if(CurrentBoard[rowToFlip][colToFlip] == colorToSet) { 
 				// Cell is already the color it needs to be
 				// Check in the negative directions until it hits the row and column we clicked
 				while(!(row == rowToFlip && col == colToFlip)) {
-					this.CurrentBoard[rowToFlip][colToFlip] = colorToSet;
+					CurrentBoard[rowToFlip][colToFlip] = colorToSet;
 					// move in the negative direction
 					rowToFlip = rowToFlip - rowDir;
 					colToFlip = colToFlip - colDir;
-					cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 				}
 				break;
 			} else {
 				// move the cell in the positive direction to check it
 				rowToFlip = rowToFlip + rowDir;
 				colToFlip = colToFlip + colDir;
-				cellToFlip = this.CurrentBoard[rowToFlip][colToFlip];
 			}
 			// Stop when you get to the edge of the board
 			if(isCellOutOfBounds(rowToFlip, colToFlip)) {
@@ -267,10 +288,10 @@ public class Board {
 
 	}
 	private boolean cellIsBlack(int row, int col) {
-		return this.CurrentBoard[row][col] == Board.BLACK;
+		return CurrentBoard[row][col] == Board.BLACK;
 	}
 	private boolean cellIsWhite(int row, int col) {
-		return this.CurrentBoard[row][col] == Board.WHITE;
+		return CurrentBoard[row][col] == Board.WHITE;
 	}
 	private boolean isCellOutOfBounds(int row, int col) {
 		if(row < 0 || row == 8 || col < 0 || col == 8) {
