@@ -197,10 +197,10 @@ public class Board {
 		for(int i=0; i<8; i++) {
 			row+= rowDir;
 			col+= colDir;
-			if(CurrentBoard[row][col] == opponent){
+			if(!isCellOutOfBounds(row, col) && CurrentBoard[row][col] == opponent){
 				valid = true;
 			}
-			else if(CurrentBoard[row][col] == color){
+			else if(!isCellOutOfBounds(row, col) && CurrentBoard[row][col] == color){
 				if(valid) {
 					return true;
 				} else{
