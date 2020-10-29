@@ -271,8 +271,12 @@ public class UI_Prototype extends Application {
 	private void passMove() {
 
 		System.out.println("pass pressed");
+		try {
 		if (gameBoard.Pass(currGame.getPlayerwithTurn())) {
 			currGame.SwitchTurn();
+		}
+		} catch(IllegalArgumentException ex) {
+			System.out.println("A valid move exists. You must make a valid move");
 		}
 
 		return;
