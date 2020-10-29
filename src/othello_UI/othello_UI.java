@@ -13,12 +13,12 @@ public class othello_UI extends Application{
 
 
 	public static void main(String[] args) throws IOException {
-		
+
 		System.out.println("hello world");
 		try {
 			FileReader file = new FileReader("data/users.csv");
 			List<Player> beans = new CsvToBeanBuilder<Player>(file)
-				       .withType(Player.class).build().parse();
+					.withType(Player.class).build().parse();
 			for(Player user : beans) {
 				System.out.println(user.Name);
 			}
@@ -30,8 +30,8 @@ public class othello_UI extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		
+
+
 	}
 
 }

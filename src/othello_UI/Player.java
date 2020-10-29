@@ -13,11 +13,22 @@ public class Player implements Comparable<Player> {
 	int Wins;
 	@CsvBindByName
 	int Losses;
-	
-	public Player() {
-		
+	char Color;
+
+	public static final char BLACK = 'b';
+	public static final char WHITE = 'w';
+
+	/**
+	 * New Player with Color choice
+	 * @param Name
+	 * @param color
+	 */
+	public Player(String Name,char color) {
+		this.Color = color ;
+		this.Name = Name;
+
 	}
-	
+
 	public Player(String name, String password) {
 		this.Name = name;
 		this.Password = password;
