@@ -23,30 +23,21 @@
 package othello_UI;
 
 import javafx.application.Application;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner; 
-import java.awt.Label;
 
 
 public class UI_Prototype extends Application {
@@ -351,16 +342,6 @@ public class UI_Prototype extends Application {
 		System.out.println(gameBoard.toString());
 		updateScores(String.valueOf(tempBlackScore),
 				String.valueOf(tempWhiteScore));
-
-	}
-
-	private Node getCircleFromGridPane( int col, int row) {
-		for (Node node : Gpane.getChildren()) {
-			if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-				return (Circle)node;
-			}
-		}
-		return null;
 
 	}
 
