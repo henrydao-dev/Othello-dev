@@ -113,7 +113,7 @@ public class UI_Prototype extends Application {
 
 		Gpane.setLayoutX(100);
 		Gpane.setLayoutY(150);
-		drawBoard();
+		drawStartingDiscs();
 
 
 		//Needed buttons
@@ -251,7 +251,7 @@ public class UI_Prototype extends Application {
 	}
 
 
-	private void drawBoard() {
+	private void drawStartingDiscs() {
 		Circle c1 = new Circle(75/2, 75/2, 37, Color.WHITE);
 		Circle c2 = new Circle(75/2, 75/2, 37, Color.BLACK);
 		Circle c3 = new Circle(75/2, 75/2, 37, Color.BLACK);
@@ -292,7 +292,7 @@ public class UI_Prototype extends Application {
 
 		Gpane.setLayoutX(100);
 		Gpane.setLayoutY(150);
-		drawBoard();
+		drawStartingDiscs();
 		int tempBlackScore=0;
 		int tempWhiteScore=0;
 		for (int i=0; i<gameBoard.CurrentBoard.length; i++)
@@ -314,6 +314,8 @@ public class UI_Prototype extends Application {
 			}
 
 		}
+		// Output board to console
+		System.out.println(gameBoard.toString());
 		updateScores(String.valueOf(tempBlackScore),
 				String.valueOf(tempWhiteScore));
 
