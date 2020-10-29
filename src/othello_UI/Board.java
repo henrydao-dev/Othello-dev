@@ -1,8 +1,8 @@
 package othello_UI;
 
 public class Board {
-	
-	
+
+
 	/**
 	 * Current game being played
 	 */
@@ -11,7 +11,7 @@ public class Board {
 	 * Some configuration of the discs on the board
 	 */
 	public char[][] CurrentBoard;
-	
+
 	private static final char NO_DISC = ' ';
 	private static final char WHITE = 'w';
 	private static final char BLACK = 'b';
@@ -20,28 +20,28 @@ public class Board {
 	private static final int COL_LEFT = -1;
 	private static final int COL_RIGHT = 1;
 	private static final int NONE = 0;
-	
-	
+
+
 	public Board(Player player1, Player player2) {
 		CurrentBoard = new char[8][8];
 		for (int i=0; i<CurrentBoard.length; i++)
-	    {
-	      for (int j=0; j<CurrentBoard[i].length; j++)
-	      {
-	    	  CurrentBoard[i][j]=NO_DISC;
-	      }
-	    }
+		{
+			for (int j=0; j<CurrentBoard[i].length; j++)
+			{
+				CurrentBoard[i][j]=NO_DISC;
+			}
+		}
 		// Set starting discs
 		CurrentBoard[3][3] = WHITE;
 		CurrentBoard[3][4] = BLACK;
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
-//		System.out.println(p1.Name);
-//		System.out.println(p2.Name);
+		//		System.out.println(p1.Name);
+		//		System.out.println(p2.Name);
 		CurrentGame = new Game(player1, player2);
-		
+
 	}	
-	
+
 	/**
 	 * Place a disc on the board, checks if the move is valid, throws error if it is not valid
 	 * @param player
@@ -56,7 +56,7 @@ public class Board {
 			throw new IllegalArgumentException("Invalid move");
 		}
 	}
-	
+
 	/**
 	 * Checks to see if there are any valid moves else forces pass().
 	 * 
@@ -65,21 +65,21 @@ public class Board {
 	 * @param col
 	 * @return
 	 */
-	
-private boolean isPassValid(Player player) {
+
+	private boolean isPassValid(Player player) {
 		boolean isOKToPass = true;
-		
+
 		for (int i=0; i<CurrentBoard.length; i++){
-			
-	      for (int j=0; j<CurrentBoard[i].length; j++) {
-	    	  if(isMoveValid(player, i, j)) {
-	    		  isOKToPass = false;
-	    	  }
-	      }
-	    }
+
+			for (int j=0; j<CurrentBoard[i].length; j++) {
+				if(isMoveValid(player, i, j)) {
+					isOKToPass = false;
+				}
+			}
+		}
 		return isOKToPass;
 	}
-	
+
 	/**
 	 * Passes play. Throws error if pass is not allowed
 	 * @throws IllegalArgumentException
@@ -87,12 +87,12 @@ private boolean isPassValid(Player player) {
 	public boolean Pass(Player player) throws IllegalArgumentException {
 		if(isPassValid(player)) {
 			return true; 
-			
+
 		} else {
 			throw new IllegalArgumentException("Invalid move");
 		}
 	}
-	
+
 	/**
 	 * Checks if the game is over. Returns true for yes, false for no.
 	 * @return
@@ -101,22 +101,22 @@ private boolean isPassValid(Player player) {
 		boolean gameOver = false;
 		int takenSpaces = 0;
 		for (int i=0; i<CurrentBoard.length; i++)
-	    {
-	      for (int j=0; j<CurrentBoard[i].length; j++)
-	      {
-	    	  if(this.CurrentBoard[i][j] == Board.BLACK || this.CurrentBoard[i][j] == Board.WHITE) {
-	    		  // increment count of discs
-	    		  takenSpaces++;
-	    	  }
-	      }
-	    }
+		{
+			for (int j=0; j<CurrentBoard[i].length; j++)
+			{
+				if(this.CurrentBoard[i][j] == Board.BLACK || this.CurrentBoard[i][j] == Board.WHITE) {
+					// increment count of discs
+					takenSpaces++;
+				}
+			}
+		}
 		if(takenSpaces >= 64) {
 			gameOver = true;
 		}
 		return gameOver;
 	}
-	
-	
+
+
 	private boolean isMoveValid(Player player, int row, int col) {
 		boolean valid = false;
 		// Get the opponent's color
@@ -124,7 +124,7 @@ private boolean isPassValid(Player player) {
 		if(player.Color == Player.BLACK) {
 			opponent = Player.WHITE;
 		}
-		
+
 		if(this.CurrentBoard[row][col] == NO_DISC ) {
 			if(row+1<8 && col+1<8 && this.CurrentBoard[row+1][col+1] == opponent) {
 				// If it's in the board range (8x8) and the BOTTOM RIGHT diagonal row and column is an opponents
@@ -152,11 +152,11 @@ private boolean isPassValid(Player player) {
 				valid = true;
 			}  
 		}
-		
+
 		return valid;
 	}
-	
-	
+
+
 	/**
 	 * Flips the discs in each direction 
 	 * @param color (player's color)
@@ -167,31 +167,31 @@ private boolean isPassValid(Player player) {
 		// flip the one that is clicked first because it's empty
 		this.CurrentBoard[row][col] = color;
 		// Check in each direction
-		
+
 		//top
 		flipDisc(color, row, col, ROW_UP, NONE);
-		
+
 		//top right
 		flipDisc(color, row, col, ROW_UP, COL_RIGHT);
-		
+
 		//right
 		flipDisc(color, row, col, NONE, COL_RIGHT);
-		
+
 		//bottom right
 		flipDisc(color, row, col, ROW_DOWN, COL_RIGHT);
-		
+
 		//bottom
 		flipDisc(color, row, col, ROW_DOWN, NONE);
-		
+
 		//bottom left
 		flipDisc(color, row, col, ROW_DOWN, COL_LEFT);
-		
+
 		//left
 		flipDisc(color, row, col, NONE, COL_LEFT);
-		
+
 		//top left
 		flipDisc(color, row, col, ROW_UP, COL_LEFT);
-		
+
 	}
 	/**
 	 * Flips the discs in the direction given for the columns and rows
@@ -232,7 +232,7 @@ private boolean isPassValid(Player player) {
 				break;
 			}
 		}
-		
+
 	}
 	private boolean cellIsBlack(int row, int col) {
 		return this.CurrentBoard[row][col] == Board.BLACK;
@@ -250,13 +250,13 @@ private boolean isPassValid(Player player) {
 	public String toString() {
 		String matrix = "";
 		// Loop through all rows 
-        for (int i = 0; i < CurrentBoard.length; i++) {
-        	matrix += "\n";
-            // Loop through all elements of current row 
-            for (int j = 0; j < CurrentBoard[i].length; j++) { 
-                matrix += (CurrentBoard[i][j] + " ");
-            }
-        }
-        return matrix;
+		for (int i = 0; i < CurrentBoard.length; i++) {
+			matrix += "\n";
+			// Loop through all elements of current row 
+			for (int j = 0; j < CurrentBoard[i].length; j++) { 
+				matrix += (CurrentBoard[i][j] + " ");
+			}
+		}
+		return matrix;
 	}
 }

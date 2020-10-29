@@ -14,10 +14,10 @@ public class Player implements Comparable<Player> {
 	@CsvBindByName
 	int Losses;
 	char Color;
-	
+
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
-	
+
 	/**
 	 * New Player with Color choice
 	 * @param Name
@@ -26,9 +26,9 @@ public class Player implements Comparable<Player> {
 	public Player(String Name,char color) {
 		this.Color = color ;
 		this.Name = Name;
-		
+
 	}
-	
+
 	public Player(String name, String password) {
 		this.Name = name;
 		this.Password = password;

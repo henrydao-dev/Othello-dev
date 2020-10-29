@@ -21,7 +21,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 public class GameRepository {
 
 	private final String USERSCSVPATH = "data/games.csv";
-	
+
 	/**
 	 * Adds a game into the CSV file
 	 * @param newGame
@@ -34,11 +34,11 @@ public class GameRepository {
 		List<Game> games = GetGames();
 		games.add(newGame);
 		Writer writer = new FileWriter(USERSCSVPATH);
-	    StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
-	    beanToCsv.write(games);
-	    writer.close();
+		StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
+		beanToCsv.write(games);
+		writer.close();
 	}
-	
+
 	/**
 	 * Updates the game in the CSV file, overwriting the entire record with the one passed in.
 	 * @param updatedGame
@@ -57,11 +57,11 @@ public class GameRepository {
 			index++;
 		}
 
-        // Write to CSV file which is open
-		 Writer writer = new FileWriter(USERSCSVPATH);
-	     StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
-	     beanToCsv.write(games);
-	     writer.close();
+		// Write to CSV file which is open
+		Writer writer = new FileWriter(USERSCSVPATH);
+		StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
+		beanToCsv.write(games);
+		writer.close();
 	}
 	/**
 	 * Gets all the games in the CSV
@@ -70,7 +70,7 @@ public class GameRepository {
 		try {
 			FileReader file = new FileReader(USERSCSVPATH);
 			List<Game> games = new CsvToBeanBuilder<Game>(file)
-				       .withType(Game.class).build().parse();
+					.withType(Game.class).build().parse();
 			return games;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -92,12 +92,12 @@ public class GameRepository {
 	}
 
 	public void dispose() {
-		 try {
+		try {
 			super.finalize();
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }

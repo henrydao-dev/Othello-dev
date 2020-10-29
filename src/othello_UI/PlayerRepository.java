@@ -55,9 +55,9 @@ public class PlayerRepository {
 		}
 		players.add(newPlayer);
 		Writer writer = new FileWriter(USERSCSVPATH);
-	    StatefulBeanToCsv<Player> beanToCsv = new StatefulBeanToCsvBuilder<Player>(writer).build();
-	    beanToCsv.write(players);
-	    writer.close();
+		StatefulBeanToCsv<Player> beanToCsv = new StatefulBeanToCsvBuilder<Player>(writer).build();
+		beanToCsv.write(players);
+		writer.close();
 	}
 	/**
 	 * Updates the user in the CSV file by replacing the entire record with the one passed
@@ -77,11 +77,11 @@ public class PlayerRepository {
 			index++;
 		}
 
-        // Write to CSV file which is open
-		 Writer writer = new FileWriter(USERSCSVPATH);
-	     StatefulBeanToCsv<Player> beanToCsv = new StatefulBeanToCsvBuilder<Player>(writer).build();
-	     beanToCsv.write(players);
-	     writer.close();
+		// Write to CSV file which is open
+		Writer writer = new FileWriter(USERSCSVPATH);
+		StatefulBeanToCsv<Player> beanToCsv = new StatefulBeanToCsvBuilder<Player>(writer).build();
+		beanToCsv.write(players);
+		writer.close();
 	}
 	/**
 	 * Gets all the Users in the CSV file
@@ -91,7 +91,7 @@ public class PlayerRepository {
 		try {
 			FileReader file = new FileReader(USERSCSVPATH);
 			List<Player> players = new CsvToBeanBuilder<Player>(file)
-				       .withType(Player.class).build().parse();
+					.withType(Player.class).build().parse();
 			return players;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -118,6 +118,6 @@ public class PlayerRepository {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }
