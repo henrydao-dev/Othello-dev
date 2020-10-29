@@ -43,8 +43,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner; 
 import java.awt.Label;
+
 
 public class UI_Prototype extends Application {
 	private GridPane Gpane;
@@ -53,6 +56,9 @@ public class UI_Prototype extends Application {
 	private Player player1;
 	private Player player2;
 	private TextField p1ScoreBox,p2ScoreBox; 
+	
+	Scanner input = new Scanner(System.in);
+
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
@@ -66,7 +72,7 @@ public class UI_Prototype extends Application {
 		//			player1 = new Player("Player1", Player.WHITE);
 		//			player2 = new Player("Player2", Player.BLACK);
 		//		}
-
+		
 		player1 = new Player("Player1", Player.BLACK);
 		player2 = new Player("Player2", Player.WHITE);
 
@@ -229,6 +235,18 @@ public class UI_Prototype extends Application {
 			updateBoard();
 			Circle c = new Circle(75/2, 75/2, 37, color );
 			Gpane.add(c, row, col);
+	
+			//This section of code will run on every valid disc placement to check for end of game
+			if (gameBoard.isGameOver()) {
+				/*
+				 * calls delcareWinner() which will call upon another method countDiscs() to calculate
+				 * which player has won the game and output all of : Player1's score, Player2's score, 
+				 * and winner declaration
+				 */
+				declareWinner();
+				//calls endGame() only after isGameOver() is true and the winner is declared.	 
+				endGame();	
+			}
 			currGame.SwitchTurn();
 
 		} catch (IllegalArgumentException ex) {
@@ -347,6 +365,86 @@ public class UI_Prototype extends Application {
 			return false;
 		}
 	}
+	
+	//Method for being the final aspect of the game | Asks user (up to 3 times) to play again or quit
+	private void endGame() {
+			
+			//TODO: *could also display the game count b/w players at this point, before moving to "play again?"*
+			
+			gameBoard.CurrentGame.EndGame();
+		
+			System.out.println("Game is now over. Play again? [Y/N (N will close application]");
+			String userInput = input.next().toLowerCase();
+			
+			if(userInput == "y") {
+				//Restart Game and Board
+				
+				
+			} else if (userInput == "n") {
+				System.exit(0);
+			} else {
+				System.out.println("Not a valid input. Please input Y or N.");
+				//2nd Attempt
+				String userInput2 = input.next().toLowerCase();
+				
+				//nested loop 
+				if(userInput2 == "y") {
+					//Restart Game and Board
+					
+				} else if (userInput2 == "n") {
+					System.exit(0);
+				} else {
+					System.out.println("Not a valid input. Please input Y or N.");
+					//3rd and Final Attempt
+					String userInput3 = input.next().toLowerCase();
+					
+					//final nested loop
+					if(userInput3 == "y") {
+						//Restart Game and Board
+						
+					} else if (userInput3 == "n") {
+						System.exit(0);
+					} else {
+						System.out.println("Not a valid input. Game is now exiting. Thanks for playing!");
+						System.exit(0);
+				}
+			}
+		}
+			
+		}
+
+	public void declareWinner () {
+		
+		String blackCountString;
+		String whiteCountString;
+		String winner;
+		
+		/* whiteCount = list(0)
+		 * blackCount = list(1)
+		 */
+		List <Integer> discCount = gameBoard.countDiscs();
+		int whiteCount = discCount.get(0);
+		int blackCount = discCount.get(1);
+		
+		//Determines who the winner of the game is and returns it as a String
+		if (blackCount > whiteCount) {
+			winner = "Player 1";
+		} else if (blackCount < whiteCount) {
+			winner = "Player 2";
+		} else {
+			winner = "The game is a tie!";
+		}
+		
+		//Turns our variables all to Strings to output
+		blackCountString = "Player 1's disc count is " + blackCount;
+		whiteCountString = "Player 2's disc count is " + whiteCount;
+		
+		//Outputs from method
+		System.out.println("Player 1's score is: " + blackCountString + "!");
+		System.out.println("Player 2's score is: " + whiteCountString + "!");
+		System.out.println("AND THE WINNER IS......" + winner + "!");
+	}
+
 
 	//Idea: Set boolean flag for for player turns (if checked True, then player1 turn, if false, player2 turn)
 

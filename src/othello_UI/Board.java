@@ -1,5 +1,8 @@
 package othello_UI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
 
@@ -115,6 +118,36 @@ public class Board {
 		}
 		return gameOver;
 	}
+	
+	//Method for counting discs after "isGameOver()" returns true
+		public List<Integer> countDiscs () {
+			
+			int whiteCount = 0;
+			int blackCount = 0;
+			
+			//Loop for checking through the board to count discs
+			for (int i=0; i<CurrentBoard.length; i++)
+		    {
+		      for (int j=0; j<CurrentBoard[i].length; j++)
+		      {
+		    	  if(this.CurrentBoard[i][j] == Board.BLACK) {
+		    		  //increment amount of black discs
+		    		  blackCount++;
+		    	  } else if (this.CurrentBoard[i][j] == Board.WHITE) {
+		    		  //increment amount of white discs
+		    		  whiteCount++;
+		    	  }
+		      }
+		    }
+			
+			//creates a list to store our variables to output
+			List<Integer> list = new ArrayList<Integer>();
+			list.add(whiteCount);
+			list.add(blackCount);
+			
+			return list;
+		}
+
 
 
 	private boolean isMoveValid(Player player, int row, int col) {
