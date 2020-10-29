@@ -381,6 +381,7 @@ public class UI_Prototype extends Application {
 				
 				
 			} else if (userInput == "n") {
+			
 				System.exit(0);
 			} else {
 				System.out.println("Not a valid input. Please input Y or N.");

@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Board {
 
-
 	/**
 	 * Current game being played
 	 */
