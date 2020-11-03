@@ -27,8 +27,12 @@ import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -37,16 +41,18 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner; 
 
 
 public class UI_Prototype extends Application {
 	private GridPane Gpane;
+	private Pane pane;
 	private Board gameBoard;
 	private Game currGame;
 	private Player player1;
 	private Player player2;
-	private TextField p1ScoreBox,p2ScoreBox; 
+	private TextField p1ScoreBox,p2ScoreBox;
 	
 	Scanner input = new Scanner(System.in);
 
@@ -73,7 +79,7 @@ public class UI_Prototype extends Application {
 
 
 		//Creates our pane
-		Pane pane = new Pane();
+		pane = new Pane();
 		Gpane = new GridPane();
 		pane.setPadding(new Insets(0,0,0,0));
 
@@ -112,6 +118,28 @@ public class UI_Prototype extends Application {
 		Gpane.setLayoutY(150);
 		drawStartingDiscs();
 
+		//Text Input for Player 1's Name:
+		TextInputDialog dialog = new TextInputDialog("Player1");
+		dialog.setTitle("Name Entry");
+		dialog.setHeaderText("Player 1 Name Entry");
+		dialog.setContentText("Please enter your name:");
+		Optional<String> result = dialog.showAndWait();
+		String p1Name = "none";
+		if (result.isPresent()){
+		    p1Name = result.get();
+		}
+		
+		//Text Input for Player 2's Name:
+		TextInputDialog dialog2 = new TextInputDialog("Player2");
+		dialog2.setTitle("Name Entry");
+		dialog2.setHeaderText("Player 2 Name Entry");
+		dialog2.setContentText("Please enter your name:");
+		Optional<String> result2 = dialog2.showAndWait();
+		String p2Name = "none";
+			if (result2.isPresent()){
+			   p2Name = result2.get();
+		}
+
 
 		//Needed buttons
 		//add "settings" button (will be replaced with a more appropriate "settings" icon later)
@@ -142,23 +170,22 @@ public class UI_Prototype extends Application {
 		//Add "Player 1" and "Player 2" text boxes
 		//Player1
 		Text player1 = new Text(155,90, "Player 1: ");
-		TextField player1Box = new TextField();
-		player1Box.setMaxWidth(100);
-		player1Box.setLayoutX(130);
-		player1Box.setLayoutY(100);
+		Text player1CustomName = new Text(p1Name);
+		player1CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+		player1CustomName.setLayoutX(140);
+		player1CustomName.setLayoutY(118);
 		pane.getChildren().add(player1);
-		pane.getChildren().add(player1Box);
+		pane.getChildren().add(player1CustomName);
 		//		player1Box.appendText("gi");
 
 		//Player2
 		Text player2 = new Text(600,90, "Player 2: ");
-		TextField player2Box = new TextField();
-		//		player2Box.setText("2");
-		player2Box.setMaxWidth(100);
-		player2Box.setLayoutX(575);
-		player2Box.setLayoutY(100);
+		Text player2CustomName = new Text(p2Name);
+		player2CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+		player2CustomName.setLayoutX(575);
+		player2CustomName.setLayoutY(120);
 		pane.getChildren().add(player2);
-		pane.getChildren().add(player2Box);
+		pane.getChildren().add(player2CustomName);
 
 		//add player 1 and player 2 score boxes
 		//Player1
@@ -207,6 +234,24 @@ public class UI_Prototype extends Application {
 		pane.getChildren().add(p2TimerBox);
 		pane.getChildren().add(placeHolderTime2);
 		
+		//Display Current Player's Turn:
+		Text currentPlayerTurn = new Text(715,770, "Current Turn:");
+		currentPlayerTurn.setStyle("-fx-font: 14 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+		pane.getChildren().add(currentPlayerTurn);
+		//Circle representing player turn (with square as backdrop)
+		Rectangle indicatorBG = new Rectangle();
+		indicatorBG.setFill(Color.GREEN);
+		indicatorBG.setWidth(70);
+		indicatorBG.setHeight(70);
+		indicatorBG.setLayoutX(720.5);
+		indicatorBG.setLayoutY(775);
+		pane.getChildren().add(indicatorBG);		
+		Circle turnIndicator = new Circle(75/2, 75/2, 28);
+		turnIndicator.setFill(Color.BLACK);
+		turnIndicator.setLayoutX(718);
+		turnIndicator.setLayoutY(775);
+		pane.getChildren().add(turnIndicator);
+		
 		Button quitButton = new Button("Quit");
 		quitButton.setMaxWidth(150);
 		quitButton.setMaxHeight(150);
@@ -249,7 +294,24 @@ public class UI_Prototype extends Application {
 				//calls endGame() only after isGameOver() is true and the winner is declared.	 
 				endGame();	
 			}
+			
 			currGame.SwitchTurn();
+			
+			//Sets the color for turnIndicator
+			if(Player.WHITE == p.Color) {
+			Circle turnIndicator = new Circle(75/2, 75/2, 28);
+			turnIndicator.setFill(Color.BLACK);
+			turnIndicator.setLayoutX(718);
+			turnIndicator.setLayoutY(775);
+			pane.getChildren().add(turnIndicator);
+			} else {
+				Circle turnIndicator = new Circle(75/2, 75/2, 28);
+				turnIndicator.setFill(Color.WHITE);
+				turnIndicator.setLayoutX(718);
+				turnIndicator.setLayoutY(775);
+				pane.getChildren().add(turnIndicator);
+			}
+			
 
 		} catch (IllegalArgumentException ex) {
 			System.out.println("Illegal Move");
@@ -264,8 +326,21 @@ public class UI_Prototype extends Application {
 		System.out.println("pass pressed");
 		try {
 		if (gameBoard.Pass(currGame.getPlayerwithTurn())) {
+			if(currGame.getPlayerwithTurn() == player1) {
+				Circle turnIndicator = new Circle(75/2, 75/2, 28);
+				turnIndicator.setFill(Color.WHITE);
+				turnIndicator.setLayoutX(718);
+				turnIndicator.setLayoutY(775);
+				pane.getChildren().add(turnIndicator);
+			} else {
+				Circle turnIndicator = new Circle(75/2, 75/2, 28);
+				turnIndicator.setFill(Color.BLACK);
+				turnIndicator.setLayoutX(718);
+				turnIndicator.setLayoutY(775);
+				pane.getChildren().add(turnIndicator);
+			}
 			currGame.SwitchTurn();
-		}
+			}
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
 		}
@@ -292,6 +367,7 @@ public class UI_Prototype extends Application {
 	private void updateBoard(){
 
 		Gpane.getChildren().clear();
+
 
 		int k = 0;
 		int r = 0;
@@ -342,6 +418,7 @@ public class UI_Prototype extends Application {
 		System.out.println(gameBoard.toString());
 		updateScores(String.valueOf(tempBlackScore),
 				String.valueOf(tempWhiteScore));
+	
 
 	}
 
@@ -368,53 +445,36 @@ public class UI_Prototype extends Application {
 			//TODO: *could also display the game count b/w players at this point, before moving to "play again?"*
 			
 			gameBoard.CurrentGame.EndGame();
-		
-			System.out.println("Game is now over. Play again? [Y/N (N will close application]");
-			String userInput = input.next();
 			
-			if(userInput.equalsIgnoreCase("y")) {
+			//Pop up box alerting the players that the game is over
+			Alert gameOverBox = new Alert(AlertType.CONFIRMATION);
+			ButtonType yesButton = new ButtonType("Yes");
+			ButtonType noButton = new ButtonType("No");
+			gameOverBox.getButtonTypes().setAll(yesButton, noButton);
+			gameOverBox.setTitle("Game Over");
+			gameOverBox.setHeaderText(declareWinner());
+			gameOverBox.setContentText("Would you like play again?");
+			gameOverBox.show();
+			
+			//Results of player clicking buttons
+			Optional<ButtonType> result = gameOverBox.showAndWait();
+			if (result.get() == yesButton) {
 				//Restart Game and Board
+				gameBoard = new Board(player1, player2);
+				this.currGame = gameBoard.CurrentGame;
 				
-				
-			} else if (userInput.equalsIgnoreCase("n")) {
-			
-				System.exit(0);
-			} else {
-				System.out.println("Not a valid input. Please input Y or N.");
-				//2nd Attempt
-				String userInput2 = input.next();
-				
-				//nested loop 
-				if(userInput2.equalsIgnoreCase("y")) {
-					//Restart Game and Board
-					
-				} else if (userInput2.equalsIgnoreCase("n")) {
-					System.exit(0);
-				} else {
-					System.out.println("Not a valid input. Please input Y or N.");
-					//3rd and Final Attempt
-					String userInput3 = input.next();
-					
-					//final nested loop
-					if(userInput3.equalsIgnoreCase("y")) {
-						//Restart Game and Board
-						
-					} else if (userInput3.equalsIgnoreCase("n")) {
-						System.exit(0);
-					} else {
-						System.out.println("Not a valid input. Game is now exiting. Thanks for playing!");
-						System.exit(0);
-				}
+			} else if (result.get() == noButton) {
+				 System.exit(0);
 			}
-		}
 			
 		}
 
-	public void declareWinner () {
+	public String declareWinner () {
 		
 		String blackCountString;
 		String whiteCountString;
 		String winner;
+		String returnMessage;
 		
 		/* whiteCount = list(0)
 		 * blackCount = list(1)
@@ -433,13 +493,19 @@ public class UI_Prototype extends Application {
 		}
 		
 		//Turns our variables all to Strings to output
-		blackCountString = "Player 1's disc count is " + blackCount;
-		whiteCountString = "Player 2's disc count is " + whiteCount;
+		// blackCountString = "Player 1's disc count is " + blackCount;
+		//whiteCountString = "Player 2's disc count is " + whiteCount;
 		
 		//Outputs from method
-		System.out.println("Player 1's score is: " + blackCountString + "!");
-		System.out.println("Player 2's score is: " + whiteCountString + "!");
-		System.out.println("AND THE WINNER IS......" + winner + "!");
+		// System.out.println("Player 1's score is: " + blackCountString + "!");
+		// System.out.println("Player 2's score is: " + whiteCountString + "!");
+		// System.out.println("AND THE WINNER IS......" + winner + "!");
+		
+		returnMessage = "Player 1 had a score of: " + blackCount + "." + " Player 2 had a score of: " +
+						whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
+		
+		return returnMessage;
+				
 	}
 
 
@@ -452,6 +518,7 @@ public class UI_Prototype extends Application {
 		this.p1ScoreBox.setText(black);
 		this.p2ScoreBox.setText(white);
 	}
+
 
 	//for future update players name
 	//	private void updatePlayersNameinUI(String black,String white) {
