@@ -258,6 +258,7 @@
 											"model": {
 												"$ref": "AAAAAAF0z/JozFnzSac="
 											},
+											"visible": false,
 											"font": "Arial;13;0",
 											"left": 445,
 											"top": 768,
@@ -277,7 +278,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 445,
-											"top": 783,
+											"top": 770,
 											"width": 261.89794921875,
 											"height": 13,
 											"text": "+InsertGame()",
@@ -294,7 +295,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 445,
-											"top": 798,
+											"top": 785,
 											"width": 261.89794921875,
 											"height": 13,
 											"text": "+UpdateGame()",
@@ -311,7 +312,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 445,
-											"top": 813,
+											"top": 800,
 											"width": 261.89794921875,
 											"height": 13,
 											"text": "-GetGames()",
@@ -328,7 +329,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 445,
-											"top": 828,
+											"top": 815,
 											"width": 261.89794921875,
 											"height": 13,
 											"text": "-GetNextId()",
@@ -339,7 +340,7 @@
 									"left": 440,
 									"top": 763,
 									"width": 271.89794921875,
-									"height": 83
+									"height": 70
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -524,6 +525,7 @@
 											"model": {
 												"$ref": "AAAAAAF0z/PctFocRM4="
 											},
+											"visible": false,
 											"font": "Arial;13;0",
 											"left": 757,
 											"top": 768,
@@ -543,7 +545,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 757,
-											"top": 783,
+											"top": 770,
 											"width": 141.9462890625,
 											"height": 13,
 											"text": "+InsertUser()",
@@ -560,7 +562,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 757,
-											"top": 798,
+											"top": 785,
 											"width": 141.9462890625,
 											"height": 13,
 											"text": "+UpdateUser()",
@@ -577,7 +579,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 757,
-											"top": 813,
+											"top": 800,
 											"width": 141.9462890625,
 											"height": 13,
 											"text": "-GetUsers()",
@@ -594,7 +596,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 757,
-											"top": 828,
+											"top": 815,
 											"width": 141.9462890625,
 											"height": 13,
 											"text": "-GetNextId()",
@@ -609,9 +611,10 @@
 											"model": {
 												"$ref": "AAAAAAF05ltK09jbAcI="
 											},
+											"visible": false,
 											"font": "Arial;13;0",
 											"left": 757,
-											"top": 843,
+											"top": 830,
 											"width": 141.9462890625,
 											"height": 13,
 											"text": "+getPlayersStats()",
@@ -622,7 +625,7 @@
 									"left": 752,
 									"top": 763,
 									"width": 151.9462890625,
-									"height": 98
+									"height": 70
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",

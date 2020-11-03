@@ -23,26 +23,6 @@ public class GameRepository {
 	private final String USERSCSVPATH = "data/games.csv";
 
 	/**
-	 * Gets the user's last game that was not finished, essentially resuming play. 
-	 * @param user
-	 * @return Game
-	 */
-	public Game GetLastUnfinishedGameForUser(User user) {
-		List<Game> allGames = GetGames();
-		List<Game> usersGames = new ArrayList<Game>();
-		for(Game game : allGames) {
-			if(game.PlayerOne.equalsIgnoreCase(user.Name) || game.PlayerTwo.equalsIgnoreCase(user.Name)) {
-				usersGames.add(game);
-			}
-		}
-		if(usersGames.size() > 0) {
-			return usersGames.get(usersGames.size() -1); // Gets the last game, which would be the most recent TODO: ensure this game is not complete
-		} else {
-			return null;
-		}
-	}
-	
-	/**
 	 * Adds a game into the CSV file
 	 * @param newGame
 	 * @throws CsvDataTypeMismatchException If the game object isn't right
@@ -54,11 +34,11 @@ public class GameRepository {
 		List<Game> games = GetGames();
 		games.add(newGame);
 		Writer writer = new FileWriter(USERSCSVPATH);
-	    StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
-	    beanToCsv.write(games);
-	    writer.close();
+		StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
+		beanToCsv.write(games);
+		writer.close();
 	}
-	
+
 	/**
 	 * Updates the game in the CSV file, overwriting the entire record with the one passed in.
 	 * @param updatedGame
@@ -77,20 +57,20 @@ public class GameRepository {
 			index++;
 		}
 
-        // Write to CSV file which is open
-		 Writer writer = new FileWriter(USERSCSVPATH);
-	     StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
-	     beanToCsv.write(games);
-	     writer.close();
+		// Write to CSV file which is open
+		Writer writer = new FileWriter(USERSCSVPATH);
+		StatefulBeanToCsv<Game> beanToCsv = new StatefulBeanToCsvBuilder<Game>(writer).build();
+		beanToCsv.write(games);
+		writer.close();
 	}
 	/**
 	 * Gets all the games in the CSV
 	 */
-	private List<Game> GetGames() {
+	public List<Game> GetGames() {
 		try {
 			FileReader file = new FileReader(USERSCSVPATH);
 			List<Game> games = new CsvToBeanBuilder<Game>(file)
-				       .withType(Game.class).build().parse();
+					.withType(Game.class).build().parse();
 			return games;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -109,5 +89,15 @@ public class GameRepository {
 		} else {
 			return 1;
 		}
+	}
+
+	public void dispose() {
+		try {
+			super.finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
