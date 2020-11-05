@@ -60,19 +60,22 @@ public class Player implements Comparable<Player> {
 	
 	/**
 	 * Checks the user's name and password combination
+	 * @param userName
+	 * @param password
+	 * @return The player with the wins and losses
 	 * @throws IllegalArgumentException if Invalid password or user doesn't exist
 	 */
-	public void Login() throws IllegalArgumentException {
+	public static Player Login(String userName, String password) throws IllegalArgumentException {
 		PlayerRepository playerRepo = new PlayerRepository();
-		Player existingPlayer = playerRepo.GetPlayerByName(this.Name);
+		Player existingPlayer = playerRepo.GetPlayerByName(userName);
 		if(existingPlayer != null) {
-			if(existingPlayer.Password == this.Password) {
-				return; 
+			if(existingPlayer.Password == password) {
+				return existingPlayer; 
 			} else {
 				throw new IllegalArgumentException("Invalid Password, try again");
 			}
 		} else {
-			throw new IllegalArgumentException(this.Name + " not found in the database");
+			throw new IllegalArgumentException(userName + " not found in the database");
 		}
 	}
 
