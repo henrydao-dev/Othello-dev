@@ -69,12 +69,6 @@ public class UI_Prototype extends Application {
 		//			player1 = new Player("Player1", Player.WHITE);
 		//			player2 = new Player("Player2", Player.BLACK);
 		//		}
-		
-		player1 = new Player("Player1", Player.BLACK);
-		player2 = new Player("Player2", Player.WHITE);
-
-		gameBoard = new Board(player1, player2);
-		this.currGame = gameBoard.CurrentGame;
 
 
 
@@ -139,8 +133,19 @@ public class UI_Prototype extends Application {
 			if (result2.isPresent()){
 			   p2Name = result2.get();
 		}
+		// Create Game
+		player1 = new Player(p1Name, Player.BLACK);
+		player2 = new Player(p2Name, Player.WHITE);
 
-
+		gameBoard = new Board(player1, player2);
+		this.currGame = gameBoard.CurrentGame;
+		
+		drawButtonsAndLabels(p1Name, p2Name);
+		primaryStage.setTitle("Othello");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+	private void drawButtonsAndLabels(String p1Name, String p2Name) {
 		//Needed buttons
 		//add "settings" button (will be replaced with a more appropriate "settings" icon later)
 		Text settings = new Text(745,30, "settings");
@@ -255,18 +260,10 @@ public class UI_Prototype extends Application {
 		Button quitButton = new Button("Quit");
 		quitButton.setMaxWidth(150);
 		quitButton.setMaxHeight(150);
-		pane.getChildren().add(quitButton);
-		
-		
-
-		primaryStage.setTitle("Othello");
-		primaryStage.setScene(scene);
-		primaryStage.show(); 
-		
+		pane.getChildren().add(quitButton); 
 		quitButton.setOnAction(value -> System.exit(0));
 			
-		};
-
+	}
 
 	
 
