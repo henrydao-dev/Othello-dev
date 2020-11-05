@@ -5,6 +5,8 @@ import java.io.IOException;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Player implements Comparable<Player> {
 	@CsvBindByName
@@ -17,11 +19,18 @@ public class Player implements Comparable<Player> {
 	int Wins;
 	@CsvBindByName
 	int Losses;
+	/*
+	 * This can change between games so it's not saved in the CSV file
+	 */
 	char Color;
 
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
 
+	public Player() {
+		
+	}
+	
 	/**
 	 * New Player with Color choice
 	 * @param Name
@@ -67,15 +76,44 @@ public class Player implements Comparable<Player> {
 	 */
 	public static Player Login(String userName, String password) throws IllegalArgumentException {
 		PlayerRepository playerRepo = new PlayerRepository();
-		Player existingPlayer = playerRepo.GetPlayerByName(userName);
-		if(existingPlayer != null) {
-			if(existingPlayer.Password == password) {
+		try {
+			Player existingPlayer = playerRepo.GetPlayerByName(userName);
+			if(existingPlayer.Password.equals(password)) {
 				return existingPlayer; 
 			} else {
 				throw new IllegalArgumentException("Invalid Password, try again");
 			}
-		} else {
+		} catch (NullPointerException ex) {
 			throw new IllegalArgumentException(userName + " not found in the database");
+		}
+	}
+	
+	/**
+	 * Validates if the user password combo so you can register. This is to be used before you call register
+	 * @throws IllegalArgumentException if the user or password does not meet requirements. Message is attached to exception to explain
+	 */
+	public void validateRegistration() throws IllegalArgumentException{
+		Pattern userPattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{5}$", Pattern.CASE_INSENSITIVE); // 5 characters, at least one letter and one number:
+		Pattern passwordPattern = Pattern.compile("^\\d{5}$");
+		Matcher userMatcher = userPattern.matcher(this.Name);
+		Matcher passwordMatcher = passwordPattern.matcher(this.Password);
+		if(this.Name.length() > 5) {
+			throw new IllegalArgumentException("Name is too long");
+		}
+		if(this.Name.length() < 5) {
+			throw new IllegalArgumentException("Name is too short");
+		}
+		if(this.Password.length() > 5) {
+			throw new IllegalArgumentException("Password is too long");
+		}
+		if(this.Password.length() < 5) {
+			throw new IllegalArgumentException("Password is too short");
+		}
+		if(!userMatcher.find()) {
+			throw new IllegalArgumentException("Name does not meet requirements: 5 alpha-numeric characters, must include at least one digit");
+		}
+		if(!passwordMatcher.find()) {
+			throw new IllegalArgumentException("Password should only be 5 digits, no characters");
 		}
 	}
 
