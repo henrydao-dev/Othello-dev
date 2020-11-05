@@ -227,13 +227,13 @@ public class UI_Prototype extends Application {
 
 	private void drawMove(int row, int col) {
 
-		Player p = currGame.getPlayerwithTurn();
+        Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
 		try {
 			Color color = Color.WHITE;
-			if(Player.BLACK == p.Color) {
+			if(Player.BLACK == nextPlayer.Color) {
 				color = Color.BLACK;
 			}
-			gameBoard.PlaceDisc(p, row, col);
+			gameBoard.PlaceDisc(nextPlayer, row, col);
 			updateBoard();
 			Circle c = new Circle(75/2, 75/2, 37, color );
 			Gpane.add(c, row, col);
@@ -258,12 +258,20 @@ public class UI_Prototype extends Application {
 		System.out.println(row + " " + col);
 		return;
 	}
-
+	
+    private Player resolvePlayerToName(String name) {
+        if(name == player1.Name) {
+            return player1;
+        } else {
+            return player2;
+        }
+    }
+    
 	private void passMove() {
-
+        Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
 		System.out.println("pass pressed");
 		try {
-		if (gameBoard.Pass(currGame.getPlayerwithTurn())) {
+		if (gameBoard.Pass(nextPlayer)) {
 			currGame.SwitchTurn();
 		}
 		} catch(IllegalArgumentException ex) {
