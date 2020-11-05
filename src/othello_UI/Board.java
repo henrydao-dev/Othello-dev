@@ -38,9 +38,8 @@ public class Board {
 		CurrentBoard[3][4] = BLACK;
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
-		//		System.out.println(p1.Name);
-		//		System.out.println(p2.Name);
-		CurrentGame = new Game(player1, player2);
+		
+		CurrentGame = new Game(player1.Name, player2.Name);
 
 	}	
 
