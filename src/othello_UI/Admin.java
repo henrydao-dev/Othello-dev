@@ -56,39 +56,4 @@ public class Admin {
 			playerRepo.dispose(); 
 		}
 	}
-
-	/**
-	 * Registers a new player
-	 * @param name
-	 * @param password
-	 * @return
-	 * @throws CsvDataTypeMismatchException
-	 * @throws CsvRequiredFieldEmptyException
-	 * @throws IOException thrown if file doesn't exist
-	 * @throws IllegalArgumentException thrown if the user already exists in the CSV
-	 */
-	public static Player RegisterPlayer(String name, String password) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IllegalArgumentException, IOException {
-		PlayerRepository playerRepo = new PlayerRepository();
-
-		Player player = new Player(name, password);
-		playerRepo.InsertUser(player);
-		return player;
-	}
-
-	/**
-	 * Checks the password for the given player's name against the repository
-	 * @param name
-	 * @param password
-	 * @return true if the password matches, false if it doesn't
-	 */
-	public static boolean Login(String name, String password) {
-		PlayerRepository playerRepo = new PlayerRepository();
-
-		Player player = playerRepo.GetPlayerByName(name);
-		if(player.Password == password) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
