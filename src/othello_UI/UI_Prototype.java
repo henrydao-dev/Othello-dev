@@ -60,18 +60,6 @@ public class UI_Prototype extends Application {
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 
-		//		if(coinFlip()) {
-		//			// Login logic goes here GetUser then set color
-		//			player1 = new Player("Player1", Player.BLACK);
-		//			player2 = new Player("Player2", Player.WHITE);
-		//		} else {
-		//			// Login logic goes here
-		//			player1 = new Player("Player1", Player.WHITE);
-		//			player2 = new Player("Player2", Player.BLACK);
-		//		}
-
-
-
 		//Creates our pane
 		pane = new Pane();
 		Gpane = new GridPane();
@@ -82,15 +70,12 @@ public class UI_Prototype extends Application {
 
 		pane.getChildren().add(Gpane);
 
-		//Specific code for layout goes here
-
 		//add grid lines (horizontal and vertical) to create board square
 		//creates a 8x8 green grid with black lines
 
 		int k = 0;
 		int r = 0;
 		String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
-		//Gpane.setAlignment(Pos.CENTER);   
 
 		for(int k1 = 0; k1 < 8; k1++) {
 			if(r > 1)
@@ -110,6 +95,7 @@ public class UI_Prototype extends Application {
 
 		Gpane.setLayoutX(100);
 		Gpane.setLayoutY(150);
+		
 		drawStartingDiscs();
 
 		//Text Input for Player 1's Name:
@@ -144,128 +130,7 @@ public class UI_Prototype extends Application {
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-	}
-	private void drawButtonsAndLabels(String p1Name, String p2Name) {
-		//Needed buttons
-		//add "settings" button (will be replaced with a more appropriate "settings" icon later)
-		Text settings = new Text(745,30, "settings");
-		settings.setFill(Color.WHITE);
-		Rectangle settingsBox = new Rectangle();
-		settingsBox.setFill(Color.GRAY);
-		settingsBox.setWidth(50);
-		settingsBox.setHeight(50);
-		settingsBox.setLayoutX(740);
-		settingsBox.setLayoutY(5);
-		pane.getChildren().add(settingsBox);
-		pane.getChildren().add(settings);
-
-
-		//add "pass" button
-		Text pass = new Text(387, 95, "PASS");
-		Circle passButton = new Circle();
-		passButton.setFill(Color.RED);
-		passButton.setCenterX(402.5);
-		passButton.setCenterY(90);
-		passButton.setRadius(40);
-		pass.setOnMouseClicked(event -> passMove());
-		pane.getChildren().add(passButton);
-		pane.getChildren().add(pass);
-
-		//Text boxes needed
-		//Add "Player 1" and "Player 2" text boxes
-		//Player1
-		Text player1 = new Text(155,90, "Player 1: ");
-		Text player1CustomName = new Text(p1Name);
-		player1CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
-		player1CustomName.setLayoutX(140);
-		player1CustomName.setLayoutY(118);
-		pane.getChildren().add(player1);
-		pane.getChildren().add(player1CustomName);
-		//		player1Box.appendText("gi");
-
-		//Player2
-		Text player2 = new Text(600,90, "Player 2: ");
-		Text player2CustomName = new Text(p2Name);
-		player2CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
-		player2CustomName.setLayoutX(575);
-		player2CustomName.setLayoutY(120);
-		pane.getChildren().add(player2);
-		pane.getChildren().add(player2CustomName);
-
-		//add player 1 and player 2 score boxes
-		//Player1
-		Text p1Score = new Text(255,90, "SCORE");
-		p1ScoreBox = new TextField();
-		p1ScoreBox.setText("2");
-		p1ScoreBox.setMaxWidth(50);
-		p1ScoreBox.setLayoutX(250);
-		p1ScoreBox.setLayoutY(100);
-		pane.getChildren().add(p1Score);
-		pane.getChildren().add(p1ScoreBox);
-		//		p1ScoreBox.setText("20");
-		//Player2
-		Text p2Score = new Text(510,90, "SCORE");
-		p2ScoreBox = new TextField();
-		p2ScoreBox.setMaxWidth(50);
-		p2ScoreBox.setLayoutX(505);
-		p2ScoreBox.setLayoutY(100);
-		pane.getChildren().add(p2Score);
-		pane.getChildren().add(p2ScoreBox);
-		p2ScoreBox.setText("2");
-
-		//add player 1 and player 2 timer boxes
-		//Player1
-		Text placeHolderTime = new Text(275,39, "Time1");
-		placeHolderTime.setFill(Color.WHITE);
-		Rectangle p1TimerBox = new Rectangle();
-		p1TimerBox.setFill(Color.DARKBLUE);
-		p1TimerBox.setWidth(100);
-		p1TimerBox.setHeight(30);
-		p1TimerBox.setLayoutX(240);
-		p1TimerBox.setLayoutY(20);
-		pane.getChildren().add(p1TimerBox);
-		pane.getChildren().add(placeHolderTime);
-
-
-		//Player2
-		Text placeHolderTime2 = new Text(495,39, "Time2");
-		placeHolderTime2.setFill(Color.WHITE);
-		Rectangle p2TimerBox = new Rectangle();
-		p2TimerBox.setFill(Color.DARKBLUE);
-		p2TimerBox.setWidth(100);
-		p2TimerBox.setHeight(30);
-		p2TimerBox.setLayoutX(460);
-		p2TimerBox.setLayoutY(20);
-		pane.getChildren().add(p2TimerBox);
-		pane.getChildren().add(placeHolderTime2);
-		
-		//Display Current Player's Turn:
-		Text currentPlayerTurn = new Text(715,770, "Current Turn:");
-		currentPlayerTurn.setStyle("-fx-font: 14 arial; -fx-stroke: black; -fx-stroke-width: .5;");
-		pane.getChildren().add(currentPlayerTurn);
-		//Circle representing player turn (with square as backdrop)
-		Rectangle indicatorBG = new Rectangle();
-		indicatorBG.setFill(Color.GREEN);
-		indicatorBG.setWidth(70);
-		indicatorBG.setHeight(70);
-		indicatorBG.setLayoutX(720.5);
-		indicatorBG.setLayoutY(775);
-		pane.getChildren().add(indicatorBG);		
-		Circle turnIndicator = new Circle(75/2, 75/2, 28);
-		turnIndicator.setFill(Color.BLACK);
-		turnIndicator.setLayoutX(718);
-		turnIndicator.setLayoutY(775);
-		pane.getChildren().add(turnIndicator);
-		
-		Button quitButton = new Button("Quit");
-		quitButton.setMaxWidth(150);
-		quitButton.setMaxHeight(150);
-		pane.getChildren().add(quitButton); 
-		quitButton.setOnAction(value -> System.exit(0));
-			
-	}
-
-	
+	}	
 
 	private void drawMove(int row, int col) {
 
@@ -489,15 +354,6 @@ public class UI_Prototype extends Application {
 			winner = "The game is a tie!";
 		}
 		
-		//Turns our variables all to Strings to output
-		// blackCountString = "Player 1's disc count is " + blackCount;
-		//whiteCountString = "Player 2's disc count is " + whiteCount;
-		
-		//Outputs from method
-		// System.out.println("Player 1's score is: " + blackCountString + "!");
-		// System.out.println("Player 2's score is: " + whiteCountString + "!");
-		// System.out.println("AND THE WINNER IS......" + winner + "!");
-		
 		returnMessage = "Player 1 had a score of: " + blackCount + "." + " Player 2 had a score of: " +
 						whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
 		
@@ -505,22 +361,131 @@ public class UI_Prototype extends Application {
 				
 	}
 
-
-	//Idea: Set boolean flag for for player turns (if checked True, then player1 turn, if false, player2 turn)
-
-	public static void main(String[] args) {
-		launch(args);
-	}
+	
 	private void updateScores(String black,String white) {
 		this.p1ScoreBox.setText(black);
 		this.p2ScoreBox.setText(white);
 	}
+	private void drawButtonsAndLabels(String p1Name, String p2Name) {
+		//Needed buttons
+		//TODO "settings" button (will be replaced with a more appropriate "settings" icon later)
+		Text settings = new Text(745,30, "settings");
+		settings.setFill(Color.WHITE);
+		Rectangle settingsBox = new Rectangle();
+		settingsBox.setFill(Color.GRAY);
+		settingsBox.setWidth(50);
+		settingsBox.setHeight(50);
+		settingsBox.setLayoutX(740);
+		settingsBox.setLayoutY(5);
+		pane.getChildren().add(settingsBox);
+		pane.getChildren().add(settings);
 
 
-	//for future update players name
-	//	private void updatePlayersNameinUI(String black,String white) {
-	////		this.p1ScoreBox.setText(black);
-	////		this.p2ScoreBox.setText(white);
-	//	}
+		//add "pass" button
+		Text pass = new Text(387, 95, "PASS");
+		Circle passButton = new Circle();
+		passButton.setFill(Color.RED);
+		passButton.setCenterX(402.5);
+		passButton.setCenterY(90);
+		passButton.setRadius(40);
+		pass.setOnMouseClicked(event -> passMove());
+		pane.getChildren().add(passButton);
+		pane.getChildren().add(pass);
 
+		//Text boxes needed
+		//Add "Player 1" and "Player 2" text boxes
+		//Player1
+		Text player1 = new Text(155,90, "Player 1: ");
+		Text player1CustomName = new Text(p1Name);
+		player1CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+		player1CustomName.setLayoutX(140);
+		player1CustomName.setLayoutY(118);
+		pane.getChildren().add(player1);
+		pane.getChildren().add(player1CustomName);
+		//		player1Box.appendText("gi");
+
+		//Player2
+		Text player2 = new Text(600,90, "Player 2: ");
+		Text player2CustomName = new Text(p2Name);
+		player2CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+		player2CustomName.setLayoutX(575);
+		player2CustomName.setLayoutY(120);
+		pane.getChildren().add(player2);
+		pane.getChildren().add(player2CustomName);
+
+		//add player 1 and player 2 score boxes
+		//Player1
+		Text p1Score = new Text(255,90, "SCORE");
+		p1ScoreBox = new TextField();
+		p1ScoreBox.setText("2");
+		p1ScoreBox.setMaxWidth(50);
+		p1ScoreBox.setLayoutX(250);
+		p1ScoreBox.setLayoutY(100);
+		pane.getChildren().add(p1Score);
+		pane.getChildren().add(p1ScoreBox);
+		//		p1ScoreBox.setText("20");
+		//Player2
+		Text p2Score = new Text(510,90, "SCORE");
+		p2ScoreBox = new TextField();
+		p2ScoreBox.setMaxWidth(50);
+		p2ScoreBox.setLayoutX(505);
+		p2ScoreBox.setLayoutY(100);
+		pane.getChildren().add(p2Score);
+		pane.getChildren().add(p2ScoreBox);
+		p2ScoreBox.setText("2");
+
+		//add player 1 and player 2 timer boxes
+		//Player1
+		Text placeHolderTime = new Text(275,39, "Time1");
+		placeHolderTime.setFill(Color.WHITE);
+		Rectangle p1TimerBox = new Rectangle();
+		p1TimerBox.setFill(Color.DARKBLUE);
+		p1TimerBox.setWidth(100);
+		p1TimerBox.setHeight(30);
+		p1TimerBox.setLayoutX(240);
+		p1TimerBox.setLayoutY(20);
+		pane.getChildren().add(p1TimerBox);
+		pane.getChildren().add(placeHolderTime);
+
+
+		//Player2
+		Text placeHolderTime2 = new Text(495,39, "Time2");
+		placeHolderTime2.setFill(Color.WHITE);
+		Rectangle p2TimerBox = new Rectangle();
+		p2TimerBox.setFill(Color.DARKBLUE);
+		p2TimerBox.setWidth(100);
+		p2TimerBox.setHeight(30);
+		p2TimerBox.setLayoutX(460);
+		p2TimerBox.setLayoutY(20);
+		pane.getChildren().add(p2TimerBox);
+		pane.getChildren().add(placeHolderTime2);
+		
+		//Display Current Player's Turn:
+		Text currentPlayerTurn = new Text(715,770, "Current Turn:");
+		currentPlayerTurn.setStyle("-fx-font: 14 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+		pane.getChildren().add(currentPlayerTurn);
+		//Circle representing player turn (with square as backdrop)
+		Rectangle indicatorBG = new Rectangle();
+		indicatorBG.setFill(Color.GREEN);
+		indicatorBG.setWidth(70);
+		indicatorBG.setHeight(70);
+		indicatorBG.setLayoutX(720.5);
+		indicatorBG.setLayoutY(775);
+		pane.getChildren().add(indicatorBG);		
+		Circle turnIndicator = new Circle(75/2, 75/2, 28);
+		turnIndicator.setFill(Color.BLACK);
+		turnIndicator.setLayoutX(718);
+		turnIndicator.setLayoutY(775);
+		pane.getChildren().add(turnIndicator);
+		
+		Button quitButton = new Button("Quit");
+		quitButton.setMaxWidth(150);
+		quitButton.setMaxHeight(150);
+		pane.getChildren().add(quitButton); 
+		quitButton.setOnAction(value -> System.exit(0));
+			
+	}
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
