@@ -130,7 +130,7 @@ public class UI_Prototype extends Application {
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-	}	
+	}
 
 	private void drawMove(int row, int col) {
 
@@ -176,7 +176,10 @@ public class UI_Prototype extends Application {
 			
 
 		} catch (IllegalArgumentException ex) {
-			System.out.println("Illegal Move");
+			Alert warning= new Alert(AlertType.WARNING);
+			warning.setTitle("Invalid Move");
+			warning.setContentText("Invalid move played. Please play a valid move or pass.");
+			warning.show();
 			return;
 		}
 		System.out.println(row + " " + col);
@@ -334,7 +337,7 @@ public class UI_Prototype extends Application {
 			} else if (result.get() == noButton) {
 				 System.exit(0);
 			}
-			
+					
 		}
 
 	public String declareWinner () {
@@ -375,28 +378,26 @@ public class UI_Prototype extends Application {
 	private void drawButtonsAndLabels(String p1Name, String p2Name) {
 		//Needed buttons
 		//TODO "settings" button (will be replaced with a more appropriate "settings" icon later)
-		Text settings = new Text(745,30, "settings");
-		settings.setFill(Color.WHITE);
-		Rectangle settingsBox = new Rectangle();
-		settingsBox.setFill(Color.GRAY);
-		settingsBox.setWidth(50);
-		settingsBox.setHeight(50);
-		settingsBox.setLayoutX(740);
-		settingsBox.setLayoutY(5);
-		pane.getChildren().add(settingsBox);
-		pane.getChildren().add(settings);
+		
+		
+		Button settingsButton = new Button("Settings");
+		settingsButton.setMaxWidth(100);
+		settingsButton.setMaxHeight(100);
+		settingsButton.setLayoutX(740);
+		settingsButton.setLayoutY(5);
+		pane.getChildren().add(settingsButton);
+		
 
 
 		//add "pass" button
-		Text pass = new Text(387, 95, "PASS");
-		Circle passButton = new Circle();
-		passButton.setFill(Color.RED);
-		passButton.setCenterX(402.5);
-		passButton.setCenterY(90);
-		passButton.setRadius(40);
-		pass.setOnMouseClicked(event -> passMove());
+		Button passButton = new Button("Pass");
+		passButton.setLayoutX(375);
+		passButton.setLayoutY(90);
+		passButton.setMaxWidth(60);
+		passButton.setMaxHeight(45);
+		passButton.setOnMouseClicked(event -> passMove());
 		pane.getChildren().add(passButton);
-		pane.getChildren().add(pass);
+		
 
 		//Text boxes needed
 		//Add "Player 1" and "Player 2" text boxes
@@ -442,6 +443,7 @@ public class UI_Prototype extends Application {
 
 		//add player 1 and player 2 timer boxes
 		//Player1
+		
 		Text placeHolderTime = new Text(275,39, "Time1");
 		placeHolderTime.setFill(Color.WHITE);
 		Rectangle p1TimerBox = new Rectangle();
