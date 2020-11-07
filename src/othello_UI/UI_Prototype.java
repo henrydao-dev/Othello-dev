@@ -34,12 +34,16 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner; 
@@ -380,23 +384,29 @@ public class UI_Prototype extends Application {
 		//TODO "settings" button (will be replaced with a more appropriate "settings" icon later)
 		
 		
-		Button settingsButton = new Button("Settings");
-		settingsButton.setMaxWidth(100);
-		settingsButton.setMaxHeight(100);
+		Image image = new Image("https://cdn2.iconfinder.com/data/icons/web-application-icons-part-i/100/Artboard_50-512.png");
+		ImageView imageView = new ImageView(image);
+		imageView.setFitHeight(40);
+		imageView.setFitWidth(40);
+		Button settingsButton = new Button();
 		settingsButton.setLayoutX(740);
 		settingsButton.setLayoutY(5);
+		settingsButton.setGraphic(imageView);
 		pane.getChildren().add(settingsButton);
 		
 
 
 		//add "pass" button
-		Button passButton = new Button("Pass");
-		passButton.setLayoutX(375);
-		passButton.setLayoutY(90);
-		passButton.setMaxWidth(60);
-		passButton.setMaxHeight(45);
+		Text pass = new Text(387, 95, "PASS");
+		Circle passButton = new Circle();
+		passButton.setFill(Color.RED);
+		passButton.setCenterX(402.5);
+		passButton.setCenterY(90);
+		passButton.setRadius(40);
 		passButton.setOnMouseClicked(event -> passMove());
 		pane.getChildren().add(passButton);
+		pane.getChildren().add(pass);
+	
 		
 
 		//Text boxes needed
