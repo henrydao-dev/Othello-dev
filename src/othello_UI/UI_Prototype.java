@@ -90,18 +90,24 @@ public class UI_Prototype extends Application {
 		int k = 0;
 		int r = 0;
 		String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
-
+		
+//		Player tempPlayer = resolvePlayerToName(currGame.playerUpNext());
 		for(int k1 = 0; k1 < 8; k1++) {
 			if(r > 1)
 				r = 0;
 			for(int k2 = 0; k2 < 8; k2++) {
 				if(k > 1)
 					k = 0;
+				
 				Tile r1 = new Tile(75,75,k1,k2);
 				r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
 				r1.setStroke(Color.BLACK);
-				r1.setFill(Paint.valueOf(color[r][k]));
+				if((k1==3& k2==2) | (k1==2& k2==3) |
+				   (k1==4& k2==5) | (k1==5& k2==4) )
+					r1.setFill(Color.MEDIUMSEAGREEN);
+				else r1.setFill(Paint.valueOf(color[r][k]));
 				Gpane.add(r1,k1,k2);
+				
 				k++;
 			}
 			r++;
@@ -246,6 +252,8 @@ public class UI_Prototype extends Application {
 		Gpane.add(c2, 3, 4);
 		Gpane.add(c3, 4, 3);
 		Gpane.add(c4, 4, 4);
+		
+
 	}
 
 	/**Updates board after disc is placed
@@ -254,12 +262,10 @@ public class UI_Prototype extends Application {
 	private void updateBoard(){
 
 		Gpane.getChildren().clear();
-
+		Player nextPlayer = resolvePlayerToName(currGame.nextPlayer());
 
 		int k = 0;
 		int r = 0;
-		String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
-
 
 		for(int k1 = 0; k1 < 8; k1++) {
 			if(r > 1)
@@ -270,7 +276,9 @@ public class UI_Prototype extends Application {
 				Tile r1 = new Tile(75,75,k1,k2);
 				r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
 				r1.setStroke(Color.BLACK);
-				r1.setFill(Paint.valueOf(color[r][k]));
+//				Color tempColor = nextPlayer.Color==Player.BLACK ? Color.valueOf("#d5eddd") : Color.valueOf("#3d4a41");
+				if(gameBoard.isMoveValid(nextPlayer,k2,k1)) r1.setFill(Color.MEDIUMSEAGREEN) ;
+				else r1.setFill(Color.GREEN);
 				Gpane.add(r1,k1,k2);
 				k++;
 			}

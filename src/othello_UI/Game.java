@@ -71,6 +71,14 @@ public class Game {
 		else
 			return PlayerTwoName;
 	}
+
+	public String nextPlayer() {
+		if (PlayerOneName == this.LastTurn)
+			return PlayerTwoName;
+		else
+			return PlayerOneName;
+	}
+
 	
 	public int getTimeforPlayerwithTrun(){
 		if (this.LastTurn == PlayerOneName) {

@@ -146,9 +146,9 @@ public class Board {
 			return list;
 		}
 
+//		public isMovevalid(Player player)
 
-
-	private boolean isMoveValid(Player player, int row, int col) {
+	public boolean isMoveValid(Player player, int row, int col) {
 		boolean isValid = false;
 		// Get the opponent's color
 		char opponent = Player.BLACK;
