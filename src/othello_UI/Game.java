@@ -28,9 +28,9 @@ public class Game {
 	public Date Start;
 	public Date End;
 	@CsvBindByName
-	public int PlayerOneTime; // In Seconds
+	public Integer PlayerOneTime=120; // In Seconds
 	@CsvBindByName
-	public int PlayerTwoTime; // In Seconds
+	public Integer PlayerTwoTime = 120; // In Seconds
 
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
@@ -70,6 +70,20 @@ public class Game {
 			return PlayerOneName;
 		else
 			return PlayerTwoName;
+	}
+	
+	public int getTimeforPlayerwithTrun(){
+		if (this.LastTurn == PlayerOneName) {
+		return this.PlayerOneTime;
+		}
+		else return this.PlayerTwoTime;
+	}
+	
+	void setTimeforPlayerwithTrun(int Time){
+		if (this.LastTurn == PlayerOneName) {
+		this.PlayerOneTime = Time;
+		}
+		this.PlayerTwoTime = Time;
 	}
 
 }

@@ -5,9 +5,9 @@
 
 2.       Select properties
 
-3.       Click on “Java build path”
+3.       Click on ï¿½Java build pathï¿½
 
-4.       Select the ‘Libraries’ tab
+4.       Select the ï¿½Librariesï¿½ tab
 
 5.       Expand the entry
 
@@ -17,14 +17,20 @@
 
 8.       Select Add
 
-9.       Enter “javafx/**”
+9.       Enter ï¿½javafx/**ï¿½
  */
 
 package othello_UI;
 
+import javafx.animation.Animation.Status;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -46,7 +52,9 @@ import javafx.scene.text.Text;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner; 
+import java.util.Scanner;
+
+import com.sun.xml.internal.bind.v2.TODO; 
 
 
 public class UI_Prototype extends Application {
@@ -57,7 +65,9 @@ public class UI_Prototype extends Application {
 	private Player player1;
 	private Player player2;
 	private TextField p1ScoreBox,p2ScoreBox;
-	
+	private Integer tempTimerDuration ;
+	private Text placeHolderTime2, placeHolderTime;
+	private Timeline timer ;
 	Scanner input = new Scanner(System.in);
 
 	//Creates our Primary Stage
@@ -99,7 +109,7 @@ public class UI_Prototype extends Application {
 
 		Gpane.setLayoutX(100);
 		Gpane.setLayoutY(150);
-		
+
 		drawStartingDiscs();
 
 		//Text Input for Player 1's Name:
@@ -110,9 +120,9 @@ public class UI_Prototype extends Application {
 		Optional<String> result = dialog.showAndWait();
 		String p1Name = "none";
 		if (result.isPresent()){
-		    p1Name = result.get();
+			p1Name = result.get();
 		}
-		
+
 		//Text Input for Player 2's Name:
 		TextInputDialog dialog2 = new TextInputDialog("Player2");
 		dialog2.setTitle("Name Entry");
@@ -120,8 +130,8 @@ public class UI_Prototype extends Application {
 		dialog2.setContentText("Please enter your name:");
 		Optional<String> result2 = dialog2.showAndWait();
 		String p2Name = "none";
-			if (result2.isPresent()){
-			   p2Name = result2.get();
+		if (result2.isPresent()){
+			p2Name = result2.get();
 		}
 		// Create Game
 		player1 = new Player(p1Name, Player.BLACK);
@@ -129,7 +139,8 @@ public class UI_Prototype extends Application {
 
 		gameBoard = new Board(player1, player2);
 		this.currGame = gameBoard.CurrentGame;
-		
+		tempTimerDuration = currGame.PlayerOneTime;
+		this.SetTimer();
 		drawButtonsAndLabels(p1Name, p2Name);
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(scene);
@@ -138,7 +149,7 @@ public class UI_Prototype extends Application {
 
 	private void drawMove(int row, int col) {
 
-        Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
+		Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
 		try {
 			Color color = Color.WHITE;
 			if(Player.BLACK == nextPlayer.Color) {
@@ -148,7 +159,7 @@ public class UI_Prototype extends Application {
 			updateBoard();
 			Circle c = new Circle(75/2, 75/2, 37, color );
 			Gpane.add(c, row, col);
-	
+
 			//This section of code will run on every valid disc placement to check for end of game
 			if (gameBoard.isGameOver()) {
 				/*
@@ -160,16 +171,16 @@ public class UI_Prototype extends Application {
 				//calls endGame() only after isGameOver() is true and the winner is declared.	 
 				endGame();	
 			}
-			
 			currGame.SwitchTurn();
-			
+			this.SetTimer();
+
 			//Sets the color for turnIndicator
 			if(Player.WHITE == nextPlayer.Color) {
-			Circle turnIndicator = new Circle(75/2, 75/2, 28);
-			turnIndicator.setFill(Color.BLACK);
-			turnIndicator.setLayoutX(718);
-			turnIndicator.setLayoutY(775);
-			pane.getChildren().add(turnIndicator);
+				Circle turnIndicator = new Circle(75/2, 75/2, 28);
+				turnIndicator.setFill(Color.BLACK);
+				turnIndicator.setLayoutX(718);
+				turnIndicator.setLayoutY(775);
+				pane.getChildren().add(turnIndicator);
 			} else {
 				Circle turnIndicator = new Circle(75/2, 75/2, 28);
 				turnIndicator.setFill(Color.WHITE);
@@ -177,7 +188,7 @@ public class UI_Prototype extends Application {
 				turnIndicator.setLayoutY(775);
 				pane.getChildren().add(turnIndicator);
 			}
-			
+
 
 		} catch (IllegalArgumentException ex) {
 			Alert warning= new Alert(AlertType.WARNING);
@@ -189,32 +200,33 @@ public class UI_Prototype extends Application {
 		System.out.println(row + " " + col);
 		return;
 	}
-    private Player resolvePlayerToName(String name) {
-        if(name == player1.Name) {
-            return player1;
-        } else {
-            return player2;
-        }
-    }
+	private Player resolvePlayerToName(String name) {
+		if(name == player1.Name) {
+			return player1;
+		} else {
+			return player2;
+		}
+	}
 	private void passMove() {
-        Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
+		Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
 		System.out.println("pass pressed");
 		try {
-		if (gameBoard.Pass(nextPlayer)) {
-			if(nextPlayer == player1) {
-				Circle turnIndicator = new Circle(75/2, 75/2, 28);
-				turnIndicator.setFill(Color.WHITE);
-				turnIndicator.setLayoutX(718);
-				turnIndicator.setLayoutY(775);
-				pane.getChildren().add(turnIndicator);
-			} else {
-				Circle turnIndicator = new Circle(75/2, 75/2, 28);
-				turnIndicator.setFill(Color.BLACK);
-				turnIndicator.setLayoutX(718);
-				turnIndicator.setLayoutY(775);
-				pane.getChildren().add(turnIndicator);
-			}
-			currGame.SwitchTurn();
+			if (gameBoard.Pass(nextPlayer)) {
+				if(nextPlayer == player1) {
+					Circle turnIndicator = new Circle(75/2, 75/2, 28);
+					turnIndicator.setFill(Color.WHITE);
+					turnIndicator.setLayoutX(718);
+					turnIndicator.setLayoutY(775);
+					pane.getChildren().add(turnIndicator);
+				} else {
+					Circle turnIndicator = new Circle(75/2, 75/2, 28);
+					turnIndicator.setFill(Color.BLACK);
+					turnIndicator.setLayoutX(718);
+					turnIndicator.setLayoutY(775);
+					pane.getChildren().add(turnIndicator);
+				}
+				currGame.SwitchTurn();
+				this.SetTimer();
 			}
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
@@ -293,7 +305,7 @@ public class UI_Prototype extends Application {
 		System.out.println(gameBoard.toString());
 		updateScores(String.valueOf(tempBlackScore),
 				String.valueOf(tempWhiteScore));
-	
+
 
 	}
 
@@ -313,51 +325,51 @@ public class UI_Prototype extends Application {
 			return false;
 		}
 	}
-	
+
 	//Method for being the final aspect of the game | Asks user (up to 3 times) to play again or quit
 	private void endGame() {
-			
-			//TODO: *could also display the game count b/w players at this point, before moving to "play again?"*
-			
-			gameBoard.CurrentGame.EndGame();
-			
-			//Pop up box alerting the players that the game is over
-			Alert gameOverBox = new Alert(AlertType.CONFIRMATION);
-			ButtonType yesButton = new ButtonType("Yes");
-			ButtonType noButton = new ButtonType("No");
-			gameOverBox.getButtonTypes().setAll(yesButton, noButton);
-			gameOverBox.setTitle("Game Over");
-			gameOverBox.setHeaderText(declareWinner());
-			gameOverBox.setContentText("Would you like play again?");
-			gameOverBox.show();
-			
-			//Results of player clicking buttons
-			Optional<ButtonType> result = gameOverBox.showAndWait();
-			if (result.get() == yesButton) {
-				//Restart Game and Board
-				gameBoard = new Board(player1, player2);
-				this.currGame = gameBoard.CurrentGame;
-				
-			} else if (result.get() == noButton) {
-				 System.exit(0);
-			}
-					
+
+		//TODO: *could also display the game count b/w players at this point, before moving to "play again?"*
+
+		gameBoard.CurrentGame.EndGame();
+
+		//Pop up box alerting the players that the game is over
+		Alert gameOverBox = new Alert(AlertType.CONFIRMATION);
+		ButtonType yesButton = new ButtonType("Yes");
+		ButtonType noButton = new ButtonType("No");
+		gameOverBox.getButtonTypes().setAll(yesButton, noButton);
+		gameOverBox.setTitle("Game Over");
+		gameOverBox.setHeaderText(declareWinner());
+		gameOverBox.setContentText("Would you like play again?");
+		gameOverBox.show();
+
+		//Results of player clicking buttons
+		Optional<ButtonType> result = gameOverBox.showAndWait();
+		if (result.get() == yesButton) {
+			//Restart Game and Board
+			gameBoard = new Board(player1, player2);
+			this.currGame = gameBoard.CurrentGame;
+
+		} else if (result.get() == noButton) {
+			System.exit(0);
 		}
 
+	}
+
 	public String declareWinner () {
-		
+
 		String blackCountString;
 		String whiteCountString;
 		String winner;
 		String returnMessage;
-		
+
 		/* whiteCount = list(0)
 		 * blackCount = list(1)
 		 */
 		List <Integer> discCount = gameBoard.countDiscs();
 		int whiteCount = discCount.get(0);
 		int blackCount = discCount.get(1);
-		
+
 		//Determines who the winner of the game is and returns it as a String
 		if (blackCount > whiteCount) {
 			winner = "Player 1";
@@ -366,15 +378,15 @@ public class UI_Prototype extends Application {
 		} else {
 			winner = "The game is a tie!";
 		}
-		
+
 		returnMessage = "Player 1 had a score of: " + blackCount + "." + " Player 2 had a score of: " +
-						whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
-		
+				whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
+
 		return returnMessage;
-				
+
 	}
 
-	
+
 	private void updateScores(String black,String white) {
 		this.p1ScoreBox.setText(black);
 		this.p2ScoreBox.setText(white);
@@ -382,8 +394,8 @@ public class UI_Prototype extends Application {
 	private void drawButtonsAndLabels(String p1Name, String p2Name) {
 		//Needed buttons
 		//TODO "settings" button (will be replaced with a more appropriate "settings" icon later)
-		
-		
+
+
 		Image image = new Image("https://cdn2.iconfinder.com/data/icons/web-application-icons-part-i/100/Artboard_50-512.png");
 		ImageView imageView = new ImageView(image);
 		imageView.setFitHeight(40);
@@ -393,7 +405,7 @@ public class UI_Prototype extends Application {
 		settingsButton.setLayoutY(5);
 		settingsButton.setGraphic(imageView);
 		pane.getChildren().add(settingsButton);
-		
+
 
 
 		//add "pass" button
@@ -406,8 +418,8 @@ public class UI_Prototype extends Application {
 		passButton.setOnMouseClicked(event -> passMove());
 		pane.getChildren().add(passButton);
 		pane.getChildren().add(pass);
-	
-		
+
+
 
 		//Text boxes needed
 		//Add "Player 1" and "Player 2" text boxes
@@ -453,8 +465,8 @@ public class UI_Prototype extends Application {
 
 		//add player 1 and player 2 timer boxes
 		//Player1
-		
-		Text placeHolderTime = new Text(275,39, "Time1");
+
+		placeHolderTime = new Text(275,39, currGame.PlayerOneTime.toString());
 		placeHolderTime.setFill(Color.WHITE);
 		Rectangle p1TimerBox = new Rectangle();
 		p1TimerBox.setFill(Color.DARKBLUE);
@@ -465,9 +477,8 @@ public class UI_Prototype extends Application {
 		pane.getChildren().add(p1TimerBox);
 		pane.getChildren().add(placeHolderTime);
 
-
 		//Player2
-		Text placeHolderTime2 = new Text(495,39, "Time2");
+		placeHolderTime2 = new Text(495,39, currGame.PlayerTwoTime.toString());
 		placeHolderTime2.setFill(Color.WHITE);
 		Rectangle p2TimerBox = new Rectangle();
 		p2TimerBox.setFill(Color.DARKBLUE);
@@ -477,11 +488,14 @@ public class UI_Prototype extends Application {
 		p2TimerBox.setLayoutY(20);
 		pane.getChildren().add(p2TimerBox);
 		pane.getChildren().add(placeHolderTime2);
-		
+
 		//Display Current Player's Turn:
 		Text currentPlayerTurn = new Text(715,770, "Current Turn:");
+
 		currentPlayerTurn.setStyle("-fx-font: 14 arial; -fx-stroke: black; -fx-stroke-width: .5;");
+
 		pane.getChildren().add(currentPlayerTurn);
+
 		//Circle representing player turn (with square as backdrop)
 		Rectangle indicatorBG = new Rectangle();
 		indicatorBG.setFill(Color.GREEN);
@@ -495,15 +509,63 @@ public class UI_Prototype extends Application {
 		turnIndicator.setLayoutX(718);
 		turnIndicator.setLayoutY(775);
 		pane.getChildren().add(turnIndicator);
-		
+
 		Button quitButton = new Button("Quit");
 		quitButton.setMaxWidth(150);
 		quitButton.setMaxHeight(150);
 		pane.getChildren().add(quitButton); 
 		quitButton.setOnAction(value -> System.exit(0));
-			
+
 	}
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+
+	private void SetTimer() {
+		//stoping timer and saving values
+		if(timer != null) {
+			timer.stop();
+//			tempTimerDuration = currGame.PlayerOneTime;
+			
+		}
+
+		//creating a new Timer
+
+		if(currGame.LastTurn == currGame.PlayerOneName) {
+			//for other player
+			currGame.PlayerTwoTime =tempTimerDuration;
+			tempTimerDuration = currGame.PlayerOneTime;
+		}else { 
+			//for this player
+			currGame.PlayerOneTime =tempTimerDuration;
+			tempTimerDuration = currGame.PlayerTwoTime;
+		}
+		timer = new Timeline(new KeyFrame(Duration.seconds(1),
+				new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				if(tempTimerDuration >0) 
+				{
+					tempTimerDuration--;
+					
+					//					System.out.println("newTIME"+tempTimerDuration);
+					if(currGame.LastTurn == currGame.PlayerOneName) 
+						placeHolderTime.setText(tempTimerDuration.toString());
+					else placeHolderTime2.setText(tempTimerDuration.toString());
+				}
+				else {
+					currGame.EndGame();
+					
+					// TODO
+					//need code for what happens if TimeOUT!!!!!
+				}
+			}
+		}));
+
+		timer.setCycleCount(Timeline.INDEFINITE);
+		timer.play();
+
 	}
 }
