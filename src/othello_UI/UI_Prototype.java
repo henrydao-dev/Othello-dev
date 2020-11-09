@@ -30,6 +30,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -37,16 +38,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
@@ -57,7 +61,7 @@ import java.util.Scanner;
 import com.sun.xml.internal.bind.v2.TODO; 
 
 
-public class UI_Prototype extends Application {
+public class UI_Prototype extends Application  {
 	private GridPane Gpane;
 	private Pane pane;
 	private Board gameBoard;
@@ -69,18 +73,61 @@ public class UI_Prototype extends Application {
 	private Text placeHolderTime2, placeHolderTime;
 	private Timeline timer ;
 	Scanner input = new Scanner(System.in);
-
+	private StackPane pane2;
+	private Button startgame, stats, logout;
+	Stage window;
+	Scene scene, scene2;
+	
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
-
-		//Creates our pane
+		window = primaryStage;
+		
+		//creates title screen panes
+		pane2 = new StackPane();
+		pane2.setPadding(new Insets(0,0,0,0));
+		
+		//creates title
+		Label title = new Label();
+		title.setText("OTHELLO");
+		title.setPrefSize(250, 50);
+		title.setFont(Font.font("Times New Roman",35));
+		title.setTranslateY(-200);
+		title.setTranslateX(45);
+		
+		//creates Buttons
+		startgame = new Button("Play Game");
+		startgame.setPrefSize(150,50);
+		startgame.setTranslateY(-100);
+		
+		//upon clicking "Play Game" transfers to game board
+		startgame.setOnAction(e -> window.setScene(scene));
+		
+		stats = new Button("Statisics");
+		stats.setPrefSize(150,50);
+		stats.setTranslateY(-50);
+		
+		logout = new Button("Logout");
+		logout.setPrefSize(150,50);
+		
+		
+		//adds to Pane
+		pane2.getChildren().add(title);
+		pane2.getChildren().add(startgame);
+		pane2.getChildren().add(stats);
+		pane2.getChildren().add(logout);
+		
+		scene2 = new Scene(pane2, 350, 500);
+		
+		
+		
+		//Creates game pane
 		pane = new Pane();
 		Gpane = new GridPane();
 		pane.setPadding(new Insets(0,0,0,0));
 
 		//Creates our scene
-		Scene scene = new Scene(pane,800,850);
+		scene = new Scene(pane,800,850);
 
 		pane.getChildren().add(Gpane);
 
@@ -149,7 +196,7 @@ public class UI_Prototype extends Application {
 		this.SetTimer();
 		drawButtonsAndLabels(p1Name, p2Name);
 		primaryStage.setTitle("Othello");
-		primaryStage.setScene(scene);
+		primaryStage.setScene(scene2);
 		primaryStage.show();
 	}
 
