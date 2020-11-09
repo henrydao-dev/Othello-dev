@@ -63,7 +63,7 @@ import com.sun.xml.internal.bind.v2.TODO;
 
 public class UI_Prototype extends Application  {
 	private GridPane Gpane;
-	private Pane pane;
+	private Pane pane, loginPane, loginPane2, registerPane, registerPane2;
 	private Board gameBoard;
 	private Game currGame;
 	private Player player1;
@@ -76,13 +76,298 @@ public class UI_Prototype extends Application  {
 	private StackPane pane2;
 	private Button startgame, stats, logout;
 	Stage window;
-	Scene scene, scene2;
+	Scene currentScene,scene, scene2, loginScene, loginScene2, registerScene, registerScene2;
 	
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 		window = primaryStage;
+		currentScene = primaryStage.getScene();
 		
+//---Login Scene 1 Assets--------
+		//Create Login pane
+		loginPane = new Pane();
+		loginPane.setPadding(new Insets(0,0,0,0));
+		
+		//Creates our scene
+		loginScene = new Scene(loginPane,400,200);
+		
+		//creates title
+		Label loginTitle = new Label();
+		loginTitle.setText("Login: (Player 1)");
+		loginTitle.setPrefSize(250, 50);
+		loginTitle.setFont(Font.font("Times New Roman",20));
+		loginTitle.setLayoutX(135);;
+		loginTitle.setLayoutY(5);
+		loginPane.getChildren().add(loginTitle);
+		
+		//"username" Text
+		Label username = new Label();
+		username.setText("Username:");
+		username.setPrefSize(250, 50);
+		username.setFont(Font.font("Times New Roman",15));
+		username.setLayoutX(50);;
+		username.setLayoutY(40);
+		loginPane.getChildren().add(username);
+		
+		//username Textfield
+		TextField usernameField = new TextField();
+		usernameField.setMaxWidth(375);
+		usernameField.setLayoutX(130);
+		usernameField.setLayoutY(53);
+		loginPane.getChildren().add(usernameField);
+		
+		//"password" Text
+		Label password = new Label();
+		password.setText("Password:");
+		password.setPrefSize(250, 50);
+		password.setFont(Font.font("Times New Roman",15));
+		password.setLayoutX(50);;
+		password.setLayoutY(80);
+		loginPane.getChildren().add(password);
+		
+		//password Textfield
+		TextField passwordField = new TextField();
+		passwordField.setMaxWidth(375);
+		passwordField.setLayoutX(130);
+		passwordField.setLayoutY(93);
+		loginPane.getChildren().add(passwordField);
+		
+		//Register Button
+		Button registerButton = new Button("Register");
+		registerButton.setPrefSize(150, 40);
+		registerButton.setLayoutX(35);
+		registerButton.setLayoutY(145);
+		loginPane.getChildren().add(registerButton);
+		
+		//Login Button
+		Button loginButton = new Button("Login");
+		loginButton.setPrefSize(150, 40);
+		loginButton.setLayoutX(195);
+		loginButton.setLayoutY(145);
+		loginPane.getChildren().add(loginButton);
+		
+		//upon clicking "Register" transfers to Register Scene
+		registerButton.setOnAction(e -> window.setScene(registerScene));
+		
+		
+		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
+		loginButton.setOnAction(e -> 
+		{
+			//if(loginIsVerified)	
+			window.setScene(loginScene2);
+		//else {
+		//Try again text
+	//}	
+		});
+		
+		//---End Login Scene 1 Assets ----
+
+//---Login Scene 2 Assets ----
+		//---Login(Player2) Scene Assets--------
+		
+		//Create Login pane
+		loginPane2 = new Pane();
+		loginPane2.setPadding(new Insets(0,0,0,0));
+		
+		//Creates our scene
+		loginScene2 = new Scene(loginPane2,400,200);
+		
+		//creates title
+		Label loginTitle2 = new Label();
+		loginTitle2.setText("Login: (Player 2)");
+		loginTitle2.setPrefSize(250, 50);
+		loginTitle2.setFont(Font.font("Times New Roman",20));
+		loginTitle2.setLayoutX(135);;
+		loginTitle2.setLayoutY(5);
+		loginPane2.getChildren().add(loginTitle2);
+		
+		//"username" Text
+		Label username2 = new Label();
+		username2.setText("Username:");
+		username2.setPrefSize(250, 50);
+		username2.setFont(Font.font("Times New Roman",15));
+		username2.setLayoutX(50);;
+		username2.setLayoutY(40);
+		loginPane2.getChildren().add(username2);
+		
+		//username Textfield
+		TextField usernameField2 = new TextField();
+		usernameField2.setMaxWidth(375);
+		usernameField2.setLayoutX(130);
+		usernameField2.setLayoutY(53);
+		loginPane2.getChildren().add(usernameField2);
+		
+		//"password" Text
+		Label password2 = new Label();
+		password2.setText("Password:");
+		password2.setPrefSize(250, 50);
+		password2.setFont(Font.font("Times New Roman",15));
+		password2.setLayoutX(50);;
+		password2.setLayoutY(80);
+		loginPane.getChildren().add(password2);
+		
+		//password Textfield
+		TextField passwordField2 = new TextField();
+		passwordField2.setMaxWidth(375);
+		passwordField2.setLayoutX(130);
+		passwordField2.setLayoutY(93);
+		loginPane2.getChildren().add(passwordField2);
+		
+		//Register Button
+		Button registerButton2 = new Button("Register");
+		registerButton2.setPrefSize(150, 40);
+		registerButton2.setLayoutX(35);
+		registerButton2.setLayoutY(145);
+		loginPane2.getChildren().add(registerButton2);
+		
+		//Login Button
+		Button loginButton2 = new Button("Login");
+		loginButton2.setPrefSize(150, 40);
+		loginButton2.setLayoutX(195);
+		loginButton2.setLayoutY(145);
+		loginPane2.getChildren().add(loginButton2);
+		
+		//upon clicking "Register" transfers to Register Scene
+		registerButton2.setOnAction(e -> window.setScene(registerScene2));
+		
+		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
+		loginButton2.setOnAction(e -> 
+		{
+			//if(loginIsVerified)	
+			window.setScene(scene2);
+			//else {
+				//Try again text
+			//}	
+		});
+		
+		//---End of Login Scene 2 Assets-----
+				
+//---Register Screen Assets------
+		//Create Register pane
+		registerPane = new Pane();
+		registerPane.setPadding(new Insets(0,0,0,0));
+				
+		//Creates our scene
+		registerScene = new Scene(registerPane,400,200);
+		
+		//creates title
+		Label registerTitle = new Label();
+		registerTitle.setText("Register Account");
+		registerTitle.setPrefSize(250, 50);
+		registerTitle.setFont(Font.font("Times New Roman",20));
+		registerTitle.setLayoutX(130);;
+		registerTitle.setLayoutY(5);
+		registerPane.getChildren().add(registerTitle);
+				
+		//"username" Text
+		Label regUsername = new Label();
+		regUsername.setText("Username:");
+		regUsername.setPrefSize(250, 50);
+		regUsername.setFont(Font.font("Times New Roman",15));
+		regUsername.setLayoutX(50);;
+		regUsername.setLayoutY(40);
+		registerPane.getChildren().add(regUsername);
+				
+		//username Textfield
+		TextField regUsernameField = new TextField();
+		regUsernameField.setMaxWidth(375);
+		regUsernameField.setLayoutX(130);
+		regUsernameField.setLayoutY(53);
+		registerPane.getChildren().add(regUsernameField);
+				
+		//"password" Text
+		Label regPassword = new Label();
+		regPassword.setText("Password:");
+		regPassword.setPrefSize(250, 50);
+		regPassword.setFont(Font.font("Times New Roman",15));
+		regPassword.setLayoutX(50);;
+		regPassword.setLayoutY(80);
+		registerPane.getChildren().add(regPassword);
+				
+		//password Textfield
+		TextField regPasswordField = new TextField();
+		regPasswordField.setMaxWidth(375);
+		regPasswordField.setLayoutX(130);
+		regPasswordField.setLayoutY(93);
+		registerPane.getChildren().add(regPasswordField);
+		
+		//Register Button
+		Button registerAccountButton = new Button("Register");
+		registerAccountButton.setPrefSize(150, 40);
+		registerAccountButton.setLayoutX(130);
+		registerAccountButton.setLayoutY(145);
+		registerPane.getChildren().add(registerAccountButton);
+		
+		//upon clicking "Register" transfers to Main Menu Scene
+		//Also needs to store inputs to player object (?)
+		registerAccountButton.setOnAction(e -> window.setScene(loginScene2));
+				
+		//---End Register Scene Assets--------
+		
+//---Register Screen 2 Assets------
+		//Create Register pane
+		registerPane2 = new Pane();
+		registerPane2.setPadding(new Insets(0,0,0,0));
+					
+		//Creates our scene
+		registerScene2 = new Scene(registerPane2,400,200);
+				
+		//creates title
+		Label registerTitle2 = new Label();
+		registerTitle2.setText("Register Account");
+		registerTitle2.setPrefSize(250, 50);
+		registerTitle2.setFont(Font.font("Times New Roman",20));
+		registerTitle2.setLayoutX(130);;
+		registerTitle2.setLayoutY(5);
+		registerPane2.getChildren().add(registerTitle2);
+						
+		//"username" Text
+		Label regUsername2 = new Label();
+		regUsername2.setText("Username:");
+		regUsername2.setPrefSize(250, 50);
+		regUsername2.setFont(Font.font("Times New Roman",15));
+		regUsername2.setLayoutX(50);;
+		regUsername2.setLayoutY(40);
+		registerPane2.getChildren().add(regUsername2);
+						
+		//username Textfield
+		TextField regUsernameField2 = new TextField();
+		regUsernameField2.setMaxWidth(375);
+		regUsernameField2.setLayoutX(130);
+		regUsernameField2.setLayoutY(53);
+		registerPane2.getChildren().add(regUsernameField2);
+						
+		//"password" Text
+		Label regPassword2 = new Label();
+		regPassword2.setText("Password:");
+		regPassword2.setPrefSize(250, 50);
+		regPassword2.setFont(Font.font("Times New Roman",15));
+		regPassword2.setLayoutX(50);;
+		regPassword2.setLayoutY(80);
+		registerPane2.getChildren().add(regPassword2);
+						
+		//password Textfield
+		TextField regPasswordField2 = new TextField();
+		regPasswordField2.setMaxWidth(375);
+		regPasswordField2.setLayoutX(130);
+		regPasswordField2.setLayoutY(93);
+		registerPane2.getChildren().add(regPasswordField2);
+				
+		//Register Button
+		Button registerAccountButton2 = new Button("Register");
+		registerAccountButton2.setPrefSize(150, 40);
+		registerAccountButton2.setLayoutX(130);
+		registerAccountButton2.setLayoutY(145);
+		registerPane2.getChildren().add(registerAccountButton2);
+				
+		//upon clicking "Register" transfers to Main Menu Scene
+		//Also needs to store inputs to player object (?)
+		registerAccountButton2.setOnAction(e -> window.setScene(scene2));
+						
+		//---End Register Scene Assets--------
+		
+//---Main Menu (scene2) Assets-------
 		//creates title screen panes
 		pane2 = new StackPane();
 		pane2.setPadding(new Insets(0,0,0,0));
@@ -101,7 +386,88 @@ public class UI_Prototype extends Application  {
 		startgame.setTranslateY(-100);
 		
 		//upon clicking "Play Game" transfers to game board
-		startgame.setOnAction(e -> window.setScene(scene));
+		startgame.setOnAction(e -> 
+		{
+			
+			//Creates game pane
+			pane = new Pane();
+			Gpane = new GridPane();
+			pane.setPadding(new Insets(0,0,0,0));
+
+			//Creates our scene
+			scene = new Scene(pane,800,850);
+
+			pane.getChildren().add(Gpane);
+
+			//add grid lines (horizontal and vertical) to create board square
+			//creates a 8x8 green grid with black lines
+
+			int k = 0;
+			int r = 0;
+			String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
+			
+//			Player tempPlayer = resolvePlayerToName(currGame.playerUpNext());
+			for(int k1 = 0; k1 < 8; k1++) {
+				if(r > 1)
+					r = 0;
+				for(int k2 = 0; k2 < 8; k2++) {
+					if(k > 1)
+						k = 0;
+					
+					Tile r1 = new Tile(75,75,k1,k2);
+					r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
+					r1.setStroke(Color.BLACK);
+					if((k1==3& k2==2) | (k1==2& k2==3) |
+					   (k1==4& k2==5) | (k1==5& k2==4) )
+						r1.setFill(Color.MEDIUMSEAGREEN);
+					else r1.setFill(Paint.valueOf(color[r][k]));
+					Gpane.add(r1,k1,k2);
+					
+					k++;
+				}
+				r++;
+			}
+
+			Gpane.setLayoutX(100);
+			Gpane.setLayoutY(150);
+
+			drawStartingDiscs();
+		
+			//Text Input for Player 1's Name:
+			TextInputDialog dialog = new TextInputDialog("Player1");
+			dialog.setTitle("Name Entry");
+			dialog.setHeaderText("Player 1 Name Entry");
+			dialog.setContentText("Please enter your name: (max 10 characters)");
+			Optional<String> result = dialog.showAndWait();
+			String p1Name = "player 1";
+			if (result.isPresent()&& result.get().length() < 11){
+				p1Name = result.get();
+			}
+
+			//Text Input for Player 2's Name:
+			TextInputDialog dialog2 = new TextInputDialog("Player2");
+			dialog2.setTitle("Name Entry");
+			dialog2.setHeaderText("Player 2 Name Entry");
+			dialog2.setContentText("Please enter your name: (max 10 characters)");
+			Optional<String> result2 = dialog2.showAndWait();
+			String p2Name = "player 2";
+			if (result2.isPresent()  && result2.get().length() < 11){
+				p2Name = result2.get();
+			}
+			
+			// Create Game
+			player1 = new Player(p1Name, Player.BLACK);
+			player2 = new Player(p2Name, Player.WHITE);
+
+			gameBoard = new Board(player1, player2);
+			this.currGame = gameBoard.CurrentGame;
+			tempTimerDuration = currGame.PlayerOneTime;
+			this.SetTimer();
+			drawButtonsAndLabels(p1Name, p2Name);
+			
+			window.setScene(scene);
+		
+		});
 		
 		stats = new Button("Statisics");
 		stats.setPrefSize(150,50);
@@ -119,86 +485,12 @@ public class UI_Prototype extends Application  {
 		
 		scene2 = new Scene(pane2, 350, 500);
 		
-		
-		
-		//Creates game pane
-		pane = new Pane();
-		Gpane = new GridPane();
-		pane.setPadding(new Insets(0,0,0,0));
-
-		//Creates our scene
-		scene = new Scene(pane,800,850);
-
-		pane.getChildren().add(Gpane);
-
-		//add grid lines (horizontal and vertical) to create board square
-		//creates a 8x8 green grid with black lines
-
-		int k = 0;
-		int r = 0;
-		String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
-		
-//		Player tempPlayer = resolvePlayerToName(currGame.playerUpNext());
-		for(int k1 = 0; k1 < 8; k1++) {
-			if(r > 1)
-				r = 0;
-			for(int k2 = 0; k2 < 8; k2++) {
-				if(k > 1)
-					k = 0;
-				
-				Tile r1 = new Tile(75,75,k1,k2);
-				r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
-				r1.setStroke(Color.BLACK);
-				if((k1==3& k2==2) | (k1==2& k2==3) |
-				   (k1==4& k2==5) | (k1==5& k2==4) )
-					r1.setFill(Color.MEDIUMSEAGREEN);
-				else r1.setFill(Paint.valueOf(color[r][k]));
-				Gpane.add(r1,k1,k2);
-				
-				k++;
-			}
-			r++;
-		}
-
-		Gpane.setLayoutX(100);
-		Gpane.setLayoutY(150);
-
-		drawStartingDiscs();
-
-		//Text Input for Player 1's Name:
-		TextInputDialog dialog = new TextInputDialog("Player1");
-		dialog.setTitle("Name Entry");
-		dialog.setHeaderText("Player 1 Name Entry");
-		dialog.setContentText("Please enter your name: (max 10 characters)");
-		Optional<String> result = dialog.showAndWait();
-		String p1Name = "player 1";
-		if (result.isPresent()&& result.get().length() < 11){
-			p1Name = result.get();
-		}
-
-		//Text Input for Player 2's Name:
-		TextInputDialog dialog2 = new TextInputDialog("Player2");
-		dialog2.setTitle("Name Entry");
-		dialog2.setHeaderText("Player 2 Name Entry");
-		dialog2.setContentText("Please enter your name: (max 10 characters)");
-		Optional<String> result2 = dialog2.showAndWait();
-		String p2Name = "player 2";
-		if (result2.isPresent()  && result2.get().length() < 11){
-			p2Name = result2.get();
-		}
-		// Create Game
-		player1 = new Player(p1Name, Player.BLACK);
-		player2 = new Player(p2Name, Player.WHITE);
-
-		gameBoard = new Board(player1, player2);
-		this.currGame = gameBoard.CurrentGame;
-		tempTimerDuration = currGame.PlayerOneTime;
-		this.SetTimer();
-		drawButtonsAndLabels(p1Name, p2Name);
 		primaryStage.setTitle("Othello");
-		primaryStage.setScene(scene2);
+		primaryStage.setScene(loginScene);
 		primaryStage.show();
+		
 	}
+		
 
 	private void drawMove(int row, int col) {
 
@@ -486,7 +778,6 @@ public class UI_Prototype extends Application  {
 		player1CustomName.setLayoutY(118);
 		pane.getChildren().add(player1);
 		pane.getChildren().add(player1CustomName);
-		//		player1Box.appendText("gi");
 
 		//Player2
 		Text player2 = new Text(575,90, "Player 2: ");
