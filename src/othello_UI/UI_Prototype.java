@@ -169,10 +169,10 @@ public class UI_Prototype extends Application  {
 		TextInputDialog dialog = new TextInputDialog("Player1");
 		dialog.setTitle("Name Entry");
 		dialog.setHeaderText("Player 1 Name Entry");
-		dialog.setContentText("Please enter your name:");
+		dialog.setContentText("Please enter your name: (max 10 characters)");
 		Optional<String> result = dialog.showAndWait();
-		String p1Name = "none";
-		if (result.isPresent()){
+		String p1Name = "player 1";
+		if (result.isPresent()&& result.get().length() < 11){
 			p1Name = result.get();
 		}
 
@@ -180,10 +180,10 @@ public class UI_Prototype extends Application  {
 		TextInputDialog dialog2 = new TextInputDialog("Player2");
 		dialog2.setTitle("Name Entry");
 		dialog2.setHeaderText("Player 2 Name Entry");
-		dialog2.setContentText("Please enter your name:");
+		dialog2.setContentText("Please enter your name: (max 10 characters)");
 		Optional<String> result2 = dialog2.showAndWait();
-		String p2Name = "none";
-		if (result2.isPresent()){
+		String p2Name = "player 2";
+		if (result2.isPresent()  && result2.get().length() < 11){
 			p2Name = result2.get();
 		}
 		// Create Game
@@ -479,17 +479,17 @@ public class UI_Prototype extends Application  {
 		//Text boxes needed
 		//Add "Player 1" and "Player 2" text boxes
 		//Player1
-		Text player1 = new Text(155,90, "Player 1: ");
+		Text player1 = new Text(100,90, "Player 1: ");
 		Text player1CustomName = new Text(p1Name);
 		player1CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
-		player1CustomName.setLayoutX(140);
+		player1CustomName.setLayoutX(100);
 		player1CustomName.setLayoutY(118);
 		pane.getChildren().add(player1);
 		pane.getChildren().add(player1CustomName);
 		//		player1Box.appendText("gi");
 
 		//Player2
-		Text player2 = new Text(600,90, "Player 2: ");
+		Text player2 = new Text(575,90, "Player 2: ");
 		Text player2CustomName = new Text(p2Name);
 		player2CustomName.setStyle("-fx-font: 18 arial; -fx-stroke: black; -fx-stroke-width: .5;");
 		player2CustomName.setLayoutX(575);
@@ -578,7 +578,7 @@ public class UI_Prototype extends Application  {
 
 
 	private void SetTimer() {
-		//stoping timer and saving values
+		//stopping timer and saving values
 		if(timer != null) {
 			timer.stop();
 //			tempTimerDuration = currGame.PlayerOneTime;
@@ -606,10 +606,15 @@ public class UI_Prototype extends Application  {
 					tempTimerDuration--;
 					
 					//					System.out.println("newTIME"+tempTimerDuration);
-					if(currGame.LastTurn == currGame.PlayerOneName) 
+					if(currGame.LastTurn == currGame.PlayerOneName) { 
 						placeHolderTime.setText(tempTimerDuration.toString());
-					else placeHolderTime2.setText(tempTimerDuration.toString());
+						placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
+						placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
+					}
+					else { placeHolderTime2.setText(tempTimerDuration.toString());
+					
 				}
+					}
 				else {
 					currGame.EndGame();
 					
