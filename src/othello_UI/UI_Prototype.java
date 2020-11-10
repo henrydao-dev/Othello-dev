@@ -52,8 +52,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
@@ -90,7 +96,7 @@ public class UI_Prototype extends Application  {
 		createLeaderboardScene();
 		
 		primaryStage.setTitle("Othello");
-		primaryStage.setScene(loginScene);
+		primaryStage.setScene(leaderboardScene);
 		primaryStage.show();
 		
 	}
@@ -110,13 +116,7 @@ public class UI_Prototype extends Application  {
 
 			//This section of code will run on every valid disc placement to check for end of game
 			if (gameBoard.isGameOver()) {
-				/*
-				 * calls delcareWinner() which will call upon another method countDiscs() to calculate
-				 * which player has won the game and output all of : Player1's score, Player2's score, 
-				 * and winner declaration
-				 */
-				declareWinner();
-				//calls endGame() only after isGameOver() is true and the winner is declared.	 
+				//calls endGame() only after isGameOver() is true	 
 				endGame();	
 			}
 			currGame.SwitchTurn();
@@ -195,8 +195,6 @@ public class UI_Prototype extends Application  {
 		Gpane.add(c2, 3, 4);
 		Gpane.add(c3, 4, 3);
 		Gpane.add(c4, 4, 4);
-		
-
 	}
 
 	/**Updates board after disc is placed
@@ -219,7 +217,6 @@ public class UI_Prototype extends Application  {
 				Tile r1 = new Tile(75,75,k1,k2);
 				r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
 				r1.setStroke(Color.BLACK);
-//				Color tempColor = nextPlayer.Color==Player.BLACK ? Color.valueOf("#d5eddd") : Color.valueOf("#3d4a41");
 				if(gameBoard.isMoveValid(nextPlayer,k2,k1)) r1.setFill(Color.MEDIUMSEAGREEN) ;
 				else r1.setFill(Color.GREEN);
 				Gpane.add(r1,k1,k2);
@@ -282,7 +279,11 @@ public class UI_Prototype extends Application  {
 
 		//TODO: *could also display the game count b/w players at this point, before moving to "play again?"*
 
-		gameBoard.CurrentGame.EndGame();
+		try {
+			gameBoard.CurrentGame.EndGame();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} 
 
 		//Pop up box alerting the players that the game is over
 		Alert gameOverBox = new Alert(AlertType.CONFIRMATION);
@@ -299,6 +300,7 @@ public class UI_Prototype extends Application  {
 			//Restart Game and Board
 			gameBoard = new Board(player1, player2);
 			this.currGame = gameBoard.CurrentGame;
+			// TODO this does not function the way you'd expect right now
 
 		} else if (result.get() == noButton) {
 			System.exit(0);
@@ -318,8 +320,24 @@ public class UI_Prototype extends Application  {
 		//Determines who the winner of the game is and returns it as a String
 		if (blackCount > whiteCount) {
 			winner = "Player 1";
+			player1.Wins++;
+			player2.Losses++;
+			try {
+				player1.Update();
+				player2.Update();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else if (blackCount < whiteCount) {
 			winner = "Player 2";
+			player2.Wins++;
+			player1.Losses++;
+			try {
+				player2.Update();
+				player1.Update();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			winner = "The game is a tie!";
 		}
@@ -498,7 +516,11 @@ public class UI_Prototype extends Application  {
 				}
 					}
 				else {
-					currGame.EndGame();
+					try {
+						currGame.EndGame();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					} 
 					
 					// TODO
 					//need code for what happens if TimeOUT!!!!!
@@ -605,6 +627,11 @@ public class UI_Prototype extends Application  {
 		player2.setColor(Player.WHITE);
 		gameBoard = new Board(player1, player2);
 		this.currGame = gameBoard.CurrentGame;
+		try {
+			this.currGame.StartGame();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		tempTimerDuration = currGame.PlayerOneTime;
 		this.SetTimer();
 		drawButtonsAndLabels(player1.Name, player2.Name);
@@ -823,9 +850,7 @@ public class UI_Prototype extends Application  {
         
         table.getColumns().addAll(usernameCol, winsCol, lossCol);
  
-        leaderboardPane.getChildren().add(table);
- 
-				
+        leaderboardPane.getChildren().add(table);				
 		
 		//Back Button
 		Button backButton = new Button("Back");
