@@ -25,6 +25,8 @@ package othello_UI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -37,6 +39,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,11 +54,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import java.util.List;
 import java.util.Optional;
-
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
 
 public class UI_Prototype extends Application  {
 	private GridPane Gpane;
-	private Pane pane, loginPane, loginPane2, registerPane, registerPane2;
+	private Pane pane, loginPane, loginPane2, registerPane, registerPane2, leaderboardPane;
 	private Board gameBoard;
 	private Game currGame;
 	private Player player1, player2;
@@ -66,7 +70,7 @@ public class UI_Prototype extends Application  {
 	private StackPane mainMenuPane;
 	private Button startGameButton, stats, logout;
 	private Stage window;
-	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene;
+	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene;
 	
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
@@ -82,6 +86,8 @@ public class UI_Prototype extends Application  {
 		createRegisterScene2();
 				
 		createMainMenuScene();
+		
+		createLeaderboardScene();
 		
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(loginScene);
@@ -535,6 +541,9 @@ public class UI_Prototype extends Application  {
 		stats = new Button("Statisics");
 		stats.setPrefSize(150,50);
 		stats.setTranslateY(-50);
+		stats.setOnAction(e ->  {
+			window.setScene(leaderboardScene);
+		});
 		
 		logout = new Button("Logout");
 		logout.setPrefSize(150,50);
@@ -779,7 +788,58 @@ public class UI_Prototype extends Application  {
 				
 		//---End Register Scene Assets--------
 	}
+	private void createLeaderboardScene() {
+		//---Leaderboard Assets------
 
+		leaderboardPane = new Pane();
+		leaderboardPane.setPadding(new Insets(0,0,0,0));
+				
+		//Creates our scene
+		leaderboardScene = new Scene(leaderboardPane,400,500);
+		
+		//creates title
+		Label leaderboardTitle = new Label();
+		leaderboardTitle.setText("Leaderboard");
+		leaderboardTitle.setFont(new Font("Arial", 20));
+		leaderboardPane.getChildren().add(leaderboardTitle);
+		
+		TableView<Player> table = new TableView<Player>();
+		table.setEditable(false);
+		table.setMaxHeight(400);
+		 
+        TableColumn<Player, String> usernameCol = new TableColumn<Player, String>("Name");
+        usernameCol.setMinWidth(100);
+        usernameCol.setCellValueFactory(new PropertyValueFactory<Player, String>("Name"));
+        
+        TableColumn<Player, Integer> winsCol = new TableColumn<Player, Integer>("Wins");
+        winsCol.setMinWidth(100);
+        winsCol.setCellValueFactory(new PropertyValueFactory<Player, Integer>("Wins"));
+        
+        TableColumn<Player, Integer> lossCol = new TableColumn<Player, Integer>("Losses");
+        lossCol.setMinWidth(100);
+        lossCol.setCellValueFactory(new PropertyValueFactory<Player, Integer>("Losses"));
+        
+        table.setItems(FXCollections.observableList(Admin.GetLeaderBoard()));
+        
+        table.getColumns().addAll(usernameCol, winsCol, lossCol);
+ 
+        leaderboardPane.getChildren().add(table);
+ 
+				
+		
+		//Back Button
+		Button backButton = new Button("Back");
+		backButton.setPrefSize(150, 40);
+		backButton.setLayoutX(130);
+		backButton.setLayoutY(450);
+		leaderboardPane.getChildren().add(backButton);
+		
+		backButton.setOnAction(e -> {
+			window.setScene(mainMenuScene);
+		});
+				
+		//---End Leaderboard Scene Assets--------
+	}
 
 	private void createLoginScene2() {
 		//---Login Scene 2 Assets ----

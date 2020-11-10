@@ -26,6 +26,16 @@ public class Player implements Comparable<Player> {
 
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
+	
+	public String getName() {
+		return Name;
+	}
+	public Integer getWins() {
+		return Wins;
+	}
+	public Integer getLosses() {
+		return Losses;
+	}
 
 	public Player() {
 		
