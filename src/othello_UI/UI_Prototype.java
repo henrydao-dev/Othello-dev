@@ -29,6 +29,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -52,6 +53,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.FileInputStream;
 import java.util.List;
@@ -76,7 +78,7 @@ public class UI_Prototype extends Application  {
 	private StackPane mainMenuPane;
 	private Button startGameButton, stats, logout;
 	Stage window;
-	Scene currentScene,sceneBoard, scene2, loginScene, loginScene2, registerScene, registerScene2;
+	Scene currentScene,gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene;
 	
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
@@ -478,7 +480,6 @@ public class UI_Prototype extends Application  {
 		//stopping timer and saving values
 		if(timer != null) {
 			timer.stop();
-			
 		}
 
 		//creating a new Timer
@@ -528,6 +529,9 @@ public class UI_Prototype extends Application  {
 		//creates title screen panes
 		mainMenuPane = new StackPane();
 		mainMenuPane.setPadding(new Insets(0,0,0,0));
+
+		//Creates our scene
+		mainMenuScene = new Scene(mainMenuPane,400,500);
 		
 		//creates title
 		Label title = new Label();
@@ -570,7 +574,7 @@ public class UI_Prototype extends Application  {
 		pane.setPadding(new Insets(0,0,0,0));
 
 		//Creates our scene
-		sceneBoard = new Scene(pane,800,850);
+		gameBoardScene = new Scene(pane,800,850);
 
 		pane.getChildren().add(Gpane);
 
@@ -616,7 +620,7 @@ public class UI_Prototype extends Application  {
 		this.SetTimer();
 		drawButtonsAndLabels(player1.Name, player2.Name);
 		
-		window.setScene(sceneBoard);
+		window.setScene(gameBoardScene);
 	}
 
 
@@ -627,7 +631,7 @@ public class UI_Prototype extends Application  {
 		registerPane2.setPadding(new Insets(0,0,0,0));
 					
 		//Creates our scene
-		registerScene2 = new Scene(registerPane2,400,200);
+		registerScene2 = new Scene(registerPane2,400,225);
 				
 		//creates title
 		Label registerTitle2 = new Label();
@@ -668,9 +672,11 @@ public class UI_Prototype extends Application  {
 		messageregister2.setStyle("-fx-text-inner-color: red;");
 		messageregister2.setPrefSize(250, 50);
 		messageregister2.setFont(Font.font("Times New Roman",15));
-		messageregister2.setLayoutX(140);;
-		messageregister2.setLayoutY(108);
-		messageregister2.setTextFill(Color.RED);	
+		messageregister2.setLayoutX(10);;
+		messageregister2.setLayoutY(110);
+		messageregister2.setTextFill(Color.RED);
+		messageregister2.setWrapText(true);
+		messageregister2.setTextAlignment(TextAlignment.CENTER);
 		registerPane.getChildren().add(messageregister2);
 		
 		//password Textfield
@@ -684,7 +690,7 @@ public class UI_Prototype extends Application  {
 		Button registerAccountButton2 = new Button("Register");
 		registerAccountButton2.setPrefSize(150, 40);
 		registerAccountButton2.setLayoutX(130);
-		registerAccountButton2.setLayoutY(145);
+		registerAccountButton2.setLayoutY(160);
 		registerPane2.getChildren().add(registerAccountButton2);
 				
 		//upon clicking "Register" transfers to Main Menu Scene
@@ -697,7 +703,7 @@ public class UI_Prototype extends Application  {
 				tempPlayer.validateRegistration();
 				tempPlayer.Register();
 				player2 = Player.Login(regUsernameField2.getText(),regPasswordField2.getText());  
-				window.setScene(scene2);
+				window.setScene(mainMenuScene);
 			} catch (Exception e2) {
 				// TODO: handle exception
 				messageregister2.setText(e2.getMessage());
@@ -717,7 +723,7 @@ public class UI_Prototype extends Application  {
 		registerPane.setPadding(new Insets(0,0,0,0));
 				
 		//Creates our scene
-		registerScene = new Scene(registerPane,400,200);
+		registerScene = new Scene(registerPane,400,225);
 		
 		//creates title
 		Label registerTitle = new Label();
@@ -756,11 +762,13 @@ public class UI_Prototype extends Application  {
 		Label messageregister = new Label();
 		messageregister.setText("");
 		messageregister.setStyle("-fx-text-inner-color: red;");
-		messageregister.setPrefSize(250, 50);
+		messageregister.setPrefSize(380, 50);
 		messageregister.setFont(Font.font("Times New Roman",15));
-		messageregister.setLayoutX(140);;
-		messageregister.setLayoutY(108);
+		messageregister.setLayoutX(10);
+		messageregister.setLayoutY(110);
 		messageregister.setTextFill(Color.RED);	
+		messageregister.setWrapText(true);
+		messageregister.setTextAlignment(TextAlignment.CENTER);
 		registerPane.getChildren().add(messageregister);
 		
 		//password Textfield
@@ -774,7 +782,7 @@ public class UI_Prototype extends Application  {
 		Button registerAccountButton = new Button("Register");
 		registerAccountButton.setPrefSize(150, 40);
 		registerAccountButton.setLayoutX(130);
-		registerAccountButton.setLayoutY(145);
+		registerAccountButton.setLayoutY(160);
 		registerPane.getChildren().add(registerAccountButton);
 		
 		//upon clicking "Register" transfers to Main Menu Scene
@@ -787,7 +795,6 @@ public class UI_Prototype extends Application  {
 				player1 = Player.Login(regUsernameField.getText(),regPasswordField.getText());  
 				window.setScene(loginScene2);
 			} catch (Exception e2) {
-				// TODO: handle exception
 				messageregister.setText(e2.getMessage());
 			}
 			
@@ -813,7 +820,7 @@ public class UI_Prototype extends Application  {
 		loginTitle2.setText("Login: (Player 2)");
 		loginTitle2.setPrefSize(250, 50);
 		loginTitle2.setFont(Font.font("Times New Roman",20));
-		loginTitle2.setLayoutX(135);;
+		loginTitle2.setLayoutX(135);
 		loginTitle2.setLayoutY(5);
 		loginPane2.getChildren().add(loginTitle2);
 		
@@ -822,7 +829,7 @@ public class UI_Prototype extends Application  {
 		username2.setText("Username:");
 		username2.setPrefSize(250, 50);
 		username2.setFont(Font.font("Times New Roman",15));
-		username2.setLayoutX(50);;
+		username2.setLayoutX(50);
 		username2.setLayoutY(40);
 		loginPane2.getChildren().add(username2);
 		
@@ -838,9 +845,9 @@ public class UI_Prototype extends Application  {
 		password2.setText("Password:");
 		password2.setPrefSize(250, 50);
 		password2.setFont(Font.font("Times New Roman",15));
-		password2.setLayoutX(50);;
+		password2.setLayoutX(50);
 		password2.setLayoutY(80);
-		loginPane.getChildren().add(password2);
+		loginPane2.getChildren().add(password2);
 		
 		//password Textfield
 		TextField passwordField2 = new TextField();
@@ -854,9 +861,10 @@ public class UI_Prototype extends Application  {
 		message2.setStyle("-fx-text-inner-color: red;");
 		message2.setPrefSize(250, 50);
 		message2.setFont(Font.font("Times New Roman",15));
-		message2.setLayoutX(140);;
+		message2.setLayoutX(140);
 		message2.setLayoutY(108);
-		message2.setTextFill(Color.RED);	
+		message2.setTextFill(Color.RED);
+		message2.setWrapText(true);
 		loginPane2.getChildren().add(message2);
 		//Register Button
 		Button registerButton2 = new Button("Register");
@@ -887,7 +895,7 @@ public class UI_Prototype extends Application  {
 				}
 				player2 = Player.Login(usernameField2.getText(),passwordField2.getText()); 
 
-				window.setScene(scene2);
+				window.setScene(mainMenuScene);
 				
 			
 			}catch (Exception e1) {
@@ -937,8 +945,9 @@ public class UI_Prototype extends Application  {
 		message.setStyle("-fx-text-inner-color: red;");
 		message.setPrefSize(250, 50);
 		message.setFont(Font.font("Times New Roman",15));
-		message.setLayoutX(140);;
+		message.setLayoutX(140);
 		message.setLayoutY(108);
+		message.setWrapText(true);
 		loginPane.getChildren().add(message);
 		
 		//username Textfield
