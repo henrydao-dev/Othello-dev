@@ -169,6 +169,7 @@ public class UI_Prototype extends Application  {
 				}
 				currGame.SwitchTurn();
 				this.SetTimer();
+				updateBoard();
 			}
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
