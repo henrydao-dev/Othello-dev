@@ -110,6 +110,15 @@ public class UI_Prototype extends Application  {
 		username.setLayoutY(40);
 		loginPane.getChildren().add(username);
 		
+		Label message = new Label();
+		message.setText("");
+		message.setStyle("-fx-text-inner-color: red;");
+		message.setPrefSize(250, 50);
+		message.setFont(Font.font("Times New Roman",15));
+		message.setLayoutX(140);;
+		message.setLayoutY(108);
+		loginPane.getChildren().add(message);
+		
 		//username Textfield
 		TextField usernameField = new TextField();
 		usernameField.setMaxWidth(375);
@@ -154,8 +163,28 @@ public class UI_Prototype extends Application  {
 		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
 		loginButton.setOnAction(e -> 
 		{
+			try {
+				player1 = Player.Login(usernameField.getText(),passwordField.getText()); 
+//				message.setText("Welcome "+usernameField.getText()+"!");
+//				try {
+//				    Thread.sleep(1 * 1000);
+//				} catch (InterruptedException ie) {
+//				    Thread.currentThread().interrupt();
+//				}
+				window.setScene(loginScene2);
+				
+			
+			}catch (Exception e1) {
+				
+				System.out.println(e1.getMessage());
+				message.setText("Invalid Cerdinals!");
+				message.setTextFill(Color.RED);
+				// TODO: handle exception
+			}
+//			usernameField.setStyle("-fx-text-inner-color: black;");
+//			System.out.println();
 			//if(loginIsVerified)	
-			window.setScene(loginScene2);
+			
 		//else {
 		//Try again text
 	//}	
@@ -214,6 +243,15 @@ public class UI_Prototype extends Application  {
 		passwordField2.setLayoutY(93);
 		loginPane2.getChildren().add(passwordField2);
 		
+		Label message2 = new Label();
+		message2.setText("");
+		message2.setStyle("-fx-text-inner-color: red;");
+		message2.setPrefSize(250, 50);
+		message2.setFont(Font.font("Times New Roman",15));
+		message2.setLayoutX(140);;
+		message2.setLayoutY(108);
+		message2.setTextFill(Color.RED);	
+		loginPane2.getChildren().add(message2);
 		//Register Button
 		Button registerButton2 = new Button("Register");
 		registerButton2.setPrefSize(150, 40);
@@ -234,11 +272,27 @@ public class UI_Prototype extends Application  {
 		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
 		loginButton2.setOnAction(e -> 
 		{
-			//if(loginIsVerified)	
-			window.setScene(scene2);
-			//else {
-				//Try again text
-			//}	
+			try {
+				
+				message.setText("Welcome "+usernameField.getText()+"!");
+				if (player1.Name.equals(usernameField2.getText())) {
+
+					throw new IllegalStateException("SameUser");
+				}
+				player2 = Player.Login(usernameField2.getText(),passwordField2.getText()); 
+
+				window.setScene(scene2);
+				
+			
+			}catch (Exception e1) {
+				
+				System.out.println(e1.getMessage());
+				if(e1.getMessage()=="SameUser") message2.setText("Player1 cannot login twice!");
+				else message2.setText("Invalid Cerdinals!");
+				
+				// TODO: handle exception
+			}
+
 		});
 		
 		//---End of Login Scene 2 Assets-----
@@ -284,7 +338,17 @@ public class UI_Prototype extends Application  {
 		regPassword.setLayoutX(50);;
 		regPassword.setLayoutY(80);
 		registerPane.getChildren().add(regPassword);
-				
+		
+		Label messageregister = new Label();
+		messageregister.setText("");
+		messageregister.setStyle("-fx-text-inner-color: red;");
+		messageregister.setPrefSize(250, 50);
+		messageregister.setFont(Font.font("Times New Roman",15));
+		messageregister.setLayoutX(140);;
+		messageregister.setLayoutY(108);
+		messageregister.setTextFill(Color.RED);	
+		registerPane.getChildren().add(messageregister);
+		
 		//password Textfield
 		TextField regPasswordField = new TextField();
 		regPasswordField.setMaxWidth(375);
@@ -301,7 +365,19 @@ public class UI_Prototype extends Application  {
 		
 		//upon clicking "Register" transfers to Main Menu Scene
 		//Also needs to store inputs to player object (?)
-		registerAccountButton.setOnAction(e -> window.setScene(loginScene2));
+		registerAccountButton.setOnAction(e -> {
+			try {
+				Player tempPlayer = new Player(regUsernameField.getText(),regPasswordField.getText());
+				tempPlayer.validateRegistration();
+				tempPlayer.Register();
+				player1 = Player.Login(regUsernameField.getText(),regPasswordField.getText());  
+				window.setScene(loginScene2);
+			} catch (Exception e2) {
+				// TODO: handle exception
+				messageregister.setText(e2.getMessage());
+			}
+			
+		});
 				
 		//---End Register Scene Assets--------
 		
@@ -347,6 +423,16 @@ public class UI_Prototype extends Application  {
 		regPassword2.setLayoutY(80);
 		registerPane2.getChildren().add(regPassword2);
 						
+		Label messageregister2 = new Label();
+		messageregister2.setText("");
+		messageregister2.setStyle("-fx-text-inner-color: red;");
+		messageregister2.setPrefSize(250, 50);
+		messageregister2.setFont(Font.font("Times New Roman",15));
+		messageregister2.setLayoutX(140);;
+		messageregister2.setLayoutY(108);
+		messageregister2.setTextFill(Color.RED);	
+		registerPane.getChildren().add(messageregister2);
+		
 		//password Textfield
 		TextField regPasswordField2 = new TextField();
 		regPasswordField2.setMaxWidth(375);
@@ -363,7 +449,22 @@ public class UI_Prototype extends Application  {
 				
 		//upon clicking "Register" transfers to Main Menu Scene
 		//Also needs to store inputs to player object (?)
-		registerAccountButton2.setOnAction(e -> window.setScene(scene2));
+		registerAccountButton2.setOnAction(e ->{
+			
+			
+			try {
+				Player tempPlayer = new Player(regUsernameField2.getText(),regPasswordField2.getText());
+				tempPlayer.validateRegistration();
+				tempPlayer.Register();
+				player2 = Player.Login(regUsernameField2.getText(),regPasswordField2.getText());  
+				window.setScene(scene2);
+			} catch (Exception e2) {
+				// TODO: handle exception
+				messageregister2.setText(e2.getMessage());
+			}
+			
+			
+		} );
 						
 		//---End Register Scene Assets--------
 		
@@ -434,36 +535,37 @@ public class UI_Prototype extends Application  {
 			drawStartingDiscs();
 		
 			//Text Input for Player 1's Name:
-			TextInputDialog dialog = new TextInputDialog("Player1");
-			dialog.setTitle("Name Entry");
-			dialog.setHeaderText("Player 1 Name Entry");
-			dialog.setContentText("Please enter your name: (max 10 characters)");
-			Optional<String> result = dialog.showAndWait();
-			String p1Name = "player 1";
-			if (result.isPresent()&& result.get().length() < 11){
-				p1Name = result.get();
-			}
-
-			//Text Input for Player 2's Name:
-			TextInputDialog dialog2 = new TextInputDialog("Player2");
-			dialog2.setTitle("Name Entry");
-			dialog2.setHeaderText("Player 2 Name Entry");
-			dialog2.setContentText("Please enter your name: (max 10 characters)");
-			Optional<String> result2 = dialog2.showAndWait();
-			String p2Name = "player 2";
-			if (result2.isPresent()  && result2.get().length() < 11){
-				p2Name = result2.get();
-			}
+//			TextInputDialog dialog = new TextInputDialog("Player1");
+//			dialog.setTitle("Name Entry");
+//			dialog.setHeaderText("Player 1 Name Entry");
+//			dialog.setContentText("Please enter your name: (max 10 characters)");
+//			Optional<String> result = dialog.showAndWait();
+//			String p1Name = "player 1";
+//			if (result.isPresent()&& result.get().length() < 11){
+//				p1Name = result.get();
+//			}
+//
+//			//Text Input for Player 2's Name:
+//			TextInputDialog dialog2 = new TextInputDialog("Player2");
+//			dialog2.setTitle("Name Entry");
+//			dialog2.setHeaderText("Player 2 Name Entry");
+//			dialog2.setContentText("Please enter your name: (max 10 characters)");
+//			Optional<String> result2 = dialog2.showAndWait();
+//			String p2Name = "player 2";
+//			if (result2.isPresent()  && result2.get().length() < 11){
+//				p2Name = result2.get();
+//			}
 			
 			// Create Game
-			player1 = new Player(p1Name, Player.BLACK);
-			player2 = new Player(p2Name, Player.WHITE);
-
+//			player1 = new Player(p1Name, Player.BLACK);
+//			player2 = new Player(p2Name, Player.WHITE);
+			player1.setColor(Player.BLACK);
+			player2.setColor(Player.WHITE);
 			gameBoard = new Board(player1, player2);
 			this.currGame = gameBoard.CurrentGame;
 			tempTimerDuration = currGame.PlayerOneTime;
 			this.SetTimer();
-			drawButtonsAndLabels(p1Name, p2Name);
+			drawButtonsAndLabels(player1.Name, player2.Name);
 			
 			window.setScene(scene);
 		
@@ -477,11 +579,28 @@ public class UI_Prototype extends Application  {
 		logout.setPrefSize(150,50);
 		
 		
+		//log in notifs
+//		Label player1label = new Label();
+//		player1label.setText("Welcome "+ usernameField.getText()+"! Black discs!" );
+//		player1label.setPrefSize(250, 50);
+//		player1label.setFont(Font.font("Times New Roman",15));
+//		player1label.setLayoutX(140);
+//		player1label.setLayoutY(250);
+//		
+//		Label player2label = new Label();
+//		player2label.setText("Welcome "+ usernameField2.getText()+"! White discs!" );
+//		player2label.setPrefSize(250, 50);
+//		player2label.setFont(Font.font("Times New Roman",15));
+//		player2label.setLayoutX(140);;
+//		player2label.setLayoutY(250);
+//		
 		//adds to Pane
 		pane2.getChildren().add(title);
 		pane2.getChildren().add(startgame);
 		pane2.getChildren().add(stats);
 		pane2.getChildren().add(logout);
+//		pane2.getChildren().add(player1label);
+//		pane2.getChildren().add(player2label);
 		
 		scene2 = new Scene(pane2, 350, 500);
 		

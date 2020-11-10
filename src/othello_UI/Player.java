@@ -49,6 +49,10 @@ public class Player implements Comparable<Player> {
 		this.Losses = 0;
 	}
 	
+	public void setColor(char color) {
+		this.Color = color;
+	}
+	
 	/**
 	 * Registers the user
 	 * @throws IllegalStateException If the password isn't set on this Player object
