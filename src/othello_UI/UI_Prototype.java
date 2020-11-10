@@ -22,18 +22,14 @@
 
 package othello_UI;
 
-import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -41,7 +37,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,13 +49,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
-
-import com.sun.xml.internal.bind.v2.TODO; 
 
 
 public class UI_Prototype extends Application  {
@@ -68,23 +58,20 @@ public class UI_Prototype extends Application  {
 	private Pane pane, loginPane, loginPane2, registerPane, registerPane2;
 	private Board gameBoard;
 	private Game currGame;
-	private Player player1;
-	private Player player2;
+	private Player player1, player2;
 	private TextField p1ScoreBox,p2ScoreBox;
 	private Integer tempTimerDuration ;
 	private Text placeHolderTime2, placeHolderTime;
 	private Timeline timer ;
-	Scanner input = new Scanner(System.in);
 	private StackPane mainMenuPane;
 	private Button startGameButton, stats, logout;
-	Stage window;
-	Scene currentScene,gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene;
+	private Stage window;
+	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene;
 	
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 		window = primaryStage;
-		currentScene = primaryStage.getScene();
 		
 		createLoginScene1();
 		
@@ -101,10 +88,6 @@ public class UI_Prototype extends Application  {
 		primaryStage.show();
 		
 	}
-
-
-	
-		
 
 	private void drawMove(int row, int col) {
 
@@ -302,7 +285,6 @@ public class UI_Prototype extends Application  {
 		gameOverBox.setTitle("Game Over");
 		gameOverBox.setHeaderText(declareWinner());
 		gameOverBox.setContentText("Would you like play again?");
-		gameOverBox.show();
 
 		//Results of player clicking buttons
 		Optional<ButtonType> result = gameOverBox.showAndWait();
@@ -322,9 +304,6 @@ public class UI_Prototype extends Application  {
 		String winner;
 		String returnMessage;
 
-		/* whiteCount = list(0)
-		 * blackCount = list(1)
-		 */
 		List <Integer> discCount = gameBoard.countDiscs();
 		int whiteCount = discCount.get(0);
 		int blackCount = discCount.get(1);
@@ -697,7 +676,6 @@ public class UI_Prototype extends Application  {
 		//Also needs to store inputs to player object (?)
 		registerAccountButton2.setOnAction(e ->{
 			
-			
 			try {
 				Player tempPlayer = new Player(regUsernameField2.getText(),regPasswordField2.getText());
 				tempPlayer.validateRegistration();
@@ -705,10 +683,8 @@ public class UI_Prototype extends Application  {
 				player2 = Player.Login(regUsernameField2.getText(),regPasswordField2.getText());  
 				window.setScene(mainMenuScene);
 			} catch (Exception e2) {
-				// TODO: handle exception
 				messageregister2.setText(e2.getMessage());
 			}
-			
 			
 		} );
 						
@@ -897,14 +873,11 @@ public class UI_Prototype extends Application  {
 
 				window.setScene(mainMenuScene);
 				
-			
 			}catch (Exception e1) {
 				
 				System.out.println(e1.getMessage());
-				if(e1.getMessage()=="SameUser") message2.setText("Player1 cannot login twice!");
-				else message2.setText("Invalid Cerdinals!");
-				
-				// TODO: handle exception
+				if(e1.getMessage()=="SameUser") message2.setText("Player1 cannot login twice");
+				else message2.setText("Invalid Credentials");
 			}
 
 		});
@@ -1004,7 +977,6 @@ public class UI_Prototype extends Application  {
 				System.out.println(e1.getMessage());
 				message.setText("Invalid Credentials");
 				message.setTextFill(Color.RED);
-				// TODO: handle exception
 			}
 		});
 		
