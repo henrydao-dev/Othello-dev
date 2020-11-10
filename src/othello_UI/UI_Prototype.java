@@ -96,7 +96,7 @@ public class UI_Prototype extends Application  {
 		createLeaderboardScene();
 		
 		primaryStage.setTitle("Othello");
-		primaryStage.setScene(leaderboardScene);
+		primaryStage.setScene(loginScene);
 		primaryStage.show();
 		
 	}
