@@ -273,7 +273,7 @@ public class UI_Prototype extends Application  {
 			return false;
 		}
 	}
-
+	
 	//Method for being the final aspect of the game | Asks user (up to 3 times) to play again or quit
 	private void endGame() {
 
@@ -289,20 +289,20 @@ public class UI_Prototype extends Application  {
 		Alert gameOverBox = new Alert(AlertType.CONFIRMATION);
 		ButtonType yesButton = new ButtonType("Yes");
 		ButtonType noButton = new ButtonType("No");
-		gameOverBox.getButtonTypes().setAll(yesButton, noButton);
+		gameOverBox.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 		gameOverBox.setTitle("Game Over");
 		gameOverBox.setHeaderText(declareWinner());
 		gameOverBox.setContentText("Would you like play again?");
 
 		//Results of player clicking buttons
 		Optional<ButtonType> result = gameOverBox.showAndWait();
-		if (result.get() == yesButton) {
+		if (result.get() == ButtonType.YES) {
 			//Restart Game and Board
 			gameBoard = new Board(player1, player2);
 			this.currGame = gameBoard.CurrentGame;
 			// TODO this does not function the way you'd expect right now
 
-		} else if (result.get() == noButton) {
+		} else if (result.get() == ButtonType.NO) {
 			System.exit(0);
 		}
 
@@ -470,15 +470,37 @@ public class UI_Prototype extends Application  {
 		turnIndicator.setLayoutY(775);
 		pane.getChildren().add(turnIndicator);
 
-		Button quitButton = new Button("Quit");
-		quitButton.setMaxWidth(150);
-		quitButton.setMaxHeight(150);
+		Image quitImage = new Image("https://i.pinimg.com/originals/ae/df/dd/aedfdde5f2063b5d94acc6be3b29a7d3.png");
+		ImageView quitImageView = new ImageView(quitImage);
+		quitImageView.setFitWidth(45);
+		quitImageView.setFitHeight(45);
+		Button quitButton = new Button();
+		quitButton.setLayoutX(5);
+		quitButton.setLayoutY(5);
 		pane.getChildren().add(quitButton); 
-		quitButton.setOnAction(value -> System.exit(0));
+		quitButton.setGraphic(quitImageView);
+		quitButton.setOnAction(value -> QuitGame());
+		
 
 	}
 
-
+	//Method that allows for early quit by clicking "quit" button
+		private void QuitGame() {
+			Alert confirmQuit= new Alert(AlertType.CONFIRMATION);
+			confirmQuit.getButtonTypes();
+			confirmQuit.setTitle("Quit");
+			confirmQuit.setHeaderText("Quit Game?");
+			confirmQuit.setContentText("Are you sure you want to quit? Win will go to: " + currGame.nextPlayer());
+			
+			Optional<ButtonType> result = confirmQuit.showAndWait();
+			if(result.get() == ButtonType.OK) {
+				//user chooses yes button
+				System.exit(0);
+			} else {
+				return;
+			}
+		}
+		
 
 	private void SetTimer() {
 		//stopping timer and saving values
