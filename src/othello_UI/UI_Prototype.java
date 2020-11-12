@@ -61,6 +61,7 @@ import java.util.Optional;
 
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import com.sun.xml.internal.ws.api.pipe.NextAction;
 
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
@@ -79,7 +80,7 @@ public class UI_Prototype extends Application  {
 	private Button startGameButton, stats, logout;
 	private Stage window;
 	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene;
-
+	private Integer defultTime=8;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
@@ -309,8 +310,20 @@ public class UI_Prototype extends Application  {
 		Optional<ButtonType> result = gameOverBox.showAndWait();
 		if (result.get() == ButtonType.YES) {
 			//Restart Game and Board
-			gameBoard = new Board(player1, player2);
+			gameBoard = new Board(player1, player2,defultTime);
+			tempTimerDuration = defultTime;
 			this.currGame = gameBoard.CurrentGame;
+			placeHolderTime.setText(tempTimerDuration.toString());
+			placeHolderTime2.setText(tempTimerDuration.toString());
+			currGame.LastTurn = currGame.nextPlayer();
+			updateBoard();
+			currGame.LastTurn = player1.Name;
+			
+			this.SetTimer();
+			
+//			tempTimerDuration = defultTime;
+//			resetTimer();
+			
 			// TODO this does not function the way you'd expect right now
 
 		} else if (result.get() == ButtonType.NO) {
@@ -707,14 +720,14 @@ public class UI_Prototype extends Application  {
 		// Create Game
 		player1.setColor(Player.BLACK);
 		player2.setColor(Player.WHITE);
-		gameBoard = new Board(player1, player2);
+		gameBoard = new Board(player1, player2,defultTime);
 		this.currGame = gameBoard.CurrentGame;
 		try {
 			this.currGame.StartGame();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		tempTimerDuration = currGame.PlayerOneTime;
+		tempTimerDuration = defultTime;
 		this.SetTimer();
 		drawButtonsAndLabels(player1.Name, player2.Name);
 

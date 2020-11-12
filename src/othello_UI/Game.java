@@ -47,10 +47,12 @@ public class Game {
 
 	}
 	
-	public Game(String playerOne, String playerTwo) {
+	public Game(String playerOne, String playerTwo,Integer defultTimer) {
 		this.PlayerOneName = playerOne;
 		this.PlayerTwoName = playerTwo;
 		this.LastTurn = playerOne; // No one has played
+		PlayerOneTime = defultTimer;
+		PlayerTwoTime	= 	defultTimer;
 	}
 
 	public void SwitchTurn() {
