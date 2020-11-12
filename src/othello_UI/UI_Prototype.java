@@ -508,25 +508,30 @@ public class UI_Prototype extends Application  {
 
 	//Method that allows for early quit by clicking "quit" button
 	private void QuitGame() {
+		timer.stop();
 		Alert confirmQuit= new Alert(AlertType.CONFIRMATION);
 		confirmQuit.getButtonTypes();
 		confirmQuit.setTitle("Quit");
 		confirmQuit.setHeaderText("Quit Game?");
-		confirmQuit.setContentText("Are you sure you want to quit? Win will go to: " + currGame.nextPlayer());
-		this.resolvePlayerToName(currGame.nextPlayer()).Wins++;
-		this.resolvePlayerToName(currGame.LastTurn).Losses++;
-		try {
-			
-		player2.Update();
-		player1.Update();
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
+		confirmQuit.setContentText("Are you sure you want to quit? Win will go to:" + currGame.nextPlayer());
+
 		Optional<ButtonType> result = confirmQuit.showAndWait();
 		if(result.get() == ButtonType.OK) {
+			
+			this.resolvePlayerToName(currGame.nextPlayer()).Wins++;
+			this.resolvePlayerToName(currGame.LastTurn).Losses++;
+			try {
+				
+			player2.Update();
+			player1.Update();
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 			//user chooses yes button
 			System.exit(0);
 		} else {
+			timer.play();
 			return;
 		}
 	}
