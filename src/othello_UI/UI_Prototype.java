@@ -68,7 +68,7 @@ import javafx.scene.control.TableColumn;
 
 public class UI_Prototype extends Application  {
 	private GridPane Gpane;
-	private Pane pane, loginPane, loginPane2, registerPane, registerPane2, leaderboardPane;
+	private Pane pane, loginPane, loginPane2, registerPane, registerPane2, leaderboardPane, setParamPane;
 	private Board gameBoard;
 	private Game currGame;
 	private Player player1, player2;
@@ -79,7 +79,7 @@ public class UI_Prototype extends Application  {
 	private StackPane mainMenuPane;
 	private Button startGameButton, stats, logout;
 	private Stage window;
-	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene;
+	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene, setParametersScene;
 	private Integer defultTime=8;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
@@ -97,6 +97,8 @@ public class UI_Prototype extends Application  {
 		createMainMenuScene();
 
 		createLeaderboardScene();
+		
+		createSetParametersScene();
 
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(loginScene);
@@ -1058,7 +1060,7 @@ public class UI_Prototype extends Application  {
 				}
 				player2 = Player.Login(usernameField2.getText(),passwordField2.getText()); 
 
-				window.setScene(mainMenuScene);
+				window.setScene(setParametersScene);
 
 			}catch (Exception e1) {
 
@@ -1168,6 +1170,58 @@ public class UI_Prototype extends Application  {
 		});
 
 		//---End Login Scene 1 Assets ----
+	}
+	
+	public void createSetParametersScene() {
+		setParamPane = new Pane();
+		setParamPane.setPadding(new Insets(0,0,0,0));
+		
+		setParametersScene = new Scene (setParamPane, 400, 200);
+		Label time = new Label();
+		time.setText("Enter game length in seconds: ");
+		time.setPrefSize(250, 50);
+		time.setFont(Font.font("Times New Roman",15));
+		time.setLayoutX(40);
+		time.setLayoutY(40);
+		setParamPane.getChildren().add(time);
+		
+		Label message = new Label();
+		message.setText("");
+		message.setStyle("-fx-text-inner-color: red;");
+		message.setPrefSize(250, 50);
+		message.setFont(Font.font("Times New Roman",15));
+		message.setLayoutX(140);
+		message.setLayoutY(108);
+		message.setWrapText(true);
+		setParamPane.getChildren().add(message);
+		
+		TextField timeField = new TextField();
+		timeField.setMaxWidth(40);
+		timeField.setLayoutX(240);
+		timeField.setLayoutY(53);
+		setParamPane.getChildren().add(timeField);
+		
+		Button okButton = new Button("OK");
+		okButton.setPrefSize(35, 35);
+		okButton.setLayoutX(290);
+		okButton.setLayoutY(50);
+		setParamPane.getChildren().add(okButton);
+		
+		//upon clicking ok button
+		okButton.setOnAction(e -> 
+		{
+			try {
+				
+				window.setScene(mainMenuScene);
+				
+			}catch (Exception err){
+				System.out.print(err.getMessage());
+				message.setText("Please enter a valid length of time");
+				message.setTextFill(Color.RED);
+				
+			}
+			
+		});
 	}
 	public static void main(String[] args) {
 		launch(args);
