@@ -173,9 +173,9 @@ public class UI_Prototype extends Application  {
 					turnIndicator.setLayoutY(775);
 					pane.getChildren().add(turnIndicator);
 				}
+				updateBoard();
 				currGame.SwitchTurn();
 				this.SetTimer();
-				updateBoard();
 			}
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
