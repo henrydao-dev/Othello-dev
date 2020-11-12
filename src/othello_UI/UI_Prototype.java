@@ -664,6 +664,12 @@ public class UI_Prototype extends Application  {
 
 		logout = new Button("Logout");
 		logout.setPrefSize(150,50);
+		
+		logout.setOnAction(e -> {
+			
+			window.setScene(loginScene);
+			
+		});
 
 		//adds to Pane
 		mainMenuPane.getChildren().add(title);
