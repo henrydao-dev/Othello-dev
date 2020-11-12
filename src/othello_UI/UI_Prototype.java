@@ -22,6 +22,7 @@
 
 package othello_UI;
 
+import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -77,28 +78,28 @@ public class UI_Prototype extends Application  {
 	private Button startGameButton, stats, logout;
 	private Stage window;
 	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene;
-	
+
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 		window = primaryStage;
-		
+
 		createLoginScene1();
-		
+
 		createLoginScene2();
-						
+
 		createRegisterScene1();
-				
+
 		createRegisterScene2();
-				
+
 		createMainMenuScene();
-		
+
 		createLeaderboardScene();
-		
+
 		primaryStage.setTitle("Othello");
 		primaryStage.setScene(loginScene);
 		primaryStage.show();
-		
+
 	}
 
 	private void drawMove(int row, int col) {
@@ -273,12 +274,12 @@ public class UI_Prototype extends Application  {
 			return false;
 		}
 	}
-	
+
 	//Method for being the final aspect of the game | Asks user (up to 3 times) to play again or quit
 	private void endGame() {
 
 		//TODO: *could also display the game count b/w players at this point, before moving to "play again?"*
-
+		if(timer.getStatus()  == Status.RUNNING) timer.stop();
 		try {
 			gameBoard.CurrentGame.EndGame();
 		} catch (Exception e) {
@@ -291,9 +292,17 @@ public class UI_Prototype extends Application  {
 		ButtonType noButton = new ButtonType("No");
 		gameOverBox.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 		gameOverBox.setTitle("Game Over");
-		gameOverBox.setHeaderText(declareWinner());
-		gameOverBox.setContentText("Would you like play again?");
+		if(currGame.PlayerOneTime == 0 | currGame.PlayerTwoTime==0) {
+			gameOverBox.setTitle("Time Out!");
+			gameOverBox.setHeaderText(declareWinner(true));
+			gameOverBox.setContentText("Would you like play again?");
+		}
+		else {
+		gameOverBox.setTitle("Game Over");
 
+		gameOverBox.setHeaderText(declareWinner(false));
+		gameOverBox.setContentText("Would you like play again?");
+		}
 		//Results of player clicking buttons
 		Optional<ButtonType> result = gameOverBox.showAndWait();
 		if (result.get() == ButtonType.YES) {
@@ -308,10 +317,18 @@ public class UI_Prototype extends Application  {
 
 	}
 
-	public String declareWinner () {
+
+	public String declareWinner (boolean isTimeout) {
 
 		String winner;
 		String returnMessage;
+		if (currGame.PlayerOneTime==0) {
+			returnMessage = "TimeOut for player " +currGame.PlayerOneName+".\n The Winner Is player "
+			+currGame.PlayerTwoName+"!";
+		}else if(currGame.PlayerTwoTime==0) {
+			returnMessage = "TimeOut for player " +currGame.PlayerTwoName+".\n The Winner Is player "
+						+currGame.PlayerOneName+"!";
+			}
 
 		List <Integer> discCount = gameBoard.countDiscs();
 		int whiteCount = discCount.get(0);
@@ -448,6 +465,11 @@ public class UI_Prototype extends Application  {
 		p2TimerBox.setLayoutY(20);
 		pane.getChildren().add(p2TimerBox);
 		pane.getChildren().add(placeHolderTime2);
+		
+		//seetings for timer holder
+		placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
+		placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
+
 
 		//Display Current Player's Turn:
 		Text currentPlayerTurn = new Text(715,770, "Current Turn:");
@@ -480,27 +502,35 @@ public class UI_Prototype extends Application  {
 		pane.getChildren().add(quitButton); 
 		quitButton.setGraphic(quitImageView);
 		quitButton.setOnAction(value -> QuitGame());
-		
+
 
 	}
 
 	//Method that allows for early quit by clicking "quit" button
-		private void QuitGame() {
-			Alert confirmQuit= new Alert(AlertType.CONFIRMATION);
-			confirmQuit.getButtonTypes();
-			confirmQuit.setTitle("Quit");
-			confirmQuit.setHeaderText("Quit Game?");
-			confirmQuit.setContentText("Are you sure you want to quit? Win will go to: " + currGame.nextPlayer());
+	private void QuitGame() {
+		Alert confirmQuit= new Alert(AlertType.CONFIRMATION);
+		confirmQuit.getButtonTypes();
+		confirmQuit.setTitle("Quit");
+		confirmQuit.setHeaderText("Quit Game?");
+		confirmQuit.setContentText("Are you sure you want to quit? Win will go to: " + currGame.nextPlayer());
+		this.resolvePlayerToName(currGame.nextPlayer()).Wins++;
+		this.resolvePlayerToName(currGame.LastTurn).Losses++;
+		try {
 			
-			Optional<ButtonType> result = confirmQuit.showAndWait();
-			if(result.get() == ButtonType.OK) {
-				//user chooses yes button
-				System.exit(0);
-			} else {
-				return;
-			}
+		player2.Update();
+		player1.Update();
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
-		
+		Optional<ButtonType> result = confirmQuit.showAndWait();
+		if(result.get() == ButtonType.OK) {
+			//user chooses yes button
+			System.exit(0);
+		} else {
+			return;
+		}
+	}
+
 
 	private void SetTimer() {
 		//stopping timer and saving values
@@ -526,24 +556,31 @@ public class UI_Prototype extends Application  {
 			public void handle(ActionEvent event) {
 				if(tempTimerDuration >0) 
 				{
+					
 					tempTimerDuration--;
-					
-					if(currGame.LastTurn == currGame.PlayerOneName) { 
+
+					if(currGame.LastTurn == currGame.PlayerOneName) {
+						if(tempTimerDuration<11) placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
 						placeHolderTime.setText(tempTimerDuration.toString());
-						placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
-						placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
 					}
-					else { placeHolderTime2.setText(tempTimerDuration.toString());
-					
+					else {
+						if(tempTimerDuration<11) placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
+
+						placeHolderTime2.setText(tempTimerDuration.toString());
+
+					}
 				}
-					}
 				else {
 					try {
-						currGame.EndGame();
+						timer.stop();
+						if(currGame.LastTurn == currGame.PlayerOneName) 
+							currGame.PlayerOneTime =tempTimerDuration;
+						else currGame.PlayerTwoTime =tempTimerDuration;
+						endGame();
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					} 
-					
+
 					// TODO
 					//need code for what happens if TimeOUT!!!!!
 				}
@@ -562,7 +599,7 @@ public class UI_Prototype extends Application  {
 
 		//Creates our scene
 		mainMenuScene = new Scene(mainMenuPane,400,500);
-		
+
 		//creates title
 		Label title = new Label();
 		title.setText("OTHELLO");
@@ -570,28 +607,28 @@ public class UI_Prototype extends Application  {
 		title.setFont(Font.font("Times New Roman",35));
 		title.setTranslateY(-200);
 		title.setTranslateX(45);
-		
+
 		//creates Buttons
 		startGameButton = new Button("Play Game");
 		startGameButton.setPrefSize(150,50);
 		startGameButton.setTranslateY(-100);
-		
+
 		//upon clicking "Play Game" transfers to game board
 		startGameButton.setOnAction(e -> 
 		{
 			createGameBoard();
 		});
-		
+
 		stats = new Button("Statisics");
 		stats.setPrefSize(150,50);
 		stats.setTranslateY(-50);
 		stats.setOnAction(e ->  {
 			window.setScene(leaderboardScene);
 		});
-		
+
 		logout = new Button("Logout");
 		logout.setPrefSize(150,50);
-			
+
 		//adds to Pane
 		mainMenuPane.getChildren().add(title);
 		mainMenuPane.getChildren().add(startGameButton);
@@ -617,23 +654,23 @@ public class UI_Prototype extends Application  {
 		int k = 0;
 		int r = 0;
 		String[][] color={{"GREEN","GREEN"},{"GREEN","GREEN"}};
-		
+
 		for(int k1 = 0; k1 < 8; k1++) {
 			if(r > 1)
 				r = 0;
 			for(int k2 = 0; k2 < 8; k2++) {
 				if(k > 1)
 					k = 0;
-				
+
 				Tile r1 = new Tile(75,75,k1,k2);
 				r1.setOnMouseClicked(event -> drawMove(r1.row, r1.col));
 				r1.setStroke(Color.BLACK);
 				if((k1==3& k2==2) | (k1==2& k2==3) |
-				   (k1==4& k2==5) | (k1==5& k2==4) )
+						(k1==4& k2==5) | (k1==5& k2==4) )
 					r1.setFill(Color.MEDIUMSEAGREEN);
 				else r1.setFill(Paint.valueOf(color[r][k]));
 				Gpane.add(r1,k1,k2);
-				
+
 				k++;
 			}
 			r++;
@@ -643,7 +680,7 @@ public class UI_Prototype extends Application  {
 		Gpane.setLayoutY(150);
 
 		drawStartingDiscs();
-		
+
 		// Create Game
 		player1.setColor(Player.BLACK);
 		player2.setColor(Player.WHITE);
@@ -657,7 +694,7 @@ public class UI_Prototype extends Application  {
 		tempTimerDuration = currGame.PlayerOneTime;
 		this.SetTimer();
 		drawButtonsAndLabels(player1.Name, player2.Name);
-		
+
 		window.setScene(gameBoardScene);
 	}
 
@@ -667,10 +704,10 @@ public class UI_Prototype extends Application  {
 		//Create Register pane
 		registerPane2 = new Pane();
 		registerPane2.setPadding(new Insets(0,0,0,0));
-					
+
 		//Creates our scene
 		registerScene2 = new Scene(registerPane2,400,225);
-				
+
 		//creates title
 		Label registerTitle2 = new Label();
 		registerTitle2.setText("Register Account");
@@ -679,7 +716,7 @@ public class UI_Prototype extends Application  {
 		registerTitle2.setLayoutX(130);;
 		registerTitle2.setLayoutY(5);
 		registerPane2.getChildren().add(registerTitle2);
-						
+
 		//"username" Text
 		Label regUsername2 = new Label();
 		regUsername2.setText("Username:");
@@ -688,14 +725,14 @@ public class UI_Prototype extends Application  {
 		regUsername2.setLayoutX(50);;
 		regUsername2.setLayoutY(40);
 		registerPane2.getChildren().add(regUsername2);
-						
+
 		//username Textfield
 		TextField regUsernameField2 = new TextField();
 		regUsernameField2.setMaxWidth(375);
 		regUsernameField2.setLayoutX(130);
 		regUsernameField2.setLayoutY(53);
 		registerPane2.getChildren().add(regUsernameField2);
-						
+
 		//"password" Text
 		Label regPassword2 = new Label();
 		regPassword2.setText("Password:");
@@ -704,7 +741,7 @@ public class UI_Prototype extends Application  {
 		regPassword2.setLayoutX(50);;
 		regPassword2.setLayoutY(80);
 		registerPane2.getChildren().add(regPassword2);
-						
+
 		Label messageregister2 = new Label();
 		messageregister2.setText("");
 		messageregister2.setStyle("-fx-text-inner-color: red;");
@@ -716,25 +753,25 @@ public class UI_Prototype extends Application  {
 		messageregister2.setWrapText(true);
 		messageregister2.setTextAlignment(TextAlignment.CENTER);
 		registerPane.getChildren().add(messageregister2);
-		
+
 		//password Textfield
 		TextField regPasswordField2 = new TextField();
 		regPasswordField2.setMaxWidth(375);
 		regPasswordField2.setLayoutX(130);
 		regPasswordField2.setLayoutY(93);
 		registerPane2.getChildren().add(regPasswordField2);
-				
+
 		//Register Button
 		Button registerAccountButton2 = new Button("Register");
 		registerAccountButton2.setPrefSize(150, 40);
 		registerAccountButton2.setLayoutX(130);
 		registerAccountButton2.setLayoutY(160);
 		registerPane2.getChildren().add(registerAccountButton2);
-				
+
 		//upon clicking "Register" transfers to Main Menu Scene
 		//Also needs to store inputs to player object (?)
 		registerAccountButton2.setOnAction(e ->{
-			
+
 			try {
 				Player tempPlayer = new Player(regUsernameField2.getText(),regPasswordField2.getText());
 				tempPlayer.validateRegistration();
@@ -744,9 +781,9 @@ public class UI_Prototype extends Application  {
 			} catch (Exception e2) {
 				messageregister2.setText(e2.getMessage());
 			}
-			
+
 		} );
-						
+
 		//---End Register Scene Assets--------
 	}
 
@@ -756,10 +793,10 @@ public class UI_Prototype extends Application  {
 		//Create Register pane
 		registerPane = new Pane();
 		registerPane.setPadding(new Insets(0,0,0,0));
-				
+
 		//Creates our scene
 		registerScene = new Scene(registerPane,400,225);
-		
+
 		//creates title
 		Label registerTitle = new Label();
 		registerTitle.setText("Register Account");
@@ -768,7 +805,7 @@ public class UI_Prototype extends Application  {
 		registerTitle.setLayoutX(130);;
 		registerTitle.setLayoutY(5);
 		registerPane.getChildren().add(registerTitle);
-				
+
 		//"username" Text
 		Label regUsername = new Label();
 		regUsername.setText("Username:");
@@ -777,14 +814,14 @@ public class UI_Prototype extends Application  {
 		regUsername.setLayoutX(50);;
 		regUsername.setLayoutY(40);
 		registerPane.getChildren().add(regUsername);
-				
+
 		//username Textfield
 		TextField regUsernameField = new TextField();
 		regUsernameField.setMaxWidth(375);
 		regUsernameField.setLayoutX(130);
 		regUsernameField.setLayoutY(53);
 		registerPane.getChildren().add(regUsernameField);
-				
+
 		//"password" Text
 		Label regPassword = new Label();
 		regPassword.setText("Password:");
@@ -793,7 +830,7 @@ public class UI_Prototype extends Application  {
 		regPassword.setLayoutX(50);;
 		regPassword.setLayoutY(80);
 		registerPane.getChildren().add(regPassword);
-		
+
 		Label messageregister = new Label();
 		messageregister.setText("");
 		messageregister.setStyle("-fx-text-inner-color: red;");
@@ -805,21 +842,21 @@ public class UI_Prototype extends Application  {
 		messageregister.setWrapText(true);
 		messageregister.setTextAlignment(TextAlignment.CENTER);
 		registerPane.getChildren().add(messageregister);
-		
+
 		//password Textfield
 		TextField regPasswordField = new TextField();
 		regPasswordField.setMaxWidth(375);
 		regPasswordField.setLayoutX(130);
 		regPasswordField.setLayoutY(93);
 		registerPane.getChildren().add(regPasswordField);
-		
+
 		//Register Button
 		Button registerAccountButton = new Button("Register");
 		registerAccountButton.setPrefSize(150, 40);
 		registerAccountButton.setLayoutX(130);
 		registerAccountButton.setLayoutY(160);
 		registerPane.getChildren().add(registerAccountButton);
-		
+
 		//upon clicking "Register" transfers to Main Menu Scene
 		//Also needs to store inputs to player object (?)
 		registerAccountButton.setOnAction(e -> {
@@ -832,9 +869,9 @@ public class UI_Prototype extends Application  {
 			} catch (Exception e2) {
 				messageregister.setText(e2.getMessage());
 			}
-			
+
 		});
-				
+
 		//---End Register Scene Assets--------
 	}
 	private void createLeaderboardScene() {
@@ -842,63 +879,63 @@ public class UI_Prototype extends Application  {
 
 		leaderboardPane = new Pane();
 		leaderboardPane.setPadding(new Insets(0,0,0,0));
-				
+
 		//Creates our scene
 		leaderboardScene = new Scene(leaderboardPane,400,500);
-		
+
 		//creates title
 		Label leaderboardTitle = new Label();
 		leaderboardTitle.setText("Leaderboard");
 		leaderboardTitle.setFont(new Font("Arial", 20));
 		leaderboardPane.getChildren().add(leaderboardTitle);
-		
+
 		TableView<Player> table = new TableView<Player>();
 		table.setEditable(false);
 		table.setMaxHeight(400);
-		 
-        TableColumn<Player, String> usernameCol = new TableColumn<Player, String>("Name");
-        usernameCol.setMinWidth(100);
-        usernameCol.setCellValueFactory(new PropertyValueFactory<Player, String>("Name"));
-        
-        TableColumn<Player, Integer> winsCol = new TableColumn<Player, Integer>("Wins");
-        winsCol.setMinWidth(100);
-        winsCol.setCellValueFactory(new PropertyValueFactory<Player, Integer>("Wins"));
-        
-        TableColumn<Player, Integer> lossCol = new TableColumn<Player, Integer>("Losses");
-        lossCol.setMinWidth(100);
-        lossCol.setCellValueFactory(new PropertyValueFactory<Player, Integer>("Losses"));
-        
-        table.setItems(FXCollections.observableList(Admin.GetLeaderBoard()));
-        
-        table.getColumns().addAll(usernameCol, winsCol, lossCol);
- 
-        leaderboardPane.getChildren().add(table);				
-		
+
+		TableColumn<Player, String> usernameCol = new TableColumn<Player, String>("Name");
+		usernameCol.setMinWidth(100);
+		usernameCol.setCellValueFactory(new PropertyValueFactory<Player, String>("Name"));
+
+		TableColumn<Player, Integer> winsCol = new TableColumn<Player, Integer>("Wins");
+		winsCol.setMinWidth(100);
+		winsCol.setCellValueFactory(new PropertyValueFactory<Player, Integer>("Wins"));
+
+		TableColumn<Player, Integer> lossCol = new TableColumn<Player, Integer>("Losses");
+		lossCol.setMinWidth(100);
+		lossCol.setCellValueFactory(new PropertyValueFactory<Player, Integer>("Losses"));
+
+		table.setItems(FXCollections.observableList(Admin.GetLeaderBoard()));
+
+		table.getColumns().addAll(usernameCol, winsCol, lossCol);
+
+		leaderboardPane.getChildren().add(table);				
+
 		//Back Button
 		Button backButton = new Button("Back");
 		backButton.setPrefSize(150, 40);
 		backButton.setLayoutX(130);
 		backButton.setLayoutY(450);
 		leaderboardPane.getChildren().add(backButton);
-		
+
 		backButton.setOnAction(e -> {
 			window.setScene(mainMenuScene);
 		});
-				
+
 		//---End Leaderboard Scene Assets--------
 	}
 
 	private void createLoginScene2() {
 		//---Login Scene 2 Assets ----
 		//---Login(Player2) Scene Assets--------
-		
+
 		//Create Login pane
 		loginPane2 = new Pane();
 		loginPane2.setPadding(new Insets(0,0,0,0));
-		
+
 		//Creates our scene
 		loginScene2 = new Scene(loginPane2,400,200);
-		
+
 		//creates title
 		Label loginTitle2 = new Label();
 		loginTitle2.setText("Login: (Player 2)");
@@ -907,7 +944,7 @@ public class UI_Prototype extends Application  {
 		loginTitle2.setLayoutX(135);
 		loginTitle2.setLayoutY(5);
 		loginPane2.getChildren().add(loginTitle2);
-		
+
 		//"username" Text
 		Label username2 = new Label();
 		username2.setText("Username:");
@@ -916,14 +953,14 @@ public class UI_Prototype extends Application  {
 		username2.setLayoutX(50);
 		username2.setLayoutY(40);
 		loginPane2.getChildren().add(username2);
-		
+
 		//username Textfield
 		TextField usernameField2 = new TextField();
 		usernameField2.setMaxWidth(375);
 		usernameField2.setLayoutX(130);
 		usernameField2.setLayoutY(53);
 		loginPane2.getChildren().add(usernameField2);
-		
+
 		//"password" Text
 		Label password2 = new Label();
 		password2.setText("Password:");
@@ -932,14 +969,14 @@ public class UI_Prototype extends Application  {
 		password2.setLayoutX(50);
 		password2.setLayoutY(80);
 		loginPane2.getChildren().add(password2);
-		
+
 		//password Textfield
 		TextField passwordField2 = new TextField();
 		passwordField2.setMaxWidth(375);
 		passwordField2.setLayoutX(130);
 		passwordField2.setLayoutY(93);
 		loginPane2.getChildren().add(passwordField2);
-		
+
 		Label message2 = new Label();
 		message2.setText("");
 		message2.setStyle("-fx-text-inner-color: red;");
@@ -956,22 +993,22 @@ public class UI_Prototype extends Application  {
 		registerButton2.setLayoutX(35);
 		registerButton2.setLayoutY(145);
 		loginPane2.getChildren().add(registerButton2);
-		
+
 		//Login Button
 		Button loginButton2 = new Button("Login");
 		loginButton2.setPrefSize(150, 40);
 		loginButton2.setLayoutX(195);
 		loginButton2.setLayoutY(145);
 		loginPane2.getChildren().add(loginButton2);
-		
+
 		//upon clicking "Register" transfers to Register Scene
 		registerButton2.setOnAction(e -> window.setScene(registerScene2));
-		
+
 		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
 		loginButton2.setOnAction(e -> 
 		{
 			try {
-				
+
 				message2.setText("Welcome "+usernameField2.getText()+"!");
 				if (player1.Name.equals(usernameField2.getText())) {
 
@@ -980,16 +1017,16 @@ public class UI_Prototype extends Application  {
 				player2 = Player.Login(usernameField2.getText(),passwordField2.getText()); 
 
 				window.setScene(mainMenuScene);
-				
+
 			}catch (Exception e1) {
-				
+
 				System.out.println(e1.getMessage());
 				if(e1.getMessage()=="SameUser") message2.setText("Player1 cannot login twice");
 				else message2.setText("Invalid Credentials");
 			}
 
 		});
-		
+
 		//---End of Login Scene 2 Assets-----
 	}
 
@@ -999,10 +1036,10 @@ public class UI_Prototype extends Application  {
 		//Create Login pane
 		loginPane = new Pane();
 		loginPane.setPadding(new Insets(0,0,0,0));
-		
+
 		//Creates our scene
 		loginScene = new Scene(loginPane,400,200);
-		
+
 		//creates title
 		Label loginTitle = new Label();
 		loginTitle.setText("Login: (Player 1)");
@@ -1011,7 +1048,7 @@ public class UI_Prototype extends Application  {
 		loginTitle.setLayoutX(135);;
 		loginTitle.setLayoutY(5);
 		loginPane.getChildren().add(loginTitle);
-		
+
 		//"username" Text
 		Label username = new Label();
 		username.setText("Username:");
@@ -1020,7 +1057,7 @@ public class UI_Prototype extends Application  {
 		username.setLayoutX(50);;
 		username.setLayoutY(40);
 		loginPane.getChildren().add(username);
-		
+
 		Label message = new Label();
 		message.setText("");
 		message.setStyle("-fx-text-inner-color: red;");
@@ -1030,14 +1067,14 @@ public class UI_Prototype extends Application  {
 		message.setLayoutY(108);
 		message.setWrapText(true);
 		loginPane.getChildren().add(message);
-		
+
 		//username Textfield
 		TextField usernameField = new TextField();
 		usernameField.setMaxWidth(375);
 		usernameField.setLayoutX(130);
 		usernameField.setLayoutY(53);
 		loginPane.getChildren().add(usernameField);
-		
+
 		//"password" Text
 		Label password = new Label();
 		password.setText("Password:");
@@ -1046,48 +1083,48 @@ public class UI_Prototype extends Application  {
 		password.setLayoutX(50);;
 		password.setLayoutY(80);
 		loginPane.getChildren().add(password);
-		
+
 		//password Textfield
 		TextField passwordField = new TextField();
 		passwordField.setMaxWidth(375);
 		passwordField.setLayoutX(130);
 		passwordField.setLayoutY(93);
 		loginPane.getChildren().add(passwordField);
-		
+
 		//Register Button
 		Button registerButton = new Button("Register");
 		registerButton.setPrefSize(150, 40);
 		registerButton.setLayoutX(35);
 		registerButton.setLayoutY(145);
 		loginPane.getChildren().add(registerButton);
-		
+
 		//Login Button
 		Button loginButton = new Button("Login");
 		loginButton.setPrefSize(150, 40);
 		loginButton.setLayoutX(195);
 		loginButton.setLayoutY(145);
 		loginPane.getChildren().add(loginButton);
-		
+
 		//upon clicking "Register" transfers to Register Scene
 		registerButton.setOnAction(e -> window.setScene(registerScene));
-		
-		
+
+
 		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
 		loginButton.setOnAction(e -> 
 		{
 			try {
 				player1 = Player.Login(usernameField.getText(),passwordField.getText()); 
 				window.setScene(loginScene2);
-				
-			
+
+
 			}catch (Exception e1) {
-				
+
 				System.out.println(e1.getMessage());
 				message.setText("Invalid Credentials");
 				message.setTextFill(Color.RED);
 			}
 		});
-		
+
 		//---End Login Scene 1 Assets ----
 	}
 	public static void main(String[] args) {

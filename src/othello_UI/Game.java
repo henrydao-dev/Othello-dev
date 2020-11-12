@@ -31,9 +31,9 @@ public class Game {
 	public Date Start;
 	public Date End;
 	@CsvBindByName
-	public Integer PlayerOneTime=120; // In Seconds
+	public Integer PlayerOneTime=10; // In Seconds
 	@CsvBindByName
-	public Integer PlayerTwoTime = 120; // In Seconds
+	public Integer PlayerTwoTime = 10; // In Seconds
 
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
