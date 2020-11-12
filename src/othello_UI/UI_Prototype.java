@@ -26,6 +26,7 @@ import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -303,6 +304,7 @@ public class UI_Prototype extends Application  {
 		gameOverBox.setHeaderText(declareWinner(false));
 		gameOverBox.setContentText("Would you like play again?");
 		}
+		
 		//Results of player clicking buttons
 		Optional<ButtonType> result = gameOverBox.showAndWait();
 		if (result.get() == ButtonType.YES) {
@@ -321,15 +323,29 @@ public class UI_Prototype extends Application  {
 	public String declareWinner (boolean isTimeout) {
 
 		String winner;
-		String returnMessage;
+		String returnMessage="";
+		if(isTimeout) {
 		if (currGame.PlayerOneTime==0) {
+			resolvePlayerToName(currGame.PlayerOneName).Losses++;
+			resolvePlayerToName(currGame.PlayerTwoName).Wins++;
+			
 			returnMessage = "TimeOut for player " +currGame.PlayerOneName+".\n The Winner Is player "
 			+currGame.PlayerTwoName+"!";
 		}else if(currGame.PlayerTwoTime==0) {
-			returnMessage = "TimeOut for player " +currGame.PlayerTwoName+".\n The Winner Is player "
+			resolvePlayerToName(currGame.PlayerOneName).Wins++;
+			resolvePlayerToName(currGame.PlayerTwoName).Losses++;
+			returnMessage =  "TimeOut for player " +currGame.PlayerTwoName+".\n The Winner Is player "
 						+currGame.PlayerOneName+"!";
 			}
-
+		try {
+			player1.Update();
+			player2.Update();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return returnMessage;
+		
+	}
 		List <Integer> discCount = gameBoard.countDiscs();
 		int whiteCount = discCount.get(0);
 		int blackCount = discCount.get(1);
@@ -581,9 +597,11 @@ public class UI_Prototype extends Application  {
 						if(currGame.LastTurn == currGame.PlayerOneName) 
 							currGame.PlayerOneTime =tempTimerDuration;
 						else currGame.PlayerTwoTime =tempTimerDuration;
-						endGame();
+//		                Alert alert = new Alert(AlertType.INFORMATION, "Hi there");
+		                Platform.runLater(() ->endGame());
+//						endGame();
 					} catch (Exception e) {
-						System.out.println(e.getMessage());
+						System.out.println("sadsad"+e.getMessage());
 					} 
 
 					// TODO
