@@ -26,6 +26,16 @@ public class Player implements Comparable<Player> {
 
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
+	
+	public String getName() {
+		return Name;
+	}
+	public Integer getWins() {
+		return Wins;
+	}
+	public Integer getLosses() {
+		return Losses;
+	}
 
 	public Player() {
 		
@@ -47,6 +57,10 @@ public class Player implements Comparable<Player> {
 		this.Password = password;
 		this.Wins = 0;
 		this.Losses = 0;
+	}
+	
+	public void setColor(char color) {
+		this.Color = color;
 	}
 	
 	/**
@@ -116,11 +130,16 @@ public class Player implements Comparable<Player> {
 			throw new IllegalArgumentException("Password should only be 5 digits, no characters");
 		}
 	}
+	
+	public void Update() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
+		PlayerRepository playerRepo = new PlayerRepository();
+		playerRepo.UpdatePlayer(this);
+		playerRepo.dispose();
+	}
 
 	@Override
 	public int compareTo(Player compareUser) {
-		int compareWins = ((Player) compareUser).Wins;
 		//ascending order
-		return this.Wins - compareWins;
+		return Integer.compare(compareUser.Wins, this.Wins);
 	}
 }

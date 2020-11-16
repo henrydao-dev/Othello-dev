@@ -22,9 +22,9 @@ public class Board {
 	private static final int COL_LEFT = -1;
 	private static final int COL_RIGHT = 1;
 	private static final int NONE = 0;
+	
 
-
-	public Board(Player player1, Player player2) {
+	public Board(Player player1, Player player2,Integer defultTime) {
 		CurrentBoard = new char[8][8];
 		for (int i=0; i<CurrentBoard.length; i++)
 		{
@@ -39,7 +39,7 @@ public class Board {
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
 		
-		CurrentGame = new Game(player1.Name, player2.Name);
+		CurrentGame = new Game(player1.Name, player2.Name,defultTime);
 
 	}	
 
@@ -146,9 +146,9 @@ public class Board {
 			return list;
 		}
 
+//		public isMovevalid(Player player)
 
-
-	private boolean isMoveValid(Player player, int row, int col) {
+	public boolean isMoveValid(Player player, int row, int col) {
 		boolean isValid = false;
 		// Get the opponent's color
 		char opponent = Player.BLACK;
