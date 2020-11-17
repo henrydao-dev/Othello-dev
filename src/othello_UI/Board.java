@@ -24,7 +24,7 @@ public class Board {
 	private static final int NONE = 0;
 	
 
-	public Board(Player player1, Player player2,Integer defultTime) {
+	public Board(Player player1, Player player2,Integer timeLimitInSeconds) {
 		CurrentBoard = new char[8][8];
 		for (int i=0; i<CurrentBoard.length; i++)
 		{
@@ -39,7 +39,7 @@ public class Board {
 		CurrentBoard[4][3] = BLACK;
 		CurrentBoard[4][4] = WHITE;
 		
-		CurrentGame = new Game(player1.Name, player2.Name,defultTime);
+		CurrentGame = new Game(player1.Name, player2.Name,timeLimitInSeconds);
 
 	}	
 

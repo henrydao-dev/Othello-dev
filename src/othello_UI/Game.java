@@ -31,9 +31,9 @@ public class Game {
 	public Date Start;
 	public Date End;
 	@CsvBindByName
-	public Integer PlayerOneTime=10; // In Seconds
+	public Integer PlayerOneTime; // In Seconds
 	@CsvBindByName
-	public Integer PlayerTwoTime = 10; // In Seconds
+	public Integer PlayerTwoTime; // In Seconds
 
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
@@ -47,12 +47,12 @@ public class Game {
 
 	}
 	
-	public Game(String playerOne, String playerTwo,Integer defultTimer) {
+	public Game(String playerOne, String playerTwo,Integer timeLimitInSeconds) {
 		this.PlayerOneName = playerOne;
 		this.PlayerTwoName = playerTwo;
 		this.LastTurn = playerOne; // No one has played
-		PlayerOneTime = defultTimer;
-		PlayerTwoTime	= 	defultTimer;
+		this.PlayerOneTime = timeLimitInSeconds;
+		this.PlayerTwoTime = timeLimitInSeconds;
 	}
 
 	public void SwitchTurn() {
