@@ -70,17 +70,17 @@ public class UI_Prototype extends Application  {
 	private GridPane Gpane;
 	private Pane pane, loginPane, loginPane2, registerPane, registerPane2, leaderboardPane, setParamPane;
 	private Board gameBoard;
-	private Game currGame;
 	private Player player1, player2;
 	private TextField p1ScoreBox,p2ScoreBox;
-	private Integer tempTimerDuration ;
 	private Text placeHolderTime2, placeHolderTime;
 	private Timeline timer ;
+	private Integer tempTimerDuration;
+	private Integer defaultTimeLimitInSeconds = 120;
 	private StackPane mainMenuPane;
 	private Button startGameButton, stats, logout;
 	private Stage window;
 	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene, setParametersScene;
-	private Integer defultTime=8;
+	private Integer timeLimitInSeconds=300;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
@@ -108,7 +108,7 @@ public class UI_Prototype extends Application  {
 
 	private void drawMove(int row, int col) {
 
-		Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
+		Player nextPlayer = resolvePlayerToName(gameBoard.CurrentGame.playerUpNext());
 		try {
 			Color color = Color.WHITE;
 			if(Player.BLACK == nextPlayer.Color) {
@@ -124,7 +124,7 @@ public class UI_Prototype extends Application  {
 				//calls endGame() only after isGameOver() is true	 
 				endGame();	
 			}
-			currGame.SwitchTurn();
+			gameBoard.CurrentGame.SwitchTurn();
 			this.SetTimer();
 
 			//Sets the color for turnIndicator
@@ -161,7 +161,7 @@ public class UI_Prototype extends Application  {
 		}
 	}
 	private void passMove() {
-		Player nextPlayer = resolvePlayerToName(currGame.playerUpNext());
+		Player nextPlayer = resolvePlayerToName(gameBoard.CurrentGame.playerUpNext());
 		System.out.println("pass pressed");
 		try {
 			if (gameBoard.Pass(nextPlayer)) {
@@ -179,7 +179,7 @@ public class UI_Prototype extends Application  {
 					pane.getChildren().add(turnIndicator);
 				}
 				updateBoard();
-				currGame.SwitchTurn();
+				gameBoard.CurrentGame.SwitchTurn();
 				this.SetTimer();
 			}
 		} catch(IllegalArgumentException ex) {
@@ -208,7 +208,7 @@ public class UI_Prototype extends Application  {
 	private void updateBoard(){
 
 		Gpane.getChildren().clear();
-		Player nextPlayer = resolvePlayerToName(currGame.nextPlayer());
+		Player nextPlayer = resolvePlayerToName(gameBoard.CurrentGame.nextPlayer());
 
 		int k = 0;
 		int r = 0;
@@ -296,7 +296,7 @@ public class UI_Prototype extends Application  {
 		ButtonType noButton = new ButtonType("No");
 		gameOverBox.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 		gameOverBox.setTitle("Game Over");
-		if(currGame.PlayerOneTime == 0 | currGame.PlayerTwoTime==0) {
+		if(gameBoard.CurrentGame.PlayerOneTime == 0 | gameBoard.CurrentGame.PlayerTwoTime==0) {
 			gameOverBox.setTitle("Time Out!");
 			gameOverBox.setHeaderText(declareWinner(true));
 			gameOverBox.setContentText("Would you like play again?");
@@ -312,14 +312,13 @@ public class UI_Prototype extends Application  {
 		Optional<ButtonType> result = gameOverBox.showAndWait();
 		if (result.get() == ButtonType.YES) {
 			//Restart Game and Board
-			gameBoard = new Board(player1, player2,defultTime);
-			tempTimerDuration = defultTime;
-			this.currGame = gameBoard.CurrentGame;
-			placeHolderTime.setText(tempTimerDuration.toString());
-			placeHolderTime2.setText(tempTimerDuration.toString());
-			currGame.LastTurn = currGame.nextPlayer();
+			gameBoard = new Board(player1, player2,timeLimitInSeconds);
+			this.gameBoard.CurrentGame = gameBoard.CurrentGame;
+			placeHolderTime.setText(gameBoard.CurrentGame.PlayerOneTime.toString());
+			placeHolderTime2.setText(gameBoard.CurrentGame.PlayerTwoTime.toString());
+			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
 			updateBoard();
-			currGame.LastTurn = player1.Name;
+			gameBoard.CurrentGame.LastTurn = player1.Name;
 			
 			this.SetTimer();
 			
@@ -340,17 +339,17 @@ public class UI_Prototype extends Application  {
 		String winner;
 		String returnMessage="";
 		if(isTimeout) {
-		if (currGame.PlayerOneTime==0) {
-			resolvePlayerToName(currGame.PlayerOneName).Losses++;
-			resolvePlayerToName(currGame.PlayerTwoName).Wins++;
+		if (gameBoard.CurrentGame.PlayerOneTime==0) {
+			resolvePlayerToName(gameBoard.CurrentGame.PlayerOneName).Losses++;
+			resolvePlayerToName(gameBoard.CurrentGame.PlayerTwoName).Wins++;
 			
-			returnMessage = "TimeOut for player " +currGame.PlayerOneName+".\n The Winner Is player "
-			+currGame.PlayerTwoName+"!";
-		}else if(currGame.PlayerTwoTime==0) {
-			resolvePlayerToName(currGame.PlayerOneName).Wins++;
-			resolvePlayerToName(currGame.PlayerTwoName).Losses++;
-			returnMessage =  "TimeOut for player " +currGame.PlayerTwoName+".\n The Winner Is player "
-						+currGame.PlayerOneName+"!";
+			returnMessage = "TimeOut for player " +gameBoard.CurrentGame.PlayerOneName+".\n The Winner Is player "
+			+gameBoard.CurrentGame.PlayerTwoName+"!";
+		}else if(gameBoard.CurrentGame.PlayerTwoTime==0) {
+			resolvePlayerToName(gameBoard.CurrentGame.PlayerOneName).Wins++;
+			resolvePlayerToName(gameBoard.CurrentGame.PlayerTwoName).Losses++;
+			returnMessage =  "TimeOut for player " +gameBoard.CurrentGame.PlayerTwoName+".\n The Winner Is player "
+						+gameBoard.CurrentGame.PlayerOneName+"!";
 			}
 		try {
 			player1.Update();
@@ -474,7 +473,7 @@ public class UI_Prototype extends Application  {
 		//add player 1 and player 2 timer boxes
 		//Player1
 
-		placeHolderTime = new Text(275,39, currGame.PlayerOneTime.toString());
+		placeHolderTime = new Text(275,39, gameBoard.CurrentGame.PlayerOneTime.toString());
 		placeHolderTime.setFill(Color.WHITE);
 		Rectangle p1TimerBox = new Rectangle();
 		p1TimerBox.setFill(Color.DARKBLUE);
@@ -486,7 +485,7 @@ public class UI_Prototype extends Application  {
 		pane.getChildren().add(placeHolderTime);
 
 		//Player2
-		placeHolderTime2 = new Text(495,39, currGame.PlayerTwoTime.toString());
+		placeHolderTime2 = new Text(495,39, gameBoard.CurrentGame.PlayerTwoTime.toString());
 		placeHolderTime2.setFill(Color.WHITE);
 		Rectangle p2TimerBox = new Rectangle();
 		p2TimerBox.setFill(Color.DARKBLUE);
@@ -544,13 +543,13 @@ public class UI_Prototype extends Application  {
 		confirmQuit.getButtonTypes();
 		confirmQuit.setTitle("Quit");
 		confirmQuit.setHeaderText("Quit Game?");
-		confirmQuit.setContentText("Are you sure you want to quit? Win will go to:" + currGame.nextPlayer());
+		confirmQuit.setContentText("Are you sure you want to quit? Win will go to:" + gameBoard.CurrentGame.nextPlayer());
 
 		Optional<ButtonType> result = confirmQuit.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			
-			this.resolvePlayerToName(currGame.nextPlayer()).Wins++;
-			this.resolvePlayerToName(currGame.LastTurn).Losses++;
+			this.resolvePlayerToName(gameBoard.CurrentGame.nextPlayer()).Wins++;
+			this.resolvePlayerToName(gameBoard.CurrentGame.LastTurn).Losses++;
 			try {
 				
 			player2.Update();
@@ -576,14 +575,14 @@ public class UI_Prototype extends Application  {
 
 		//creating a new Timer
 
-		if(currGame.LastTurn == currGame.PlayerOneName) {
+		if(gameBoard.CurrentGame.LastTurn == gameBoard.CurrentGame.PlayerOneName) {
 			//for other player
-			currGame.PlayerTwoTime =tempTimerDuration;
-			tempTimerDuration = currGame.PlayerOneTime;
+			gameBoard.CurrentGame.PlayerTwoTime = tempTimerDuration;
+			tempTimerDuration = gameBoard.CurrentGame.PlayerOneTime;
 		}else { 
 			//for this player
-			currGame.PlayerOneTime =tempTimerDuration;
-			tempTimerDuration = currGame.PlayerTwoTime;
+			gameBoard.CurrentGame.PlayerOneTime = tempTimerDuration;
+			tempTimerDuration = gameBoard.CurrentGame.PlayerTwoTime;
 		}
 		timer = new Timeline(new KeyFrame(Duration.seconds(1),
 				new EventHandler<ActionEvent>() {
@@ -595,7 +594,7 @@ public class UI_Prototype extends Application  {
 					
 					tempTimerDuration--;
 
-					if(currGame.LastTurn == currGame.PlayerOneName) {
+					if(gameBoard.CurrentGame.LastTurn == gameBoard.CurrentGame.PlayerOneName) {
 						if(tempTimerDuration<11) placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
 						placeHolderTime.setText(tempTimerDuration.toString());
 					}
@@ -609,18 +608,16 @@ public class UI_Prototype extends Application  {
 				else {
 					try {
 						timer.stop();
-						if(currGame.LastTurn == currGame.PlayerOneName) 
-							currGame.PlayerOneTime =tempTimerDuration;
-						else currGame.PlayerTwoTime =tempTimerDuration;
-//		                Alert alert = new Alert(AlertType.INFORMATION, "Hi there");
+						if(gameBoard.CurrentGame.LastTurn == gameBoard.CurrentGame.PlayerOneName) { 
+							gameBoard.CurrentGame.PlayerOneTime =tempTimerDuration;
+						}
+						else {
+							gameBoard.CurrentGame.PlayerTwoTime =tempTimerDuration;
+						}
 		                Platform.runLater(() ->endGame());
-//						endGame();
 					} catch (Exception e) {
-						System.out.println("sadsad"+e.getMessage());
+						e.printStackTrace();
 					} 
-
-					// TODO
-					//need code for what happens if TimeOUT!!!!!
 				}
 			}
 		}));
@@ -654,7 +651,8 @@ public class UI_Prototype extends Application  {
 		//upon clicking "Play Game" transfers to game board
 		startGameButton.setOnAction(e -> 
 		{
-			createGameBoard();
+			window.setScene(setParametersScene);
+			
 		});
 
 		stats = new Button("Statisics");
@@ -728,14 +726,12 @@ public class UI_Prototype extends Application  {
 		// Create Game
 		player1.setColor(Player.BLACK);
 		player2.setColor(Player.WHITE);
-		gameBoard = new Board(player1, player2,defultTime);
-		this.currGame = gameBoard.CurrentGame;
+		gameBoard = new Board(player1, player2,timeLimitInSeconds);
 		try {
-			this.currGame.StartGame();
+			gameBoard.CurrentGame.StartGame();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		tempTimerDuration = defultTime;
 		this.SetTimer();
 		drawButtonsAndLabels(player1.Name, player2.Name);
 
@@ -1060,7 +1056,7 @@ public class UI_Prototype extends Application  {
 				}
 				player2 = Player.Login(usernameField2.getText(),passwordField2.getText()); 
 
-				window.setScene(setParametersScene);
+				window.setScene(mainMenuScene);
 
 			}catch (Exception e1) {
 
@@ -1199,6 +1195,7 @@ public class UI_Prototype extends Application  {
 		timeField.setMaxWidth(40);
 		timeField.setLayoutX(240);
 		timeField.setLayoutY(53);
+		timeField.setText(defaultTimeLimitInSeconds.toString());
 		setParamPane.getChildren().add(timeField);
 		
 		Button okButton = new Button("OK");
@@ -1211,14 +1208,14 @@ public class UI_Prototype extends Application  {
 		okButton.setOnAction(e -> 
 		{
 			try {
-				
-				window.setScene(mainMenuScene);
+				timeLimitInSeconds = Integer.parseInt(timeField.getText());
+				tempTimerDuration = Integer.parseInt(timeField.getText()); // instantiates the time
+				createGameBoard();
 				
 			}catch (Exception err){
-				System.out.print(err.getMessage());
+				err.printStackTrace();
 				message.setText("Please enter a valid length of time");
 				message.setTextFill(Color.RED);
-				
 			}
 			
 		});
