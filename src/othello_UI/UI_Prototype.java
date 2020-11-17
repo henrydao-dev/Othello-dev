@@ -313,15 +313,17 @@ public class UI_Prototype extends Application  {
 		if (result.get() == ButtonType.YES) {
 			//Restart Game and Board
 			gameBoard = new Board(player1, player2,timeLimitInSeconds);
+			tempTimerDuration = timeLimitInSeconds;
 			this.gameBoard.CurrentGame = gameBoard.CurrentGame;
+			
 			placeHolderTime.setText(gameBoard.CurrentGame.PlayerOneTime.toString());
 			placeHolderTime2.setText(gameBoard.CurrentGame.PlayerTwoTime.toString());
-			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
+			
+//			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
 			updateBoard();
 			gameBoard.CurrentGame.LastTurn = player1.Name;
 			
 			this.SetTimer();
-			
 //			tempTimerDuration = defultTime;
 //			resetTimer();
 			
