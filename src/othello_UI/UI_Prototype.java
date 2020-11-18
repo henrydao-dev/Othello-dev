@@ -85,7 +85,7 @@ public class UI_Prototype extends Application  {
 	public void start(Stage primaryStage) {
 		//Everything in here is in our main stage
 		window = primaryStage;
-
+		
 		createLoginScene1();
 
 		createLoginScene2();
@@ -686,17 +686,18 @@ public class UI_Prototype extends Application  {
 		{
 			try {
 				
+			
+				
 			createGameBoard();
-			window.setScene(gameBoardScene);
+			
 			
 			}
-			catch(NullPointerException E){
+			catch(Exception E){
 				
 				Alert warning= new Alert(AlertType.WARNING);
 				warning.setTitle("Login Needed");
 				warning.setContentText("Players need to login to play");
 				warning.show();
-				return;
 				
 			}
 		});
