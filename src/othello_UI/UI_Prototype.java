@@ -52,7 +52,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -69,7 +68,7 @@ import javafx.scene.control.TableColumn;
 
 public class UI_Prototype extends Application  {
 	private GridPane Gpane;
-	private Pane pane, loginPane, loginPane2, registerPane, registerPane2, leaderboardPane, setParamPane;
+	private Pane pane, loginPane, loginPane2,adminLoginPane, registerPane, registerPane2,adminRegisterPane, leaderboardPane, setParamPane;
 	private Board gameBoard;
 	private Player player1, player2;
 	private TextField p1ScoreBox,p2ScoreBox;
@@ -78,9 +77,9 @@ public class UI_Prototype extends Application  {
 	private Integer tempTimerDuration;
 	private Integer defaultTimeLimitInSeconds = 120;
 	private StackPane mainMenuPane;
-	private Button startGameButton, stats, logout;
+	private Button startGameButton, stats, login,admin;
 	private Stage window;
-	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene, setParametersScene;
+	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene, setParametersScene, adminLoginScene, adminRegister;
 	private Integer timeLimitInSeconds=300;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
@@ -90,10 +89,14 @@ public class UI_Prototype extends Application  {
 		createLoginScene1();
 
 		createLoginScene2();
+		
+		//createAdminLoginScene();
 
 		createRegisterScene1();
 
 		createRegisterScene2();
+		
+		//createAdminRegisterScene();
 
 		createMainMenuScene();
 
@@ -102,7 +105,7 @@ public class UI_Prototype extends Application  {
 		createSetParametersScene();
 
 		primaryStage.setTitle("Othello");
-		primaryStage.setScene(loginScene);
+		primaryStage.setScene(mainMenuScene);
 		primaryStage.show();
 
 	}
@@ -127,7 +130,7 @@ public class UI_Prototype extends Application  {
 			}
 			gameBoard.CurrentGame.SwitchTurn();
 			this.SetTimer();
-			gameBoard.CurrentGame.passing--;
+
 			//Sets the color for turnIndicator
 			if(Player.WHITE == nextPlayer.Color) {
 				Circle turnIndicator = new Circle(75/2, 75/2, 28);
@@ -137,11 +140,11 @@ public class UI_Prototype extends Application  {
 				pane.getChildren().add(turnIndicator);
 				
 				Label playerTurnNameIndicator = new Label();
-				playerTurnNameIndicator.setText(player1.Name);
+				playerTurnNameIndicator.setText("P1");
 				playerTurnNameIndicator.setPrefSize(250, 50);
-				playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
 				playerTurnNameIndicator.setTextFill(Color.WHITE);
-				playerTurnNameIndicator.setLayoutX(735);;
+				playerTurnNameIndicator.setLayoutX(745);;
 				playerTurnNameIndicator.setLayoutY(785);
 				pane.getChildren().add(playerTurnNameIndicator);
 			} else {
@@ -152,11 +155,11 @@ public class UI_Prototype extends Application  {
 				pane.getChildren().add(turnIndicator);
 				
 				Label playerTurnNameIndicator = new Label();
-				playerTurnNameIndicator.setText(player2.Name);
+				playerTurnNameIndicator.setText("P2");
 				playerTurnNameIndicator.setPrefSize(250, 50);
-				playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
 				playerTurnNameIndicator.setTextFill(Color.BLACK);
-				playerTurnNameIndicator.setLayoutX(735);;
+				playerTurnNameIndicator.setLayoutX(745);;
 				playerTurnNameIndicator.setLayoutY(785);
 				pane.getChildren().add(playerTurnNameIndicator);
 			}
@@ -182,10 +185,8 @@ public class UI_Prototype extends Application  {
 	private void passMove() {
 		Player nextPlayer = resolvePlayerToName(gameBoard.CurrentGame.playerUpNext());
 		System.out.println("pass pressed");
-		
 		try {
 			if (gameBoard.Pass(nextPlayer)) {
-				gameBoard.CurrentGame.passing++;
 				if(nextPlayer == player1) {
 					Circle turnIndicator = new Circle(75/2, 75/2, 28);
 					turnIndicator.setFill(Color.WHITE);
@@ -194,7 +195,6 @@ public class UI_Prototype extends Application  {
 					pane.getChildren().add(turnIndicator);
 				} else {
 					Circle turnIndicator = new Circle(75/2, 75/2, 28);
-					
 					turnIndicator.setFill(Color.BLACK);
 					turnIndicator.setLayoutX(718);
 					turnIndicator.setLayoutY(775);
@@ -206,10 +206,6 @@ public class UI_Prototype extends Application  {
 			}
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
-		}
-		
-		if (gameBoard.CurrentGame.passing>2) {
-			//add codes what should happen if double pass happend
 		}
 
 		return;
@@ -345,9 +341,9 @@ public class UI_Prototype extends Application  {
 			placeHolderTime.setText(gameBoard.CurrentGame.PlayerOneTime.toString());
 			placeHolderTime2.setText(gameBoard.CurrentGame.PlayerTwoTime.toString());
 			
-			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
+//			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
 			updateBoard();
-//			gameBoard.CurrentGame.LastTurn = player1.Name;
+			gameBoard.CurrentGame.LastTurn = player1.Name;
 			
 			this.SetTimer();
 //			tempTimerDuration = defultTime;
@@ -394,7 +390,7 @@ public class UI_Prototype extends Application  {
 
 		//Determines who the winner of the game is and returns it as a String
 		if (blackCount > whiteCount) {
-			winner = player1.Name;
+			winner = "Player 1";
 			player1.Wins++;
 			player2.Losses++;
 			try {
@@ -404,7 +400,7 @@ public class UI_Prototype extends Application  {
 				e.printStackTrace();
 			}
 		} else if (blackCount < whiteCount) {
-			winner = player2.Name;
+			winner = "Player 2";
 			player2.Wins++;
 			player1.Losses++;
 			try {
@@ -414,11 +410,10 @@ public class UI_Prototype extends Application  {
 				e.printStackTrace();
 			}
 		} else {
-			return "The game is a tie!";
-			
+			winner = "The game is a tie!";
 		}
 
-		returnMessage = player1.Name+" had a score of: " + blackCount + ". " + player2.Name+ " had a score of: " +
+		returnMessage = "Player 1 had a score of: " + blackCount + "." + " Player 2 had a score of: " +
 				whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
 
 		return returnMessage;
@@ -446,12 +441,11 @@ public class UI_Prototype extends Application  {
 
 
 		//add "pass" button
-		Text pass = new Text(387, 95, "PASS");
-		Circle passButton = new Circle();
-		passButton.setFill(Color.RED);
-		passButton.setCenterX(402.5);
-		passButton.setCenterY(90);
-		passButton.setRadius(40);
+		Text pass = new Text(387, 120, "PASS");
+		Button passButton = new Button();
+		passButton.setPrefSize(100, 25);
+		passButton.setLayoutX(352.5);
+		passButton.setLayoutY(100);
 		passButton.setOnMouseClicked(event -> passMove());
 		pane.getChildren().add(passButton);
 		pane.getChildren().add(pass);
@@ -553,11 +547,11 @@ public class UI_Prototype extends Application  {
 		
 		//Labels to indicate which player goes with color of turn indicator
 		Label playerTurnNameIndicator = new Label();
-		playerTurnNameIndicator.setText(gameBoard.CurrentGame.PlayerOneName);
+		playerTurnNameIndicator.setText("P1");
 		playerTurnNameIndicator.setPrefSize(250, 50);
-		playerTurnNameIndicator.setFont(Font.font("Times New Roman",FontWeight.BOLD,16));
+		playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
 		playerTurnNameIndicator.setTextFill(Color.WHITE);
-		playerTurnNameIndicator.setLayoutX(738);;
+		playerTurnNameIndicator.setLayoutX(745);;
 		playerTurnNameIndicator.setLayoutY(785);
 		pane.getChildren().add(playerTurnNameIndicator);
 
@@ -635,12 +629,11 @@ public class UI_Prototype extends Application  {
 
 					if(gameBoard.CurrentGame.LastTurn == gameBoard.CurrentGame.PlayerOneName) {
 						if(tempTimerDuration<11) placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
-						else placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
 						placeHolderTime.setText(tempTimerDuration.toString());
 					}
 					else {
 						if(tempTimerDuration<11) placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
-						else placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
+
 						placeHolderTime2.setText(tempTimerDuration.toString());
 
 					}
@@ -691,8 +684,21 @@ public class UI_Prototype extends Application  {
 		//upon clicking "Play Game" transfers to game board
 		startGameButton.setOnAction(e -> 
 		{
-			window.setScene(setParametersScene);
+			try {
+				
+			createGameBoard();
+			window.setScene(gameBoardScene);
 			
+			}
+			catch(NullPointerException E){
+				
+				Alert warning= new Alert(AlertType.WARNING);
+				warning.setTitle("Login Needed");
+				warning.setContentText("Players need to login to play");
+				warning.show();
+				return;
+				
+			}
 		});
 
 		stats = new Button("Statisics");
@@ -701,21 +707,33 @@ public class UI_Prototype extends Application  {
 		stats.setOnAction(e ->  {
 			window.setScene(leaderboardScene);
 		});
-
-		logout = new Button("Logout");
-		logout.setPrefSize(150,50);
 		
-		logout.setOnAction(e -> {
+		login = new Button("Login");
+		login.setPrefSize(150,50);
+
+
+		login.setOnAction(e -> {
 			
 			window.setScene(loginScene);
 			
 		});
-
+		
+		admin = new Button("Set Parameters");
+		admin.setPrefSize(150,50);
+		admin.setTranslateY(50);
+			
+		admin.setOnAction(e -> {
+			
+			window.setScene(adminLoginScene);
+			
+		});
+		
 		//adds to Pane
 		mainMenuPane.getChildren().add(title);
 		mainMenuPane.getChildren().add(startGameButton);
 		mainMenuPane.getChildren().add(stats);
-		mainMenuPane.getChildren().add(logout);
+		mainMenuPane.getChildren().add(login);
+		mainMenuPane.getChildren().add(admin);
 	}
 
 
@@ -777,6 +795,95 @@ public class UI_Prototype extends Application  {
 
 		window.setScene(gameBoardScene);
 	}
+	
+	//TODO needs to be connected to admin csv
+	//creates admin register screen
+//	private void createAdminRegisterScene() {
+//		//---Register Screen Assets------
+//		//Create Register pane
+//		adminRegisterPane = new Pane();
+//		adminRegisterPane.setPadding(new Insets(0,0,0,0));
+//
+//		//Creates our scene
+//		adminRegister = new Scene(adminRegisterPane,400,225);
+//
+//		//creates title
+//		Label registerTitleAdmin = new Label();
+//		registerTitleAdmin.setText("Register Account");
+//		registerTitleAdmin.setPrefSize(250, 50);
+//		registerTitleAdmin.setFont(Font.font("Times New Roman",20));
+//		registerTitleAdmin.setLayoutX(130);;
+//		registerTitleAdmin.setLayoutY(5);
+//		adminRegisterPane.getChildren().add(registerTitleAdmin);
+//
+//		//"username" Text
+//		Label regUsernameAdmin = new Label();
+//		regUsernameAdmin.setText("Username:");
+//		regUsernameAdmin.setPrefSize(250, 50);
+//		regUsernameAdmin.setFont(Font.font("Times New Roman",15));
+//		regUsernameAdmin.setLayoutX(50);;
+//		regUsernameAdmin.setLayoutY(40);
+//		adminRegisterPane.getChildren().add(regUsernameAdmin);
+//
+//		//username Textfield
+//		TextField regUsernameFieldAdmin = new TextField();
+//		regUsernameFieldAdmin.setMaxWidth(375);
+//		regUsernameFieldAdmin.setLayoutX(130);
+//		regUsernameFieldAdmin.setLayoutY(53);
+//		adminRegisterPane.getChildren().add(regUsernameFieldAdmin);
+//
+//		//"password" Text
+//		Label regPasswordAdmin = new Label();
+//		regPasswordAdmin.setText("Password:");
+//		regPasswordAdmin.setPrefSize(250, 50);
+//		regPasswordAdmin.setFont(Font.font("Times New Roman",15));
+//		regPasswordAdmin.setLayoutX(50);;
+//		regPasswordAdmin.setLayoutY(80);
+//		adminRegisterPane.getChildren().add(regPasswordAdmin);
+//
+//		Label messageregisterAdmin = new Label();
+//		messageregisterAdmin.setText("");
+//		messageregisterAdmin.setStyle("-fx-text-inner-color: red;");
+//		messageregisterAdmin.setPrefSize(380, 50);
+//		messageregisterAdmin.setFont(Font.font("Times New Roman",15));
+//		messageregisterAdmin.setLayoutX(10);
+//		messageregisterAdmin.setLayoutY(110);
+//		messageregisterAdmin.setTextFill(Color.RED);	
+//		messageregisterAdmin.setWrapText(true);
+//		messageregisterAdmin.setTextAlignment(TextAlignment.CENTER);
+//		adminRegisterPane.getChildren().add(messageregisterAdmin);
+//
+//		//password Textfield
+//		TextField regPasswordFieldAdmin = new TextField();
+//		regPasswordFieldAdmin.setMaxWidth(375);
+//		regPasswordFieldAdmin.setLayoutX(130);
+//		regPasswordFieldAdmin.setLayoutY(93);
+//		adminRegisterPane.getChildren().add(regPasswordFieldAdmin);
+//
+//		//Register Button
+//		Button registerAccountButtonAdmin = new Button("Register");
+//		registerAccountButtonAdmin.setPrefSize(150, 40);
+//		registerAccountButtonAdmin.setLayoutX(130);
+//		registerAccountButtonAdmin.setLayoutY(160);
+//		adminRegisterPane.getChildren().add(registerAccountButtonAdmin);
+//
+//		//upon clicking "Register" transfers to Main Menu Scene
+//		//Also needs to store inputs to player object (?)
+//		registerAccountButtonAdmin.setOnAction(e -> {
+//			try {
+//				Player tempPlayer = new Player(regUsernameFieldAdmin.getText(),regPasswordFieldAdmin.getText());
+//				tempPlayer.validateRegistration();
+//				tempPlayer.Register();
+//				player1 = Player.Login(regUsernameFieldAdmin.getText(),regPasswordFieldAdmin.getText());  
+//				window.setScene(setParametersScene);
+//			} catch (Exception e2) {
+//				messageregisterAdmin.setText(e2.getMessage());
+//			}
+//
+//		});
+//
+//		//---End Register Scene Assets--------
+//	}
 
 
 	private void createRegisterScene2() {
@@ -832,7 +939,7 @@ public class UI_Prototype extends Application  {
 		messageregister2.setTextFill(Color.RED);
 		messageregister2.setWrapText(true);
 		messageregister2.setTextAlignment(TextAlignment.CENTER);
-		registerPane.getChildren().add(messageregister2);
+		registerPane2.getChildren().add(messageregister2);
 
 		//password Textfield
 		TextField regPasswordField2 = new TextField();
@@ -1004,6 +1111,105 @@ public class UI_Prototype extends Application  {
 
 		//---End Leaderboard Scene Assets--------
 	}
+	
+	//TODO connecting to admin csv and "try catch" in loginButtonAdmin needs to be edited
+	// creates admin login screen
+//	private void createAdminLoginScene() {
+//		//---Login Scene 1 Assets--------
+//		//Create Login pane
+//		adminLoginPane = new Pane();
+//		adminLoginPane.setPadding(new Insets(0,0,0,0));
+//
+//		//Creates our scene
+//		adminLoginScene = new Scene(adminLoginPane,400,200);
+//
+//		//creates title
+//		Label loginTitleAdmin = new Label();
+//		loginTitleAdmin.setText("Login: (Admin)");
+//		loginTitleAdmin.setPrefSize(250, 50);
+//		loginTitleAdmin.setFont(Font.font("Times New Roman",20));
+//		loginTitleAdmin.setLayoutX(135);;
+//		loginTitleAdmin.setLayoutY(5);
+//		adminLoginPane.getChildren().add(loginTitleAdmin);
+//
+//		//"username" Text
+//		Label usernameAdmin = new Label();
+//		usernameAdmin.setText("Username:");
+//		usernameAdmin.setPrefSize(250, 50);
+//		usernameAdmin.setFont(Font.font("Times New Roman",15));
+//		usernameAdmin.setLayoutX(50);;
+//		usernameAdmin.setLayoutY(40);
+//		adminLoginPane.getChildren().add(usernameAdmin);
+//
+//		Label messageAdmin = new Label();
+//		messageAdmin.setText("");
+//		messageAdmin.setStyle("-fx-text-inner-color: red;");
+//		messageAdmin.setPrefSize(250, 50);
+//		messageAdmin.setFont(Font.font("Times New Roman",15));
+//		messageAdmin.setLayoutX(140);
+//		messageAdmin.setLayoutY(108);
+//		messageAdmin.setWrapText(true);
+//		adminLoginPane.getChildren().add(messageAdmin);
+//
+//		//username Textfield
+//		TextField usernameFieldAdmin = new TextField();
+//		usernameFieldAdmin.setMaxWidth(375);
+//		usernameFieldAdmin.setLayoutX(130);
+//		usernameFieldAdmin.setLayoutY(53);
+//		adminLoginPane.getChildren().add(usernameFieldAdmin);
+//
+//		//"password" Text
+//		Label passwordAdmin = new Label();
+//		passwordAdmin.setText("Password:");
+//		passwordAdmin.setPrefSize(250, 50);
+//		passwordAdmin.setFont(Font.font("Times New Roman",15));
+//		passwordAdmin.setLayoutX(50);;
+//		passwordAdmin.setLayoutY(80);
+//		adminLoginPane.getChildren().add(passwordAdmin);
+//
+//		//password Textfield
+//		TextField passwordFieldAdmin = new TextField();
+//		passwordFieldAdmin.setMaxWidth(375);
+//		passwordFieldAdmin.setLayoutX(130);
+//		passwordFieldAdmin.setLayoutY(93);
+//		adminLoginPane.getChildren().add(passwordFieldAdmin);
+//
+//		//Register Button
+//		Button registerButtonAdmin = new Button("Register");
+//		registerButtonAdmin.setPrefSize(150, 40);
+//		registerButtonAdmin.setLayoutX(35);
+//		registerButtonAdmin.setLayoutY(145);
+//		adminLoginPane.getChildren().add(registerButtonAdmin);
+//
+//		//Login Button
+//		Button loginButtonAdmin = new Button("Login");
+//		loginButtonAdmin.setPrefSize(150, 40);
+//		loginButtonAdmin.setLayoutX(195);
+//		loginButtonAdmin.setLayoutY(145);
+//		adminLoginPane.getChildren().add(loginButtonAdmin);
+//
+//		//upon clicking "Register" transfers to Register Scene
+//		registerButtonAdmin.setOnAction(e -> window.setScene(adminRegister));
+//
+//		
+//		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
+//		loginButtonAdmin.setOnAction(e -> 
+//		{
+//			try {
+//				player1 = Player.Login(usernameFieldAdmin.getText(),passwordFieldAdmin.getText()); 
+//				window.setScene(setParametersScene);
+//
+//
+//			}catch (Exception e1) {
+//
+//				System.out.println(e1.getMessage());
+//				messageAdmin.setText("Invalid Credentials");
+//				messageAdmin.setTextFill(Color.RED);
+//			}
+//		});
+//
+//		//---End Admin Login Scene Assets ----
+//	}
 
 	private void createLoginScene2() {
 		//---Login Scene 2 Assets ----
@@ -1250,7 +1456,7 @@ public class UI_Prototype extends Application  {
 			try {
 				timeLimitInSeconds = Integer.parseInt(timeField.getText());
 				tempTimerDuration = Integer.parseInt(timeField.getText()); // instantiates the time
-				createGameBoard();
+				window.setScene(mainMenuScene);
 				
 			}catch (Exception err){
 				err.printStackTrace();
