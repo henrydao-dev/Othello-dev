@@ -134,12 +134,30 @@ public class UI_Prototype extends Application  {
 				turnIndicator.setLayoutX(718);
 				turnIndicator.setLayoutY(775);
 				pane.getChildren().add(turnIndicator);
+				
+				Label playerTurnNameIndicator = new Label();
+				playerTurnNameIndicator.setText("P1");
+				playerTurnNameIndicator.setPrefSize(250, 50);
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
+				playerTurnNameIndicator.setTextFill(Color.WHITE);
+				playerTurnNameIndicator.setLayoutX(745);;
+				playerTurnNameIndicator.setLayoutY(785);
+				pane.getChildren().add(playerTurnNameIndicator);
 			} else {
 				Circle turnIndicator = new Circle(75/2, 75/2, 28);
 				turnIndicator.setFill(Color.WHITE);
 				turnIndicator.setLayoutX(718);
 				turnIndicator.setLayoutY(775);
 				pane.getChildren().add(turnIndicator);
+				
+				Label playerTurnNameIndicator = new Label();
+				playerTurnNameIndicator.setText("P2");
+				playerTurnNameIndicator.setPrefSize(250, 50);
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
+				playerTurnNameIndicator.setTextFill(Color.BLACK);
+				playerTurnNameIndicator.setLayoutX(745);;
+				playerTurnNameIndicator.setLayoutY(785);
+				pane.getChildren().add(playerTurnNameIndicator);
 			}
 
 
@@ -523,6 +541,16 @@ public class UI_Prototype extends Application  {
 		turnIndicator.setLayoutX(718);
 		turnIndicator.setLayoutY(775);
 		pane.getChildren().add(turnIndicator);
+		
+		//Labels to indicate which player goes with color of turn indicator
+		Label playerTurnNameIndicator = new Label();
+		playerTurnNameIndicator.setText("P1");
+		playerTurnNameIndicator.setPrefSize(250, 50);
+		playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
+		playerTurnNameIndicator.setTextFill(Color.WHITE);
+		playerTurnNameIndicator.setLayoutX(745);;
+		playerTurnNameIndicator.setLayoutY(785);
+		pane.getChildren().add(playerTurnNameIndicator);
 
 		Image quitImage = new Image("https://i.pinimg.com/originals/ae/df/dd/aedfdde5f2063b5d94acc6be3b29a7d3.png");
 		ImageView quitImageView = new ImageView(quitImage);
