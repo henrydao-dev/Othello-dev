@@ -52,6 +52,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -126,7 +127,7 @@ public class UI_Prototype extends Application  {
 			}
 			gameBoard.CurrentGame.SwitchTurn();
 			this.SetTimer();
-
+			gameBoard.CurrentGame.passing--;
 			//Sets the color for turnIndicator
 			if(Player.WHITE == nextPlayer.Color) {
 				Circle turnIndicator = new Circle(75/2, 75/2, 28);
@@ -136,11 +137,11 @@ public class UI_Prototype extends Application  {
 				pane.getChildren().add(turnIndicator);
 				
 				Label playerTurnNameIndicator = new Label();
-				playerTurnNameIndicator.setText("P1");
+				playerTurnNameIndicator.setText(player1.Name);
 				playerTurnNameIndicator.setPrefSize(250, 50);
-				playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
 				playerTurnNameIndicator.setTextFill(Color.WHITE);
-				playerTurnNameIndicator.setLayoutX(745);;
+				playerTurnNameIndicator.setLayoutX(735);;
 				playerTurnNameIndicator.setLayoutY(785);
 				pane.getChildren().add(playerTurnNameIndicator);
 			} else {
@@ -151,11 +152,11 @@ public class UI_Prototype extends Application  {
 				pane.getChildren().add(turnIndicator);
 				
 				Label playerTurnNameIndicator = new Label();
-				playerTurnNameIndicator.setText("P2");
+				playerTurnNameIndicator.setText(player2.Name);
 				playerTurnNameIndicator.setPrefSize(250, 50);
-				playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
 				playerTurnNameIndicator.setTextFill(Color.BLACK);
-				playerTurnNameIndicator.setLayoutX(745);;
+				playerTurnNameIndicator.setLayoutX(735);;
 				playerTurnNameIndicator.setLayoutY(785);
 				pane.getChildren().add(playerTurnNameIndicator);
 			}
@@ -181,8 +182,10 @@ public class UI_Prototype extends Application  {
 	private void passMove() {
 		Player nextPlayer = resolvePlayerToName(gameBoard.CurrentGame.playerUpNext());
 		System.out.println("pass pressed");
+		
 		try {
 			if (gameBoard.Pass(nextPlayer)) {
+				gameBoard.CurrentGame.passing++;
 				if(nextPlayer == player1) {
 					Circle turnIndicator = new Circle(75/2, 75/2, 28);
 					turnIndicator.setFill(Color.WHITE);
@@ -191,6 +194,7 @@ public class UI_Prototype extends Application  {
 					pane.getChildren().add(turnIndicator);
 				} else {
 					Circle turnIndicator = new Circle(75/2, 75/2, 28);
+					
 					turnIndicator.setFill(Color.BLACK);
 					turnIndicator.setLayoutX(718);
 					turnIndicator.setLayoutY(775);
@@ -202,6 +206,10 @@ public class UI_Prototype extends Application  {
 			}
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
+		}
+		
+		if (gameBoard.CurrentGame.passing>2) {
+			//add codes what should happen if double pass happend
 		}
 
 		return;
@@ -337,9 +345,9 @@ public class UI_Prototype extends Application  {
 			placeHolderTime.setText(gameBoard.CurrentGame.PlayerOneTime.toString());
 			placeHolderTime2.setText(gameBoard.CurrentGame.PlayerTwoTime.toString());
 			
-//			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
+			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
 			updateBoard();
-			gameBoard.CurrentGame.LastTurn = player1.Name;
+//			gameBoard.CurrentGame.LastTurn = player1.Name;
 			
 			this.SetTimer();
 //			tempTimerDuration = defultTime;
@@ -386,7 +394,7 @@ public class UI_Prototype extends Application  {
 
 		//Determines who the winner of the game is and returns it as a String
 		if (blackCount > whiteCount) {
-			winner = "Player 1";
+			winner = player1.Name;
 			player1.Wins++;
 			player2.Losses++;
 			try {
@@ -396,7 +404,7 @@ public class UI_Prototype extends Application  {
 				e.printStackTrace();
 			}
 		} else if (blackCount < whiteCount) {
-			winner = "Player 2";
+			winner = player2.Name;
 			player2.Wins++;
 			player1.Losses++;
 			try {
@@ -406,10 +414,11 @@ public class UI_Prototype extends Application  {
 				e.printStackTrace();
 			}
 		} else {
-			winner = "The game is a tie!";
+			return "The game is a tie!";
+			
 		}
 
-		returnMessage = "Player 1 had a score of: " + blackCount + "." + " Player 2 had a score of: " +
+		returnMessage = player1.Name+" had a score of: " + blackCount + ". " + player2.Name+ " had a score of: " +
 				whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
 
 		return returnMessage;
@@ -544,11 +553,11 @@ public class UI_Prototype extends Application  {
 		
 		//Labels to indicate which player goes with color of turn indicator
 		Label playerTurnNameIndicator = new Label();
-		playerTurnNameIndicator.setText("P1");
+		playerTurnNameIndicator.setText(gameBoard.CurrentGame.PlayerOneName);
 		playerTurnNameIndicator.setPrefSize(250, 50);
-		playerTurnNameIndicator.setFont(Font.font("Times New Roman",20));
+		playerTurnNameIndicator.setFont(Font.font("Times New Roman",FontWeight.BOLD,16));
 		playerTurnNameIndicator.setTextFill(Color.WHITE);
-		playerTurnNameIndicator.setLayoutX(745);;
+		playerTurnNameIndicator.setLayoutX(738);;
 		playerTurnNameIndicator.setLayoutY(785);
 		pane.getChildren().add(playerTurnNameIndicator);
 
@@ -626,11 +635,12 @@ public class UI_Prototype extends Application  {
 
 					if(gameBoard.CurrentGame.LastTurn == gameBoard.CurrentGame.PlayerOneName) {
 						if(tempTimerDuration<11) placeHolderTime.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
+						else placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
 						placeHolderTime.setText(tempTimerDuration.toString());
 					}
 					else {
 						if(tempTimerDuration<11) placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: red; -fx-stroke-width: 1;");
-
+						else placeHolderTime2.setStyle("-fx-font: 18 arial; -fx-stroke: white; -fx-stroke-width: 1;");
 						placeHolderTime2.setText(tempTimerDuration.toString());
 
 					}

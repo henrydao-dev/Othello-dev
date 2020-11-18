@@ -34,6 +34,7 @@ public class Game {
 	public Integer PlayerOneTime; // In Seconds
 	@CsvBindByName
 	public Integer PlayerTwoTime; // In Seconds
+	public Integer passing=0;//keeps pass
 
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
