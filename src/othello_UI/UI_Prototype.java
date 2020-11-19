@@ -419,15 +419,15 @@ public class UI_Prototype extends Application  {
 	private void drawButtonsAndLabels(String p1Name, String p2Name) {
 		//Needed buttons
 
-		Image image = new Image("https://cdn2.iconfinder.com/data/icons/web-application-icons-part-i/100/Artboard_50-512.png");
-		ImageView imageView = new ImageView(image);
-		imageView.setFitHeight(40);
-		imageView.setFitWidth(40);
-		Button settingsButton = new Button();
-		settingsButton.setLayoutX(740);
-		settingsButton.setLayoutY(5);
-		settingsButton.setGraphic(imageView);
-		pane.getChildren().add(settingsButton);
+//		Image image = new Image("https://cdn2.iconfinder.com/data/icons/web-application-icons-part-i/100/Artboard_50-512.png");
+//		ImageView imageView = new ImageView(image);
+//		imageView.setFitHeight(40);
+//		imageView.setFitWidth(40);
+//		Button settingsButton = new Button();
+//		settingsButton.setLayoutX(740);
+//		settingsButton.setLayoutY(5);
+//		settingsButton.setGraphic(imageView);
+//		pane.getChildren().add(settingsButton);
 
 
 
