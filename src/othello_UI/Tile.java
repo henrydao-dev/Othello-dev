@@ -2,6 +2,10 @@ package othello_UI;
 
 import javafx.scene.shape.Rectangle;
 
+
+/*Tile method
+ * Devin, Dakota
+ */
 public class Tile extends Rectangle {
 
 	public int row;

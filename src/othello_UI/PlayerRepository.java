@@ -34,7 +34,6 @@ public class PlayerRepository {
 				return player;
 			}
 		}
-		System.out.println("Player not found");
 		throw new NullPointerException("Player does not exist");		
 	}
 	/**
@@ -94,7 +93,7 @@ public class PlayerRepository {
 					.withType(Player.class).build().parse();
 			return players;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println("File can't be found! " + e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
