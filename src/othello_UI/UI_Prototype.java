@@ -206,7 +206,10 @@ public class UI_Prototype extends Application  {
 		} catch(IllegalArgumentException ex) {
 			System.out.println("A valid move exists. You must make a valid move");
 		}
-		if (gameBoard.CurrentGame.passing>2) {
+		if (gameBoard.CurrentGame.passing>=2) {
+			
+			endGame();
+			
 			//add codes what should happen if double pass happend
 		}
 
@@ -303,7 +306,8 @@ public class UI_Prototype extends Application  {
 		ButtonType yesButton = new ButtonType("Yes");
 		ButtonType noButton = new ButtonType("No");
 		gameOverBox.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-		gameOverBox.setTitle("Game Over");
+		if(gameBoard.CurrentGame.passing >=2) gameOverBox.setTitle("Game Over(double pass)");
+		else gameOverBox.setTitle("Game Over");
 		if(gameBoard.CurrentGame.PlayerOneTime == 0 | gameBoard.CurrentGame.PlayerTwoTime==0) {
 			gameOverBox.setTitle("Time Out!");
 			gameOverBox.setHeaderText(declareWinner(true));
@@ -401,7 +405,8 @@ public class UI_Prototype extends Application  {
 
 		returnMessage = player1.Name+" had a score of: " + blackCount + ". " + player2.Name+ " had a score of: " +
 				whiteCount + "." + "\nThe WINNER IS..." + winner +"!";
-
+		if (gameBoard.CurrentGame.passing >=2)
+			returnMessage = "Double Pass Happend! " + returnMessage;
 		return returnMessage;
 
 	}
