@@ -192,13 +192,34 @@ public class UI_Prototype extends Application  {
 					turnIndicator.setLayoutX(718);
 					turnIndicator.setLayoutY(775);
 					pane.getChildren().add(turnIndicator);
+					
+					Label playerTurnNameIndicator = new Label();
+					playerTurnNameIndicator.setText(player2.Name);
+					playerTurnNameIndicator.setPrefSize(250, 50);
+					playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+					playerTurnNameIndicator.setTextFill(Color.BLACK);
+					playerTurnNameIndicator.setLayoutX(735);;
+					playerTurnNameIndicator.setLayoutY(785);
+					pane.getChildren().add(playerTurnNameIndicator);
+		
 				} else {
 					Circle turnIndicator = new Circle(75/2, 75/2, 28);
 					turnIndicator.setFill(Color.BLACK);
 					turnIndicator.setLayoutX(718);
 					turnIndicator.setLayoutY(775);
 					pane.getChildren().add(turnIndicator);
+					
+					Label playerTurnNameIndicator = new Label();
+					playerTurnNameIndicator.setText(player1.Name);
+					playerTurnNameIndicator.setPrefSize(250, 50);
+					playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+					playerTurnNameIndicator.setTextFill(Color.WHITE);
+					playerTurnNameIndicator.setLayoutX(735);;
+					playerTurnNameIndicator.setLayoutY(785);
+					pane.getChildren().add(playerTurnNameIndicator);
 				}
+				
+				
 				updateBoard();
 				gameBoard.CurrentGame.SwitchTurn();
 				this.SetTimer();
@@ -333,6 +354,41 @@ public class UI_Prototype extends Application  {
 			
 			gameBoard.CurrentGame.LastTurn = gameBoard.CurrentGame.nextPlayer();
 			updateBoard();
+			
+			Player nextPlayer = resolvePlayerToName(gameBoard.CurrentGame.playerUpNext());
+			if(nextPlayer == player1) {
+				Circle turnIndicator = new Circle(75/2, 75/2, 28);
+//				turnIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+				turnIndicator.setFill(Color.WHITE);
+				turnIndicator.setLayoutX(718);
+				turnIndicator.setLayoutY(775);
+				pane.getChildren().add(turnIndicator);
+				
+				Label playerTurnNameIndicator = new Label();
+				playerTurnNameIndicator.setText(player2.Name);
+				playerTurnNameIndicator.setPrefSize(250, 50);
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+				playerTurnNameIndicator.setTextFill(Color.BLACK);
+				playerTurnNameIndicator.setLayoutX(735);;
+				playerTurnNameIndicator.setLayoutY(785);
+				pane.getChildren().add(playerTurnNameIndicator);
+	
+			} else {
+				Circle turnIndicator = new Circle(75/2, 75/2, 28);
+				turnIndicator.setFill(Color.BLACK);
+				turnIndicator.setLayoutX(718);
+				turnIndicator.setLayoutY(775);
+				pane.getChildren().add(turnIndicator);
+				
+				Label playerTurnNameIndicator = new Label();
+				playerTurnNameIndicator.setText(player1.Name);
+				playerTurnNameIndicator.setPrefSize(250, 50);
+				playerTurnNameIndicator.setFont(Font.font("Times New Roman",javafx.scene.text.FontWeight.BOLD,16));
+				playerTurnNameIndicator.setTextFill(Color.WHITE);
+				playerTurnNameIndicator.setLayoutX(735);;
+				playerTurnNameIndicator.setLayoutY(785);
+				pane.getChildren().add(playerTurnNameIndicator);
+			}
 //			gameBoard.CurrentGame.LastTurn = player1.Name;
 			
 			this.SetTimer();
