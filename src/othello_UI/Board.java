@@ -23,7 +23,9 @@ public class Board {
 	private static final int COL_RIGHT = 1;
 	private static final int NONE = 0;
 	
-
+	/*
+	 * Henry, Devin, Dakota, Jairo
+	 */
 	public Board(Player player1, Player player2,Integer timeLimitInSeconds) {
 		CurrentBoard = new char[8][8];
 		for (int i=0; i<CurrentBoard.length; i++)
@@ -42,7 +44,9 @@ public class Board {
 		CurrentGame = new Game(player1.Name, player2.Name,timeLimitInSeconds);
 
 	}	
-
+	/*
+	 * Henry, Devin, Dakota 
+	 */
 	/**
 	 * Place a disc on the board, checks if the move is valid, throws error if it is not valid
 	 * @param player
@@ -58,6 +62,10 @@ public class Board {
 		}
 	}
 
+	/*
+	 * Henry, Devin, Dakota, Jairo, Sadra
+	 */
+	
 	/**
 	 * Checks to see if there are any valid moves else forces pass().
 	 * 
@@ -81,6 +89,10 @@ public class Board {
 		return isOKToPass;
 	}
 
+	/*
+	 * Henry, Devin, Dakota, Jairo, Sadra
+	 */
+	
 	/**
 	 * Passes play. Throws error if pass is not allowed
 	 * @throws IllegalArgumentException
@@ -94,6 +106,10 @@ public class Board {
 		}
 	}
 
+	/*
+	 * Henry, Devin, Dakota, Jairo, Sadra
+	 */
+	
 	/**
 	 * Checks if the game is over. Returns true for yes, false for no.
 	 * @return
@@ -116,6 +132,10 @@ public class Board {
 		}
 		return gameOver;
 	}
+	
+	/*
+	 *  Devin
+	 */
 	
 	//Method for counting discs after "isGameOver()" returns true
 		public List<Integer> countDiscs () {
@@ -146,7 +166,9 @@ public class Board {
 			return list;
 		}
 
-//		public isMovevalid(Player player)
+		/*
+		 *  Devin, Sadra
+		 */
 
 	public boolean isMoveValid(Player player, int row, int col) {
 		boolean isValid = false;
@@ -186,6 +208,10 @@ public class Board {
 
 		return isValid;
 	}
+	
+	/*
+	 *  Devin, Sadra
+	 */
 	private boolean validFlip(char color, int r, int c, int rowDir, int colDir) {
 		char opponent = Player.BLACK;
 		if(color == Player.BLACK) {
@@ -218,6 +244,8 @@ public class Board {
 	 * @param row
 	 * @param col
 	 */
+	
+	//Devin
 	public void flipDiscs(char color, int row, int col) {
 		// flip the one that is clicked first because it's empty
 		this.CurrentBoard[row][col] = color;
@@ -248,6 +276,11 @@ public class Board {
 		flipDisc(color, row, col, ROW_UP, COL_LEFT);
 
 	}
+	
+	/*
+	 *  Devin
+	 */
+	
 	/**
 	 * Flips the discs in the direction given for the columns and rows
 	 * @param colorToSet
@@ -299,6 +332,8 @@ public class Board {
 			return false;
 		}
 	}
+	
+	//Devin
 	public String toString() {
 		String matrix = "";
 		// Loop through all rows 
