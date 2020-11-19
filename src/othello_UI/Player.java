@@ -8,6 +8,8 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+//This entire method was handled by Devin and sadra
 public class Player implements Comparable<Player> {
 	@CsvBindByName
 	int Id;
@@ -30,6 +32,7 @@ public class Player implements Comparable<Player> {
 	public String getName() {
 		return Name;
 	}
+	
 	public Integer getWins() {
 		return Wins;
 	}

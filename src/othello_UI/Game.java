@@ -1,5 +1,7 @@
 package othello_UI;
 
+
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -36,18 +38,31 @@ public class Game {
 	public Integer PlayerTwoTime; // In Seconds
 	public Integer passing=0;//keeps pass
 
+	
+	/*
+	 *  Devin
+	 */
 	public Date getStart() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.StartString);
 	}
 
+	/*
+	 *  Devin
+	 */
 	public Date getEnd() throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.EndString);
 	}
 
+	/*
+	 *  Devin
+	 */
 	public Game() {
 
 	}
 	
+	/*
+	 * Devin
+	 */
 	public Game(String playerOne, String playerTwo,Integer timeLimitInSeconds) {
 		this.PlayerOneName = playerOne;
 		this.PlayerTwoName = playerTwo;
@@ -55,7 +70,9 @@ public class Game {
 		this.PlayerOneTime = timeLimitInSeconds;
 		this.PlayerTwoTime = timeLimitInSeconds;
 	}
-
+	/*
+	 * Sadra
+	 */
 	public void SwitchTurn() {
 		if (this.LastTurn == PlayerOneName) {
 			this.LastTurn = PlayerTwoName;
@@ -65,6 +82,9 @@ public class Game {
 		System.out.println("now its "+this.LastTurn+"\'s Turn");
 	}
 	
+	/*
+	 *  Devin , Sadra
+	 */
     public String playerUpNext() {
         if (PlayerOneName == this.LastTurn)
             return PlayerOneName;
@@ -72,6 +92,9 @@ public class Game {
             return PlayerTwoName;
     }
 
+    /*
+     *  Devin, Sadra
+     */
 	public String nextPlayer() {
 		if (PlayerOneName == this.LastTurn)
 			return PlayerTwoName;
@@ -79,6 +102,9 @@ public class Game {
 			return PlayerOneName;
 	}
 
+	/*
+	 *  Devin, Sadra
+	 */
 	/**
 	 * gets the player's time
 	 * @return time in seconds
@@ -90,6 +116,9 @@ public class Game {
 		else return this.PlayerTwoTime;
 	}
 
+	/*
+	 *  Devin, Jairo 
+	 */
 	/**
 	 * Ends the game by setting the end time and updating the csv
 	 * @throws IllegalStateException if the game hasn't begun or the players are not set
@@ -108,6 +137,9 @@ public class Game {
 		}
 	}
 
+	/*
+	 *  Devin,Jairo
+	 */
 	/**
 	 * Starts the game by setting the start time string and saving it to the CSV
 	 * @throws IllegalStateException if the player's are not set
@@ -126,7 +158,7 @@ public class Game {
 		}
 		
 	}
-	/**
+	/*Sadra
 	 * Saves the time to the player 
 	 * @param Time
 	 */
