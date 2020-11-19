@@ -68,7 +68,7 @@ import javafx.scene.control.TableColumn;
 
 public class UI_Prototype extends Application  {
 	private GridPane Gpane;
-	private Pane pane, loginPane, loginPane2,adminLoginPane, registerPane, registerPane2,adminRegisterPane, leaderboardPane, setParamPane;
+	private Pane pane, loginPane, loginPane2, registerPane, registerPane2, leaderboardPane, setParamPane;
 	private Board gameBoard;
 	private Player player1, player2;
 	private TextField p1ScoreBox,p2ScoreBox;
@@ -79,7 +79,7 @@ public class UI_Prototype extends Application  {
 	private StackPane mainMenuPane;
 	private Button startGameButton, stats, login,admin;
 	private Stage window;
-	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene, setParametersScene, adminLoginScene, adminRegister;
+	private Scene gameBoardScene, loginScene, loginScene2, registerScene, registerScene2, mainMenuScene, leaderboardScene, setParametersScene ;
 	private Integer timeLimitInSeconds=300;
 	//Creates our Primary Stage
 	public void start(Stage primaryStage) {
@@ -89,14 +89,10 @@ public class UI_Prototype extends Application  {
 		createLoginScene1();
 
 		createLoginScene2();
-		
-		//createAdminLoginScene();
 
 		createRegisterScene1();
 
 		createRegisterScene2();
-		
-		//createAdminRegisterScene();
 
 		createMainMenuScene();
 
@@ -284,22 +280,6 @@ public class UI_Prototype extends Application  {
 
 	}
 
-	/**
-	 * Decides who goes first
-	 * @param p1
-	 * @param p2
-	 * @return returns true for black false for white
-	 */
-	public boolean coinFlip() {
-
-		if (Math.random() > 0.5 ) {
-
-			return true;
-
-		} else {
-			return false;
-		}
-	}
 
 	//Method for being the final aspect of the game | Asks user (up to 3 times) to play again or quit
 	private void endGame() {
@@ -622,7 +602,7 @@ public class UI_Prototype extends Application  {
 
 			@Override
 			public void handle(ActionEvent event) {
-				if(tempTimerDuration >0) 
+				if(tempTimerDuration > 0) 
 				{
 					
 					tempTimerDuration--;
@@ -684,24 +664,33 @@ public class UI_Prototype extends Application  {
 		//upon clicking "Play Game" transfers to game board
 		startGameButton.setOnAction(e -> 
 		{
-			try {
-				
-			
-				
-			createGameBoard();
-			
-			
-			}
-			catch(Exception E){
+			if( player1 == null || player2 == null) {
 				
 				Alert warning= new Alert(AlertType.WARNING);
 				warning.setTitle("Login Needed");
 				warning.setContentText("Players need to login to play");
 				warning.show();
 				
+			}else {
+			try {
+				if(timeLimitInSeconds == null || tempTimerDuration == null){
+				timeLimitInSeconds = defaultTimeLimitInSeconds;
+				tempTimerDuration = defaultTimeLimitInSeconds; 	
+				}
+			createGameBoard();
+				
+			
 			}
-		});
-
+			catch(Exception err){
+				
+				Alert warning= new Alert(AlertType.WARNING);
+				warning.setTitle("Error");
+				warning.setContentText(err.getMessage());
+				warning.show();
+				err.printStackTrace();
+			}
+			}});
+		
 		stats = new Button("Statisics");
 		stats.setPrefSize(150,50);
 		stats.setTranslateY(-50);
@@ -725,7 +714,7 @@ public class UI_Prototype extends Application  {
 			
 		admin.setOnAction(e -> {
 			
-			window.setScene(adminLoginScene);
+			window.setScene(setParametersScene);
 			
 		});
 		
@@ -791,100 +780,18 @@ public class UI_Prototype extends Application  {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		if(tempTimerDuration == null) {
+			gameBoard.CurrentGame.PlayerOneTime = defaultTimeLimitInSeconds;
+			gameBoard.CurrentGame.PlayerTwoTime = defaultTimeLimitInSeconds;
+				}
+		
 		this.SetTimer();
 		drawButtonsAndLabels(player1.Name, player2.Name);
 
 		window.setScene(gameBoardScene);
 	}
 	
-	//TODO needs to be connected to admin csv
-	//creates admin register screen
-//	private void createAdminRegisterScene() {
-//		//---Register Screen Assets------
-//		//Create Register pane
-//		adminRegisterPane = new Pane();
-//		adminRegisterPane.setPadding(new Insets(0,0,0,0));
-//
-//		//Creates our scene
-//		adminRegister = new Scene(adminRegisterPane,400,225);
-//
-//		//creates title
-//		Label registerTitleAdmin = new Label();
-//		registerTitleAdmin.setText("Register Account");
-//		registerTitleAdmin.setPrefSize(250, 50);
-//		registerTitleAdmin.setFont(Font.font("Times New Roman",20));
-//		registerTitleAdmin.setLayoutX(130);;
-//		registerTitleAdmin.setLayoutY(5);
-//		adminRegisterPane.getChildren().add(registerTitleAdmin);
-//
-//		//"username" Text
-//		Label regUsernameAdmin = new Label();
-//		regUsernameAdmin.setText("Username:");
-//		regUsernameAdmin.setPrefSize(250, 50);
-//		regUsernameAdmin.setFont(Font.font("Times New Roman",15));
-//		regUsernameAdmin.setLayoutX(50);;
-//		regUsernameAdmin.setLayoutY(40);
-//		adminRegisterPane.getChildren().add(regUsernameAdmin);
-//
-//		//username Textfield
-//		TextField regUsernameFieldAdmin = new TextField();
-//		regUsernameFieldAdmin.setMaxWidth(375);
-//		regUsernameFieldAdmin.setLayoutX(130);
-//		regUsernameFieldAdmin.setLayoutY(53);
-//		adminRegisterPane.getChildren().add(regUsernameFieldAdmin);
-//
-//		//"password" Text
-//		Label regPasswordAdmin = new Label();
-//		regPasswordAdmin.setText("Password:");
-//		regPasswordAdmin.setPrefSize(250, 50);
-//		regPasswordAdmin.setFont(Font.font("Times New Roman",15));
-//		regPasswordAdmin.setLayoutX(50);;
-//		regPasswordAdmin.setLayoutY(80);
-//		adminRegisterPane.getChildren().add(regPasswordAdmin);
-//
-//		Label messageregisterAdmin = new Label();
-//		messageregisterAdmin.setText("");
-//		messageregisterAdmin.setStyle("-fx-text-inner-color: red;");
-//		messageregisterAdmin.setPrefSize(380, 50);
-//		messageregisterAdmin.setFont(Font.font("Times New Roman",15));
-//		messageregisterAdmin.setLayoutX(10);
-//		messageregisterAdmin.setLayoutY(110);
-//		messageregisterAdmin.setTextFill(Color.RED);	
-//		messageregisterAdmin.setWrapText(true);
-//		messageregisterAdmin.setTextAlignment(TextAlignment.CENTER);
-//		adminRegisterPane.getChildren().add(messageregisterAdmin);
-//
-//		//password Textfield
-//		TextField regPasswordFieldAdmin = new TextField();
-//		regPasswordFieldAdmin.setMaxWidth(375);
-//		regPasswordFieldAdmin.setLayoutX(130);
-//		regPasswordFieldAdmin.setLayoutY(93);
-//		adminRegisterPane.getChildren().add(regPasswordFieldAdmin);
-//
-//		//Register Button
-//		Button registerAccountButtonAdmin = new Button("Register");
-//		registerAccountButtonAdmin.setPrefSize(150, 40);
-//		registerAccountButtonAdmin.setLayoutX(130);
-//		registerAccountButtonAdmin.setLayoutY(160);
-//		adminRegisterPane.getChildren().add(registerAccountButtonAdmin);
-//
-//		//upon clicking "Register" transfers to Main Menu Scene
-//		//Also needs to store inputs to player object (?)
-//		registerAccountButtonAdmin.setOnAction(e -> {
-//			try {
-//				Player tempPlayer = new Player(regUsernameFieldAdmin.getText(),regPasswordFieldAdmin.getText());
-//				tempPlayer.validateRegistration();
-//				tempPlayer.Register();
-//				player1 = Player.Login(regUsernameFieldAdmin.getText(),regPasswordFieldAdmin.getText());  
-//				window.setScene(setParametersScene);
-//			} catch (Exception e2) {
-//				messageregisterAdmin.setText(e2.getMessage());
-//			}
-//
-//		});
-//
-//		//---End Register Scene Assets--------
-//	}
 
 
 	private void createRegisterScene2() {
@@ -1113,104 +1020,6 @@ public class UI_Prototype extends Application  {
 		//---End Leaderboard Scene Assets--------
 	}
 	
-	//TODO connecting to admin csv and "try catch" in loginButtonAdmin needs to be edited
-	// creates admin login screen
-//	private void createAdminLoginScene() {
-//		//---Login Scene 1 Assets--------
-//		//Create Login pane
-//		adminLoginPane = new Pane();
-//		adminLoginPane.setPadding(new Insets(0,0,0,0));
-//
-//		//Creates our scene
-//		adminLoginScene = new Scene(adminLoginPane,400,200);
-//
-//		//creates title
-//		Label loginTitleAdmin = new Label();
-//		loginTitleAdmin.setText("Login: (Admin)");
-//		loginTitleAdmin.setPrefSize(250, 50);
-//		loginTitleAdmin.setFont(Font.font("Times New Roman",20));
-//		loginTitleAdmin.setLayoutX(135);;
-//		loginTitleAdmin.setLayoutY(5);
-//		adminLoginPane.getChildren().add(loginTitleAdmin);
-//
-//		//"username" Text
-//		Label usernameAdmin = new Label();
-//		usernameAdmin.setText("Username:");
-//		usernameAdmin.setPrefSize(250, 50);
-//		usernameAdmin.setFont(Font.font("Times New Roman",15));
-//		usernameAdmin.setLayoutX(50);;
-//		usernameAdmin.setLayoutY(40);
-//		adminLoginPane.getChildren().add(usernameAdmin);
-//
-//		Label messageAdmin = new Label();
-//		messageAdmin.setText("");
-//		messageAdmin.setStyle("-fx-text-inner-color: red;");
-//		messageAdmin.setPrefSize(250, 50);
-//		messageAdmin.setFont(Font.font("Times New Roman",15));
-//		messageAdmin.setLayoutX(140);
-//		messageAdmin.setLayoutY(108);
-//		messageAdmin.setWrapText(true);
-//		adminLoginPane.getChildren().add(messageAdmin);
-//
-//		//username Textfield
-//		TextField usernameFieldAdmin = new TextField();
-//		usernameFieldAdmin.setMaxWidth(375);
-//		usernameFieldAdmin.setLayoutX(130);
-//		usernameFieldAdmin.setLayoutY(53);
-//		adminLoginPane.getChildren().add(usernameFieldAdmin);
-//
-//		//"password" Text
-//		Label passwordAdmin = new Label();
-//		passwordAdmin.setText("Password:");
-//		passwordAdmin.setPrefSize(250, 50);
-//		passwordAdmin.setFont(Font.font("Times New Roman",15));
-//		passwordAdmin.setLayoutX(50);;
-//		passwordAdmin.setLayoutY(80);
-//		adminLoginPane.getChildren().add(passwordAdmin);
-//
-//		//password Textfield
-//		TextField passwordFieldAdmin = new TextField();
-//		passwordFieldAdmin.setMaxWidth(375);
-//		passwordFieldAdmin.setLayoutX(130);
-//		passwordFieldAdmin.setLayoutY(93);
-//		adminLoginPane.getChildren().add(passwordFieldAdmin);
-//
-//		//Register Button
-//		Button registerButtonAdmin = new Button("Register");
-//		registerButtonAdmin.setPrefSize(150, 40);
-//		registerButtonAdmin.setLayoutX(35);
-//		registerButtonAdmin.setLayoutY(145);
-//		adminLoginPane.getChildren().add(registerButtonAdmin);
-//
-//		//Login Button
-//		Button loginButtonAdmin = new Button("Login");
-//		loginButtonAdmin.setPrefSize(150, 40);
-//		loginButtonAdmin.setLayoutX(195);
-//		loginButtonAdmin.setLayoutY(145);
-//		adminLoginPane.getChildren().add(loginButtonAdmin);
-//
-//		//upon clicking "Register" transfers to Register Scene
-//		registerButtonAdmin.setOnAction(e -> window.setScene(adminRegister));
-//
-//		
-//		//upon clicking "Login", if verified: transfers to Player2 Login screen. if not, (try again text?)	
-//		loginButtonAdmin.setOnAction(e -> 
-//		{
-//			try {
-//				player1 = Player.Login(usernameFieldAdmin.getText(),passwordFieldAdmin.getText()); 
-//				window.setScene(setParametersScene);
-//
-//
-//			}catch (Exception e1) {
-//
-//				System.out.println(e1.getMessage());
-//				messageAdmin.setText("Invalid Credentials");
-//				messageAdmin.setTextFill(Color.RED);
-//			}
-//		});
-//
-//		//---End Admin Login Scene Assets ----
-//	}
 
 	private void createLoginScene2() {
 		//---Login Scene 2 Assets ----
